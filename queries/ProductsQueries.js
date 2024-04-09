@@ -89,7 +89,7 @@ export const CategoriesQuery = `
     }
 `;
 
-export const SelectedCategory = `
+export const SelectedCategoryQuery = `
     #graphql
     query Categories ($category_slug: String) {
         categories (
@@ -222,45 +222,6 @@ export const SaleProductsQuery = `
             offset: $offset
             filter: { 
                 new_price: { _nempty: true  } 
-        }) {
-            id
-            product_name
-            product_description
-            price
-            new_price
-            slug
-            subcategory {
-                id
-                subcategory_name
-                slug
-                parent_category {
-                    id
-                    category_name
-                }
-            }
-            brand
-            product_image {
-                id
-            }
-            product_categories {
-                categories_id {
-                    id
-                    category_name
-                    slug
-                }
-            }
-        }
-    }
- `;
-
- export const FilteredByCategorySlugProductsQuery = `
-    #graphql
-    query Products ($category_slug: String, $offset: Int) {
-        products (
-            limit: 20
-            offset: $offset
-            filter: { 
-                product_categories: { categories_id: { slug: { _eq: $category_slug } } } 
         }) {
             id
             product_name

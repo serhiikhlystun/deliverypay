@@ -4,10 +4,7 @@ import TagsWrapp from '../../components/Tags/TagsWrapp';
 import SearchResultBar from '../../components/SearchResultBar/SearchResultBar';
 import getData from '@/queries/getData';
 import { useQuery } from 'react-query';
-import {
-  CategoriesQuery,
-  FilteredSubcategoriesQuery,
-} from '@/queries/ProductsQueries';
+import { CategoriesQuery, FilteredSubcategoriesQuery } from '@/queries/ProductsQueries';
 import {
   SaleDoubleFilteredProductsQuery,
   SaleFilteredProductsQuery,
@@ -50,6 +47,7 @@ async function handleSubcategoriesFiltering({ queryKey }) {
 }
 
 const ProductsListPage = () => {
+  const page_url = 'special';
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [inputSearchValue, setInputSearchValue] = useState('');
   const [selectedSubCategory, setSelectedSubCategory] = useState();
@@ -113,12 +111,15 @@ const ProductsListPage = () => {
           selectedSubCategory={selectedSubCategory}
           getSearchInputValue={getSearchInputValue}
           inputSearchValue={inputSearchValue}
+          page_url={page_url}
         />
       )}
       {filteredProducts && (
         <SearchResultBar count={filteredProducts.length} inputSearchText={inputSearchValue} />
       )}
-      {filteredProducts && <CardList products={filteredProducts} getLoadMoreProducts={getLoadMoreProducts} />}
+      {filteredProducts && (
+        <CardList page_url={page_url} products={filteredProducts} getLoadMoreProducts={getLoadMoreProducts} />
+      )}
     </div>
   );
 };

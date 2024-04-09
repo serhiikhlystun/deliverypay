@@ -6,14 +6,6 @@ import SpecialItem from './SpecialItem'; // Import the SpecialItem component
 
 const Special = ({products}) => {
 
-    let specialItemsData = []
-    if (products !== undefined) {
-        specialItemsData = products.filter((product)=>{
-            if(product.new_price){
-                return product
-            }
-        })
-    }
     return (
         <section className="special">
             <div className="container">
@@ -39,7 +31,7 @@ const Special = ({products}) => {
                         Check out most promising product
                     </p>
                     <div className="special__list">
-                        {specialItemsData.map((product, index) => (
+                        {products.map((product, index) => (
                            
                             <SpecialItem
                                 key={index}

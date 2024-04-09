@@ -12,7 +12,8 @@ const TagsWrapp = ({
   getSelectedSubCategory,
   selectedSubCategory,
   getSearchInputValue,
-  inputSearchValue
+  inputSearchValue,
+  page_url
 }) => {
   return (
     <section className="tags">
@@ -28,12 +29,13 @@ const TagsWrapp = ({
                 getSelectedCategory={getSelectedCategory}
                 selectedCategory={selectedCategory}
                 inputSearchValue={inputSearchValue}
+                page_url={page_url}
               />
             ))}
           </div>
           <Search getSearchInputValue={getSearchInputValue}/>
         </div>
-        {/* <div className="tags__list width-full">
+        <div className="tags__list width-full">
           {subcategories.map((subcategory, index) => (
             <TagSubItem
               key={subcategory.id}
@@ -43,7 +45,7 @@ const TagsWrapp = ({
               selectedSubCategory={selectedSubCategory}
             />
           ))}
-        </div> */}
+        </div>
       </div>
     </section>
   );

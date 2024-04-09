@@ -4,33 +4,27 @@ import TagsWrapp from '../../components/Tags/TagsWrapp';
 import SearchResultBar from '../../components/SearchResultBar/SearchResultBar';
 import getData from '@/queries/getData';
 import { useQuery } from 'react-query';
-import {
-  ProductsQuery,
-  CategoriesQuery,
-  FilteredProductsQuery,
-  FilteredSubcategoriesQuery,
-  SearchedProductsQuery,
-  DoubleFilteredProductsQuery
-} from '@/queries/ProductsQueries';
+import { ProductsQuery, CategoriesQuery, SearchedProductsQuery } from '@/queries/ProductsQueries';
 
 async function handleProductFiltering({ queryKey }) {
- 
   if (queryKey[2]) {
     return await getData(SearchedProductsQuery, 'products', {
       category: null,
       offset: queryKey[1],
       product_name: queryKey[2],
     });
-  } 
+  }
 
-  return await getData(ProductsQuery, 'products', { offset: queryKey[2] });
+  return await getData(ProductsQuery, 'products', { offset: queryKey[1] });
 }
 
 const ProductsListPage = () => {
+  const page_url = 'products';
   const [inputSearchValue, setInputSearchValue] = useState('');
   const [filteredProducts, setFilteredProducts] = useState();
   const [offsetCount, setOffsetCount] = useState(0);
-  
+  const [selectedCategory, setSelectedCategory] = useState();
+
   const { data: products, isSuccess } = useQuery(
     ['products', offsetCount, inputSearchValue],
     handleProductFiltering
@@ -41,10 +35,15 @@ const ProductsListPage = () => {
     async () => await getData(CategoriesQuery, 'categories')
   );
 
-  const getSearchInputValue = (value) => {
-    setFilteredProducts([])
+  const getSelectedCategory = e => {
+    setSelectedCategory(e.target.id);
+    setOffsetCount(0);
+    setInputSearchValue('');
+  };
+
+  const getSearchInputValue = value => {
+    setFilteredProducts([]);
     setInputSearchValue(value);
-    value && setSelectedSubCategory('');
     setOffsetCount(0);
   };
 
@@ -62,15 +61,23 @@ const ProductsListPage = () => {
 
   return (
     <div>
-      {categoriesSuccess  && (
+      {categoriesSuccess && (
         <TagsWrapp
           categories={categories}
           getSearchInputValue={getSearchInputValue}
           inputSearchValue={inputSearchValue}
+          getSelectedCategory={getSelectedCategory}
+          subcategories={[]}
+          page_url={page_url}
         />
       )}
-       {/* <SearchResultBar count={filteredProducts ? filteredProducts.length : products.length} inputSearchText={inputSearchValue} /> */}
-      {isSuccess && <CardList products={filteredProducts} getLoadMoreProducts={getLoadMoreProducts} />}
+      {isSuccess && (
+        <SearchResultBar
+          count={filteredProducts ? filteredProducts.length : null}
+          inputSearchText={inputSearchValue}
+        />
+      )}
+      <CardList page_url={page_url} products={filteredProducts} getLoadMoreProducts={getLoadMoreProducts} />
     </div>
   );
 };

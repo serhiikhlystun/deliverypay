@@ -2,41 +2,40 @@ import CardList from '@/components/Card/CardList';
 import SearchResultBar from '@/components/SearchResultBar/SearchResultBar';
 import getData from '@/queries/getData';
 import {
-  FilteredByCategorySlugProductsQuery,
   CategoriesQuery,
   FilteredSubcategoriesQuery,
-  DoubleFilteredProductsQuery,
-  SearchedProductsQuery,
-  FilteredProductsQuery,
-  ProductsQuery
+  SelectedCategoryQuery,
 } from '@/queries/ProductsQueries';
 import { useQuery } from 'react-query';
 import React, { useState, useEffect } from 'react';
 import TagsWrapp from '@/components/Tags/TagsWrapp';
+import {
+  SaleDoubleFilteredProductsQuery,
+  SaleFilteredProductsQuery,
+  SaleSearchedProductsQuery,
+  FilteredByCategorySlugSaleProductsQuery,
+} from '@/queries/SpecialQueries';
 
 async function handleProductFiltering({ queryKey }) {
-    console.log(queryKey);
   if (queryKey[4]) {
-    return await getData(SearchedProductsQuery, 'products', {
+    return await getData(SaleSearchedProductsQuery, 'products', {
       category: null,
       offset: queryKey[2],
       product_name: queryKey[4],
     });
   } else if (queryKey[1]) {
     if (queryKey[3]) {
-      return await getData(DoubleFilteredProductsQuery, 'products', {
+      return await getData(SaleDoubleFilteredProductsQuery, 'products', {
         category: queryKey[1],
         offset: queryKey[2],
         subcategory: queryKey[3],
       });
     } else
-      return await getData(FilteredProductsQuery, 'products', {
+      return await getData(SaleFilteredProductsQuery, 'products', {
         category: queryKey[1],
         offset: queryKey[2],
       });
   }
-
-//   return await getData(ProductsQuery, 'products', { offset: queryKey[2] });
 }
 
 async function handleSubcategoriesFiltering({ queryKey }) {
@@ -47,8 +46,9 @@ async function handleSubcategoriesFiltering({ queryKey }) {
   }
 }
 
-export default function CategoryPage({ products }) {
-  const [selectedCategory, setSelectedCategory] = useState(0);
+export default function CategoryPage({ category }) {
+  const page_url = 'special';
+  const [selectedCategory, setSelectedCategory] = useState();
   const [inputSearchValue, setInputSearchValue] = useState('');
   const [selectedSubCategory, setSelectedSubCategory] = useState();
   const [showProducts, setShowProducts] = useState();
@@ -88,11 +88,14 @@ export default function CategoryPage({ products }) {
   const getLoadMoreProducts = () => {
     setOffsetCount(offsetCount + 20);
   };
+  useEffect(() => {
+    setSelectedCategory(category.id);
+  }, []);
 
   useEffect(() => {
     if (!offsetCount) {
       isSuccess && setShowProducts(filteredProducts);
-    } else if(filteredProducts) {
+    } else if (filteredProducts) {
       isSuccess && setShowProducts([...showProducts, ...filteredProducts]);
     }
   }, [filteredProducts]);
@@ -108,9 +111,14 @@ export default function CategoryPage({ products }) {
         selectedSubCategory={selectedSubCategory}
         getSearchInputValue={getSearchInputValue}
         inputSearchValue={inputSearchValue}
+        page_url={page_url}
       />
-      <SearchResultBar count={showProducts ? showProducts.length : products.length} />
-      <CardList products={showProducts ? showProducts : products} getLoadMoreProducts={getLoadMoreProducts} />
+      {showProducts && (
+        <>
+          <SearchResultBar count={showProducts.length} />
+          <CardList page_url={page_url} products={showProducts} getLoadMoreProducts={getLoadMoreProducts} />
+        </>
+      )}
     </div>
   );
 }
@@ -118,11 +126,11 @@ export default function CategoryPage({ products }) {
 export const getServerSideProps = async ctx => {
   const { category } = ctx.query;
 
-  const data = await getData(FilteredByCategorySlugProductsQuery, 'products', { category_slug: category });
+  const selectedCategory = await getData(SelectedCategoryQuery, 'categories', { category_slug: category });
 
   return {
     props: {
-      products: data,
+      category: selectedCategory[0],
     },
   };
 };

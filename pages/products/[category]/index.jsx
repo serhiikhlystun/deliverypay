@@ -2,13 +2,12 @@ import CardList from '@/components/Card/CardList';
 import SearchResultBar from '@/components/SearchResultBar/SearchResultBar';
 import getData from '@/queries/getData';
 import {
-  FilteredByCategorySlugProductsQuery,
   CategoriesQuery,
   FilteredSubcategoriesQuery,
   DoubleFilteredProductsQuery,
   SearchedProductsQuery,
   FilteredProductsQuery,
-  SelectedCategory
+  SelectedCategoryQuery,
 } from '@/queries/ProductsQueries';
 import { useQuery } from 'react-query';
 import React, { useState, useEffect } from 'react';
@@ -34,8 +33,6 @@ async function handleProductFiltering({ queryKey }) {
         offset: queryKey[2],
       });
   }
-
-//   return await getData(ProductsQuery, 'products', { offset: queryKey[2] });
 }
 
 async function handleSubcategoriesFiltering({ queryKey }) {
@@ -46,18 +43,18 @@ async function handleSubcategoriesFiltering({ queryKey }) {
   }
 }
 
-export default function CategoryPage({products, category}) {
-
+export default function CategoryPage({ category }) {
+  const page_url = 'products';
   const [selectedCategory, setSelectedCategory] = useState();
   const [inputSearchValue, setInputSearchValue] = useState('');
-  const [selectedSubCategory, setSelectedSubCategory] = useState(category.id);
+  const [selectedSubCategory, setSelectedSubCategory] = useState();
   const [showProducts, setShowProducts] = useState();
   const [offsetCount, setOffsetCount] = useState(0);
 
-//   const { data: filteredProducts, isSuccess } = useQuery(
-//     ['products', selectedCategory, offsetCount, selectedSubCategory, inputSearchValue],
-//     handleProductFiltering
-//   );
+  const { data: filteredProducts, isSuccess } = useQuery(
+    ['products', selectedCategory, offsetCount, selectedSubCategory, inputSearchValue],
+    handleProductFiltering
+  );
 
   const { data: categories, isSuccess: categoriesSuccess } = useQuery(
     'categories',
@@ -67,7 +64,7 @@ export default function CategoryPage({products, category}) {
   const { data: subcategories } = useQuery(['subcategories', selectedCategory], handleSubcategoriesFiltering);
 
   const getSelectedCategory = e => {
-    setSelectedCategory(e.target.vale);
+    setSelectedCategory(e.target.id);
     setSelectedSubCategory('');
     setOffsetCount(0);
     setInputSearchValue('');
@@ -88,19 +85,18 @@ export default function CategoryPage({products, category}) {
   const getLoadMoreProducts = () => {
     setOffsetCount(offsetCount + 20);
   };
+  useEffect(() => {
+    setSelectedCategory(category.id);
+  }, []);
 
-//   useEffect(() => {
-//     setSelectedCategory(category.id)
-//     if (!offsetCount) {
-//       isSuccess && setShowProducts(filteredProducts);
-//     } else if(filteredProducts) {
-//       isSuccess && setShowProducts([...showProducts, ...filteredProducts]);
-//     }
-//   }, [filteredProducts, category]);
-
-  console.log(products);
+  useEffect(() => {
+    if (!offsetCount) {
+      isSuccess && setShowProducts(filteredProducts);
+    } else if (filteredProducts) {
+      isSuccess && setShowProducts([...showProducts, ...filteredProducts]);
+    }
+  }, [filteredProducts]);
   console.log(showProducts);
-
   return (
     <div>
       <TagsWrapp
@@ -112,9 +108,18 @@ export default function CategoryPage({products, category}) {
         selectedSubCategory={selectedSubCategory}
         getSearchInputValue={getSearchInputValue}
         inputSearchValue={inputSearchValue}
+        page_url={page_url}
       />
-      <SearchResultBar count={showProducts ? showProducts.length : products.length} />
-      <CardList products={showProducts ? showProducts : products} getLoadMoreProducts={getLoadMoreProducts} />
+      {showProducts && (
+        <>
+          <SearchResultBar count={showProducts.length} />
+          <CardList
+            page_url={page_url}
+            products={showProducts ? showProducts : products}
+            getLoadMoreProducts={getLoadMoreProducts}
+          />
+        </>
+      )}
     </div>
   );
 }
@@ -122,12 +127,10 @@ export default function CategoryPage({products, category}) {
 export const getServerSideProps = async ctx => {
   const { category } = ctx.query;
 
-  const data = await getData(FilteredByCategorySlugProductsQuery, 'products', { category_slug: category });
-  const selectedCategory = await getData(SelectedCategory, 'categories', { category_slug: category });
+  const selectedCategory = await getData(SelectedCategoryQuery, 'categories', { category_slug: category });
 
   return {
     props: {
-      products: data,
       category: selectedCategory[0],
     },
   };

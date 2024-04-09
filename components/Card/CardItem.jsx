@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL;
 
-const CardItem = ({ image, title, brand, price, priceOld, description, category, slug }) => {
+const CardItem = ({ image, title, brand, price, priceOld, description, category, slug, page_url }) => {
   const [isActive, setIsActive] = useState(false);
 
   const toggleActive = (e) => {
@@ -14,7 +14,7 @@ const CardItem = ({ image, title, brand, price, priceOld, description, category,
   };
 
   return (
-    <Link href={`/products/${category.slug}/${slug}`}>
+    <Link href={`/${page_url}/${category.slug}/${slug}`}>
       <div className="card-item">
         <div className="card-item__img-wrapp">
           <img src={`${assetsUrl}/${image}?width=580&height=700`} className="card-item__img" alt="" />
