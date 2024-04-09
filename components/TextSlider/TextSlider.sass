@@ -1,0 +1,43 @@
+@import "../../sass/abstracts/variables"
+
+.text-slider
+  background: url("./img/desk-bg.jpg")
+  background-position: center center
+  background-repeat: no-repeat
+  background-size: cover
+  height: 40px
+  display: flex
+  justify-content: space-between
+  margin-bottom: 24px
+  &__wrapp
+    display: flex
+    align-items: center
+    justify-content: space-between
+  & .swiper-container
+    overflow: hidden
+    max-width: calc(100% - 96px)
+    margin: 0 auto
+  & .text-slider-prev,
+    .text-slider-next
+    display: flex
+    align-items: center
+    justify-content: center
+    cursor: pointer
+  &__item
+    color: $white
+    text-align: center
+    font-weight: 800
+    line-height: 100%
+    font-size: 16px
+  &__title
+    &-wrapp
+      display: none
+
+
+@media (max-width: $tabletSmall)
+  .text-slider
+    background: url("./img/mob-bg.jpg")
+    background-size: cover
+    height: 96px
+    margin-bottom: 40px
+

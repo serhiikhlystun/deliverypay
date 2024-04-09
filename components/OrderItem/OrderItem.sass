@@ -1,0 +1,97 @@
+@import "../../sass/abstracts/variables"
+@import "../../sass/abstracts/mixins"
+
+.order
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr))
+  grid-row-gap: 24px
+  grid-column-gap: 24px
+  &-item
+    border: 1px solid #DDDDDD
+    min-height: 200px
+    padding: 20px
+    width: 100%
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    &:last-of-type
+      margin-bottom: 0
+    &__text
+      font-size: 14px
+      color: $grey
+      padding-bottom: 8px
+      &:last-of-type
+        padding-bottom: 0
+      & span
+        color: $black
+        font-weight: 700
+        text-transform: uppercase
+      &-box
+        display: flex
+        justify-content: space-between
+        padding-bottom: 8px
+      &-inn
+        display: flex
+        flex-direction: column
+        padding-bottom: 32px
+      &-wrapp
+        display: flex
+    &__btn
+      display: flex
+      align-items: center
+      justify-content: center
+      height: 56px
+      width: 180px
+      color: $white
+      background: $black
+      font-size: 11px
+      font-weight: 800
+      border: none
+      cursor: pointer
+      text-transform: uppercase
+      transition: $transition
+      &:hover
+        @include hoverShadowBlack()
+      &-wrapp
+        display: flex
+        justify-content: space-between
+        align-items: flex-end
+      &-icon
+        margin-right: 4px
+        margin-top: -2px
+  &__more
+    display: flex
+    align-items: center
+    justify-content: center
+    padding-top: 80px
+    &-btn
+      display: flex
+      align-items: center
+      justify-content: center
+      font-size: 12px
+      line-height: 120%
+      text-transform: uppercase
+      width: 180px
+      height: 56px
+      outline: none
+      background: $white
+      border: 1px solid #A1A1A1
+      cursor: pointer
+      transition: $transition
+      &:hover
+        @include hoverShadowBlack
+
+
+
+@media (max-width: $tablet)
+  .order
+    grid-template-columns: 1fr
+    &-item
+      max-width: none
+
+
+@media (max-width: $mobile)
+  .order-item
+    &__btn
+      width: 96px
+      height: 32px

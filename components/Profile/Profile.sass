@@ -1,0 +1,30 @@
+@import "../../sass/abstracts/variables"
+
+.profile
+  padding: 64px 0 80px
+  &__title
+    font-size: 30px
+    line-height: 120%
+    font-family: $tuskerGrotesk
+    color: $black
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: center
+    padding-bottom: 12px
+    text-transform: uppercase
+    & svg
+      margin-left: 8px
+      min-width: 40px
+      cursor: pointer
+  &__subtitle
+    font-size: 19px
+    color: $black
+    width: 100%
+    text-align: center
+    padding-bottom: 80px
+
+@media (max-width: $mobile)
+  .profile
+    &__title
+      font-size: 24px

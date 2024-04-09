@@ -1,0 +1,14 @@
+{
+  "schema": "remote-schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "default": {
+        "url": "https://crm.web3flow.online/graphql",
+        "headers": {
+          "user-agent": "JS GraphQL"
+        },
+        "introspect": true
+      }
+    }
+  }
+}

@@ -1,0 +1,193 @@
+@import "../../sass/abstracts/variables"
+
+.hamburger
+  display: none
+
+  &__box
+    display: flex
+    align-items: center
+    cursor: pointer
+    height: 28px
+
+  &__btn
+    position: relative
+    width: 24px
+    height: 20px
+    cursor: pointer
+    z-index: 100
+    transition: $transition
+    display: flex
+    align-items: flex-start
+    justify-content: space-between
+    flex-direction: column
+    cursor: pointer
+
+    &_item
+      background: $black
+      border: none
+      height: 2px
+      border-radius: 19px
+      width: 100%
+      transition: $transition
+      cursor: pointer
+
+      &:nth-of-type(2)
+        width: 50%
+
+    &_text
+      font-size: 12px
+      color: $black
+      padding-right: 8px
+      transition: $transition
+      position: relative
+      z-index: 10
+
+  &__overlay
+    position: fixed
+    top: 0
+    left: 0
+    bottom: 0
+    width: 0
+    height: 100%
+    opacity: 0
+    transition: $transition
+    overflow: hidden
+    z-index: 0
+    font-size: 26px
+    font-weight: 300
+    text-align: center
+    display: flex
+    justify-content: flex-end
+    -webkit-overflow-scrolling: touch
+
+    &-title
+      font-size: 11px
+      display: flex
+      padding-bottom: 12px
+
+    &-group
+      padding-bottom: 32px
+
+    &-btn
+      position: absolute
+      width: 100%
+      height: 100%
+      z-index: 2
+      transition: $transition
+      opacity: 0
+      background: rgba(37, 31, 30, 0.78)
+
+    &-box
+      display: flex
+      flex-direction: column
+      height: 100%
+      padding: 32px 24px
+      background: rgba(255, 255, 255, 0.9)
+      width: 100%
+      position: relative
+      z-index: 140
+
+    &-img
+      opacity: 0.2
+      width: 100%
+      max-width: 200px
+      height: auto
+      margin: 0 auto
+
+    &-list
+      position: relative
+      font-size: 26px
+      font-weight: 300
+      text-align: center
+      list-style: none
+      display: inline-block
+      padding-top: 40px
+
+      &_item
+        padding-bottom: 8px
+        position: relative
+        text-align: left
+        display: flex
+        align-items: center
+        justify-content: space-between
+
+        &-link
+          cursor: pointer
+          display: block
+          position: relative
+          color: $black
+          text-decoration: none
+          font-weight: 700
+          font-size: 24px
+          line-height: 130%
+          font-family: $tuskerGrotesk
+
+    &-buttons
+      position: relative
+      font-size: 26px
+      font-weight: 300
+      text-align: center
+      list-style: none
+      margin: 0 auto
+      display: inline-block
+      padding: 40px 0 48px
+
+      &_item
+        display: flex
+        flex-direction: column
+        align-items: center
+        padding-bottom: 32px
+        position: relative
+
+        &:last-of-type
+          padding-bottom: 0
+
+        &-link
+          border: 1px solid #BDC5D9
+          box-sizing: border-box
+          border-radius: 69px
+          display: block
+          position: relative
+          color: $black
+          text-decoration: none
+          font-weight: 400
+          font-size: 24px
+          line-height: 160%
+          padding: 8px 32px
+
+    &.open
+      transition: $transition
+      opacity: 1
+      z-index: 120
+      width: 100%
+
+      & .hamburger__overlay-btn
+        opacity: 1
+        transition: $transition
+        position: fixed
+
+  @keyframes fadeInRight
+    0%
+      opacity: 0
+      left: 20%
+    100%
+      opacity: 1
+      left: 0
+
+
+
+@media (max-width: $tablet)
+  .hamburger
+    display: block
+    &__overlay
+      &-box
+        padding: 58px 24px 24px
+        width: 50%
+        backdrop-filter: blur(3px)
+
+@media (max-width: $mobile)
+  .hamburger
+    &__overlay
+      &-box
+        width: 100%
+        padding: 32px 24px 24px

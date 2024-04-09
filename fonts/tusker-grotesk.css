@@ -1,0 +1,390 @@
+@font-face {
+    font-family: 'Tusker Grotesk 2600';
+    src: url('TuskerGrotesk-2600Semibold.eot');
+    src: local('Tusker Grotesk 2600 Semibold'), local('TuskerGrotesk-2600Semibold'),
+        url('TuskerGrotesk-2600Semibold.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-2600Semibold.woff2') format('woff2'),
+        url('TuskerGrotesk-2600Semibold.woff') format('woff'),
+        url('TuskerGrotesk-2600Semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 3500';
+    src: url('TuskerGrotesk-3500Medium.eot');
+    src: local('Tusker Grotesk 3500 Medium'), local('TuskerGrotesk-3500Medium'),
+        url('TuskerGrotesk-3500Medium.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-3500Medium.woff2') format('woff2'),
+        url('TuskerGrotesk-3500Medium.woff') format('woff'),
+        url('TuskerGrotesk-3500Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 7600';
+    src: url('TuskerGrotesk-7600Semibold.eot');
+    src: local('Tusker Grotesk 7600 Semibold'), local('TuskerGrotesk-7600Semibold'),
+        url('TuskerGrotesk-7600Semibold.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-7600Semibold.woff2') format('woff2'),
+        url('TuskerGrotesk-7600Semibold.woff') format('woff'),
+        url('TuskerGrotesk-7600Semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 5700';
+    src: url('TuskerGrotesk-5700Bold.eot');
+    src: local('Tusker Grotesk 5700 Bold'), local('TuskerGrotesk-5700Bold'),
+        url('TuskerGrotesk-5700Bold.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-5700Bold.woff2') format('woff2'),
+        url('TuskerGrotesk-5700Bold.woff') format('woff'),
+        url('TuskerGrotesk-5700Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 1800 Super';
+    src: url('TuskerGrotesk-1800Super.eot');
+    src: local('Tusker Grotesk 1800 Super'), local('TuskerGrotesk-1800Super'),
+        url('TuskerGrotesk-1800Super.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-1800Super.woff2') format('woff2'),
+        url('TuskerGrotesk-1800Super.woff') format('woff'),
+        url('TuskerGrotesk-1800Super.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 9800 Super';
+    src: url('TuskerGrotesk-9800Super.eot');
+    src: local('Tusker Grotesk 9800 Super'), local('TuskerGrotesk-9800Super'),
+        url('TuskerGrotesk-9800Super.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-9800Super.woff2') format('woff2'),
+        url('TuskerGrotesk-9800Super.woff') format('woff'),
+        url('TuskerGrotesk-9800Super.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 8700';
+    src: url('TuskerGrotesk-8700Bold.eot');
+    src: local('Tusker Grotesk 8700 Bold'), local('TuskerGrotesk-8700Bold'),
+        url('TuskerGrotesk-8700Bold.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-8700Bold.woff2') format('woff2'),
+        url('TuskerGrotesk-8700Bold.woff') format('woff'),
+        url('TuskerGrotesk-8700Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 7800 Super';
+    src: url('TuskerGrotesk-7800Super.eot');
+    src: local('Tusker Grotesk 7800 Super'), local('TuskerGrotesk-7800Super'),
+        url('TuskerGrotesk-7800Super.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-7800Super.woff2') format('woff2'),
+        url('TuskerGrotesk-7800Super.woff') format('woff'),
+        url('TuskerGrotesk-7800Super.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 2500';
+    src: url('TuskerGrotesk-2500Medium.eot');
+    src: local('Tusker Grotesk 2500 Medium'), local('TuskerGrotesk-2500Medium'),
+        url('TuskerGrotesk-2500Medium.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-2500Medium.woff2') format('woff2'),
+        url('TuskerGrotesk-2500Medium.woff') format('woff'),
+        url('TuskerGrotesk-2500Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 5500';
+    src: url('TuskerGrotesk-5500Medium.eot');
+    src: local('Tusker Grotesk 5500 Medium'), local('TuskerGrotesk-5500Medium'),
+        url('TuskerGrotesk-5500Medium.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-5500Medium.woff2') format('woff2'),
+        url('TuskerGrotesk-5500Medium.woff') format('woff'),
+        url('TuskerGrotesk-5500Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 3800 Super';
+    src: url('TuskerGrotesk-3800Super.eot');
+    src: local('Tusker Grotesk 3800 Super'), local('TuskerGrotesk-3800Super'),
+        url('TuskerGrotesk-3800Super.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-3800Super.woff2') format('woff2'),
+        url('TuskerGrotesk-3800Super.woff') format('woff'),
+        url('TuskerGrotesk-3800Super.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 1500';
+    src: url('TuskerGrotesk-1500Medium.eot');
+    src: local('Tusker Grotesk 1500 Medium'), local('TuskerGrotesk-1500Medium'),
+        url('TuskerGrotesk-1500Medium.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-1500Medium.woff2') format('woff2'),
+        url('TuskerGrotesk-1500Medium.woff') format('woff'),
+        url('TuskerGrotesk-1500Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 1700';
+    src: url('TuskerGrotesk-1700Bold.eot');
+    src: local('Tusker Grotesk 1700 Bold'), local('TuskerGrotesk-1700Bold'),
+        url('TuskerGrotesk-1700Bold.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-1700Bold.woff2') format('woff2'),
+        url('TuskerGrotesk-1700Bold.woff') format('woff'),
+        url('TuskerGrotesk-1700Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 4800 Super';
+    src: url('TuskerGrotesk-4800Super.eot');
+    src: local('Tusker Grotesk 4800 Super'), local('TuskerGrotesk-4800Super'),
+        url('TuskerGrotesk-4800Super.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-4800Super.woff2') format('woff2'),
+        url('TuskerGrotesk-4800Super.woff') format('woff'),
+        url('TuskerGrotesk-4800Super.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 1600';
+    src: url('TuskerGrotesk-1600Semibold.eot');
+    src: local('Tusker Grotesk 1600 Semibold'), local('TuskerGrotesk-1600Semibold'),
+        url('TuskerGrotesk-1600Semibold.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-1600Semibold.woff2') format('woff2'),
+        url('TuskerGrotesk-1600Semibold.woff') format('woff'),
+        url('TuskerGrotesk-1600Semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 6500';
+    src: url('TuskerGrotesk-6500Medium.eot');
+    src: local('Tusker Grotesk 6500 Medium'), local('TuskerGrotesk-6500Medium'),
+        url('TuskerGrotesk-6500Medium.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-6500Medium.woff2') format('woff2'),
+        url('TuskerGrotesk-6500Medium.woff') format('woff'),
+        url('TuskerGrotesk-6500Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 6800 Super';
+    src: url('TuskerGrotesk-6800Super.eot');
+    src: local('Tusker Grotesk 6800 Super'), local('TuskerGrotesk-6800Super'),
+        url('TuskerGrotesk-6800Super.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-6800Super.woff2') format('woff2'),
+        url('TuskerGrotesk-6800Super.woff') format('woff'),
+        url('TuskerGrotesk-6800Super.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 4500';
+    src: url('TuskerGrotesk-4500Medium.eot');
+    src: local('Tusker Grotesk 4500 Medium'), local('TuskerGrotesk-4500Medium'),
+        url('TuskerGrotesk-4500Medium.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-4500Medium.woff2') format('woff2'),
+        url('TuskerGrotesk-4500Medium.woff') format('woff'),
+        url('TuskerGrotesk-4500Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 2800 Super';
+    src: url('TuskerGrotesk-2800Super.eot');
+    src: local('Tusker Grotesk 2800 Super'), local('TuskerGrotesk-2800Super'),
+        url('TuskerGrotesk-2800Super.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-2800Super.woff2') format('woff2'),
+        url('TuskerGrotesk-2800Super.woff') format('woff'),
+        url('TuskerGrotesk-2800Super.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 7700';
+    src: url('TuskerGrotesk-7700Bold.eot');
+    src: local('Tusker Grotesk 7700 Bold'), local('TuskerGrotesk-7700Bold'),
+        url('TuskerGrotesk-7700Bold.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-7700Bold.woff2') format('woff2'),
+        url('TuskerGrotesk-7700Bold.woff') format('woff'),
+        url('TuskerGrotesk-7700Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 4600';
+    src: url('TuskerGrotesk-4600Semibold.eot');
+    src: local('Tusker Grotesk 4600 Semibold'), local('TuskerGrotesk-4600Semibold'),
+        url('TuskerGrotesk-4600Semibold.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-4600Semibold.woff2') format('woff2'),
+        url('TuskerGrotesk-4600Semibold.woff') format('woff'),
+        url('TuskerGrotesk-4600Semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 3700';
+    src: url('TuskerGrotesk-3700Bold.eot');
+    src: local('Tusker Grotesk 3700 Bold'), local('TuskerGrotesk-3700Bold'),
+        url('TuskerGrotesk-3700Bold.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-3700Bold.woff2') format('woff2'),
+        url('TuskerGrotesk-3700Bold.woff') format('woff'),
+        url('TuskerGrotesk-3700Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 5800 Super';
+    src: url('TuskerGrotesk-5800Super.eot');
+    src: local('Tusker Grotesk 5800 Super'), local('TuskerGrotesk-5800Super'),
+        url('TuskerGrotesk-5800Super.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-5800Super.woff2') format('woff2'),
+        url('TuskerGrotesk-5800Super.woff') format('woff'),
+        url('TuskerGrotesk-5800Super.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 3600';
+    src: url('TuskerGrotesk-3600Semibold.eot');
+    src: local('Tusker Grotesk 3600 Semibold'), local('TuskerGrotesk-3600Semibold'),
+        url('TuskerGrotesk-3600Semibold.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-3600Semibold.woff2') format('woff2'),
+        url('TuskerGrotesk-3600Semibold.woff') format('woff'),
+        url('TuskerGrotesk-3600Semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 2700';
+    src: url('TuskerGrotesk-2700Bold.eot');
+    src: local('Tusker Grotesk 2700 Bold'), local('TuskerGrotesk-2700Bold'),
+        url('TuskerGrotesk-2700Bold.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-2700Bold.woff2') format('woff2'),
+        url('TuskerGrotesk-2700Bold.woff') format('woff'),
+        url('TuskerGrotesk-2700Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 6700';
+    src: url('TuskerGrotesk-6700Bold.eot');
+    src: local('Tusker Grotesk 6700 Bold'), local('TuskerGrotesk-6700Bold'),
+        url('TuskerGrotesk-6700Bold.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-6700Bold.woff2') format('woff2'),
+        url('TuskerGrotesk-6700Bold.woff') format('woff'),
+        url('TuskerGrotesk-6700Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 5600';
+    src: url('TuskerGrotesk-5600Semibold.eot');
+    src: local('Tusker Grotesk 5600 Semibold'), local('TuskerGrotesk-5600Semibold'),
+        url('TuskerGrotesk-5600Semibold.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-5600Semibold.woff2') format('woff2'),
+        url('TuskerGrotesk-5600Semibold.woff') format('woff'),
+        url('TuskerGrotesk-5600Semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 8800 Super';
+    src: url('TuskerGrotesk-8800Super.eot');
+    src: local('Tusker Grotesk 8800 Super'), local('TuskerGrotesk-8800Super'),
+        url('TuskerGrotesk-8800Super.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-8800Super.woff2') format('woff2'),
+        url('TuskerGrotesk-8800Super.woff') format('woff'),
+        url('TuskerGrotesk-8800Super.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 6600';
+    src: url('TuskerGrotesk-6600Semibold.eot');
+    src: local('Tusker Grotesk 6600 Semibold'), local('TuskerGrotesk-6600Semibold'),
+        url('TuskerGrotesk-6600Semibold.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-6600Semibold.woff2') format('woff2'),
+        url('TuskerGrotesk-6600Semibold.woff') format('woff'),
+        url('TuskerGrotesk-6600Semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tusker Grotesk 4700';
+    src: url('TuskerGrotesk-4700Bold.eot');
+    src: local('Tusker Grotesk 4700 Bold'), local('TuskerGrotesk-4700Bold'),
+        url('TuskerGrotesk-4700Bold.eot?#iefix') format('embedded-opentype'),
+        url('TuskerGrotesk-4700Bold.woff2') format('woff2'),
+        url('TuskerGrotesk-4700Bold.woff') format('woff'),
+        url('TuskerGrotesk-4700Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+

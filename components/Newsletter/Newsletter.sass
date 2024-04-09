@@ -1,0 +1,59 @@
+@import "../../sass/abstracts/variables"
+
+.newsletter
+  background: url("img/bg.jpg") top, top, no-repeat
+  background-size: cover
+  &__wrapp
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    height: 45vh
+    width: 100%
+  &__title
+    font-size: 55px
+    line-height: 120%
+    font-family: $tuskerGrotesk
+    color: $white
+    width: max-content
+  &__subtitle
+    color: $white
+    mix-blend-mode: soft-light
+    padding-bottom: 16px
+    width: max-content
+  &__input
+    width: 100%
+    height: 64px
+    background: $white
+    display: flex
+    align-items: center
+    justify-content: center
+    border: none
+    outline: none
+    padding-left: 16px
+    position: relative
+    z-index: 0
+    &::placeholder
+      color: #323232
+      font-size: 12px
+      padding: 0
+      margin: 0
+    &-wrapp
+      position: relative
+      width: 100%
+      max-width: 365px
+      margin: 0 auto
+    &-btn
+      position: absolute
+      right: 16px
+      top: 16px
+      z-index: 1
+
+
+@media (max-width: $tabletSmall)
+  .newsletter
+    &__title
+      font-size: 24px
+      padding-bottom: 16px
+    &__subtitle
+      display: none
