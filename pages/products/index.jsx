@@ -15,48 +15,24 @@ import {
 
 async function handleProductFiltering({ queryKey }) {
  
-  if (queryKey[4]) {
+  if (queryKey[2]) {
     return await getData(SearchedProductsQuery, 'products', {
       category: null,
-      offset: queryKey[2],
-      product_name: queryKey[4],
-    });
-  } else if (queryKey[1]) {
-    if(queryKey[3]){
-      return await getData(DoubleFilteredProductsQuery, 'products', {
-        category: queryKey[1],
-        offset: queryKey[2],
-        subcategory: queryKey[3]
-      });
-    } else
-    return await getData(FilteredProductsQuery, 'products', {
-      category: queryKey[1],
-      offset: queryKey[2],
+      offset: queryKey[1],
+      product_name: queryKey[2],
     });
   } 
 
   return await getData(ProductsQuery, 'products', { offset: queryKey[2] });
 }
 
-async function handleSubcategoriesFiltering({ queryKey }) {
-  if (queryKey[1]) {
-    return await getData(FilteredSubcategoriesQuery, 'subcategories', {
-      category: queryKey[1],
-    });
-  }
-
-  return [];
-}
-
 const ProductsListPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState(0);
   const [inputSearchValue, setInputSearchValue] = useState('');
-  const [selectedSubCategory, setSelectedSubCategory] = useState();
   const [filteredProducts, setFilteredProducts] = useState();
   const [offsetCount, setOffsetCount] = useState(0);
   
   const { data: products, isSuccess } = useQuery(
-    ['products', selectedCategory, offsetCount, selectedSubCategory, inputSearchValue],
+    ['products', offsetCount, inputSearchValue],
     handleProductFiltering
   );
 
@@ -64,22 +40,6 @@ const ProductsListPage = () => {
     'categories',
     async () => await getData(CategoriesQuery, 'categories')
   );
-  const { data: subcategories, isSuccess: subcategoriesSuccess } = useQuery(
-    ['subcategories', selectedCategory],
-    handleSubcategoriesFiltering
-  );
-
-  const getSelectedCategory = e => {
-    setSelectedCategory(e.target.id);
-    setSelectedSubCategory('');
-    setOffsetCount(0);
-    setInputSearchValue('')
-  };
-
-  const getSelectedSubCategory = e => {
-    setSelectedSubCategory(e.target.id);
-    setOffsetCount(0);
-  };
 
   const getSearchInputValue = (value) => {
     setFilteredProducts([])
@@ -102,22 +62,15 @@ const ProductsListPage = () => {
 
   return (
     <div>
-      {categoriesSuccess && subcategoriesSuccess && (
+      {categoriesSuccess  && (
         <TagsWrapp
           categories={categories}
-          subcategories={subcategories}
-          getSelectedCategory={getSelectedCategory}
-          selectedCategory={selectedCategory}
-          getSelectedSubCategory={getSelectedSubCategory}
-          selectedSubCategory={selectedSubCategory}
           getSearchInputValue={getSearchInputValue}
           inputSearchValue={inputSearchValue}
         />
       )}
-      {filteredProducts && (
-        <SearchResultBar count={filteredProducts.length} inputSearchText={inputSearchValue} />
-      )}
-      {filteredProducts && <CardList products={filteredProducts} getLoadMoreProducts={getLoadMoreProducts} />}
+       {/* <SearchResultBar count={filteredProducts ? filteredProducts.length : products.length} inputSearchText={inputSearchValue} /> */}
+      {isSuccess && <CardList products={filteredProducts} getLoadMoreProducts={getLoadMoreProducts} />}
     </div>
   );
 };

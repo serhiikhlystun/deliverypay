@@ -22,6 +22,7 @@ const TagsWrapp = ({
             {categories.map((category, index) => (
               <TagItem
                 key={category.id}
+                slug={category.slug}
                 title={category.category_name}
                 id={category.id}
                 getSelectedCategory={getSelectedCategory}
@@ -32,7 +33,7 @@ const TagsWrapp = ({
           </div>
           <Search getSearchInputValue={getSearchInputValue}/>
         </div>
-        <div className="tags__list width-full">
+        {/* <div className="tags__list width-full">
           {subcategories.map((subcategory, index) => (
             <TagSubItem
               key={subcategory.id}
@@ -42,7 +43,7 @@ const TagsWrapp = ({
               selectedSubCategory={selectedSubCategory}
             />
           ))}
-        </div>
+        </div> */}
       </div>
     </section>
   );

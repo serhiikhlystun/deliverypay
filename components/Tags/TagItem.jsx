@@ -1,15 +1,19 @@
 import React from 'react';
 import './Tags.sass';
+import Link from 'next/link';
 
-const TagItem = ({ title, id, getSelectedCategory, selectedCategory, inputSearchValue }) => {
+const TagItem = ({ title, id, getSelectedCategory, selectedCategory, inputSearchValue, slug }) => {
   return (
-    <button
+    <Link
+      href={`/products/${slug}`}
       id={id}
-      onClick={e => getSelectedCategory(e)}
-      className={`tags__item tags__item-title ${selectedCategory === id && !inputSearchValue ? 'active' : null}`}
+      // onClick={e => getSelectedCategory(e)}
+      className={`tags__item tags__item-title ${
+        selectedCategory === id && !inputSearchValue ? 'active' : null
+      }`}
     >
       {title}
-    </button>
+    </Link>
   );
 };
 

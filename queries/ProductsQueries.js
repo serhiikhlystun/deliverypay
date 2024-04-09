@@ -89,6 +89,22 @@ export const CategoriesQuery = `
     }
 `;
 
+export const SelectedCategory = `
+    #graphql
+    query Categories ($category_slug: String) {
+        categories (
+            filter: { slug: { _eq: $category_slug } }
+        ){
+            id
+            category_name
+            category_image {
+                id
+            }
+            slug
+        }
+    }
+`;
+
 export const SubCategoriesQuery = `
     #graphql
     query SubCategories {
@@ -275,3 +291,5 @@ export const SaleProductsQuery = `
         }
     }
  `;
+
+
