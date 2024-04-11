@@ -19,6 +19,7 @@ const CardList = ({products, getLoadMoreProducts, page_url}) => {
                             category={product.product_categories[0].categories_id}
                             slug={product.slug}
                             page_url={page_url}
+                            subcategory={product.subcategory}
                         />
                     )) : null}
                 </div>

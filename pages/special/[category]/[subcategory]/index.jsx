@@ -4,7 +4,7 @@ import getData from '@/queries/getData';
 import {
   CategoriesQuery,
   FilteredSubcategoriesQuery,
-  SelectedCategoryQuery,
+  SelectedSubCategoryQuery,
 } from '@/queries/ProductsQueries';
 import { useQuery } from 'react-query';
 import React, { useState, useEffect } from 'react';
@@ -13,7 +13,6 @@ import {
   SaleDoubleFilteredProductsQuery,
   SaleFilteredProductsQuery,
   SaleSearchedProductsQuery,
-  FilteredByCategorySlugSaleProductsQuery,
 } from '@/queries/SpecialQueries';
 
 async function handleProductFiltering({ queryKey }) {
@@ -46,7 +45,7 @@ async function handleSubcategoriesFiltering({ queryKey }) {
   }
 }
 
-export default function CategoryPage({ category }) {
+export default function SubCategoryPage({ subcategory }) {
   const page_url = 'special';
   const [selectedCategory, setSelectedCategory] = useState();
   const [inputSearchValue, setInputSearchValue] = useState('');
@@ -89,7 +88,8 @@ export default function CategoryPage({ category }) {
     setOffsetCount(offsetCount + 20);
   };
   useEffect(() => {
-    setSelectedCategory(category.id);
+    setSelectedCategory(subcategory.parent_category.id);
+    setSelectedSubCategory(subcategory.id);
   }, []);
 
   useEffect(() => {
@@ -112,7 +112,7 @@ export default function CategoryPage({ category }) {
         getSearchInputValue={getSearchInputValue}
         inputSearchValue={inputSearchValue}
         page_url={page_url}
-        selectedCategorySlug={category.slug}
+        selectedCategorySlug={subcategory.parent_category.slug}
       />
       {showProducts && (
         <>
@@ -125,13 +125,15 @@ export default function CategoryPage({ category }) {
 }
 
 export const getServerSideProps = async ctx => {
-  const { category } = ctx.query;
+  const { subcategory } = ctx.query;
 
-  const selectedCategory = await getData(SelectedCategoryQuery, 'categories', { category_slug: category });
+  const selectedSubCategory = await getData(SelectedSubCategoryQuery, 'subcategories', {
+    subcategory_slug: subcategory,
+  });
 
   return {
     props: {
-      category: selectedCategory[0],
+      subcategory: selectedSubCategory[0],
     },
   };
 };

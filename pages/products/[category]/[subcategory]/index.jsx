@@ -4,34 +4,31 @@ import getData from '@/queries/getData';
 import {
   CategoriesQuery,
   FilteredSubcategoriesQuery,
-  SelectedCategoryQuery,
+  DoubleFilteredProductsQuery,
+  SearchedProductsQuery,
+  FilteredProductsQuery,
+  SelectedSubCategoryQuery,
 } from '@/queries/ProductsQueries';
 import { useQuery } from 'react-query';
 import React, { useState, useEffect } from 'react';
 import TagsWrapp from '@/components/Tags/TagsWrapp';
-import {
-  SaleDoubleFilteredProductsQuery,
-  SaleFilteredProductsQuery,
-  SaleSearchedProductsQuery,
-  FilteredByCategorySlugSaleProductsQuery,
-} from '@/queries/SpecialQueries';
 
 async function handleProductFiltering({ queryKey }) {
   if (queryKey[4]) {
-    return await getData(SaleSearchedProductsQuery, 'products', {
+    return await getData(SearchedProductsQuery, 'products', {
       category: null,
       offset: queryKey[2],
       product_name: queryKey[4],
     });
   } else if (queryKey[1]) {
     if (queryKey[3]) {
-      return await getData(SaleDoubleFilteredProductsQuery, 'products', {
+      return await getData(DoubleFilteredProductsQuery, 'products', {
         category: queryKey[1],
         offset: queryKey[2],
         subcategory: queryKey[3],
       });
     } else
-      return await getData(SaleFilteredProductsQuery, 'products', {
+      return await getData(FilteredProductsQuery, 'products', {
         category: queryKey[1],
         offset: queryKey[2],
       });
@@ -46,8 +43,8 @@ async function handleSubcategoriesFiltering({ queryKey }) {
   }
 }
 
-export default function CategoryPage({ category }) {
-  const page_url = 'special';
+export default function SubCategoryPage({ subcategory }) {
+  const page_url = 'products';
   const [selectedCategory, setSelectedCategory] = useState();
   const [inputSearchValue, setInputSearchValue] = useState('');
   const [selectedSubCategory, setSelectedSubCategory] = useState();
@@ -89,7 +86,8 @@ export default function CategoryPage({ category }) {
     setOffsetCount(offsetCount + 20);
   };
   useEffect(() => {
-    setSelectedCategory(category.id);
+    setSelectedCategory(subcategory.parent_category.id);
+    setSelectedSubCategory(subcategory.id);
   }, []);
 
   useEffect(() => {
@@ -112,7 +110,7 @@ export default function CategoryPage({ category }) {
         getSearchInputValue={getSearchInputValue}
         inputSearchValue={inputSearchValue}
         page_url={page_url}
-        selectedCategorySlug={category.slug}
+        selectedCategorySlug={subcategory.parent_category.slug}
       />
       {showProducts && (
         <>
@@ -125,13 +123,15 @@ export default function CategoryPage({ category }) {
 }
 
 export const getServerSideProps = async ctx => {
-  const { category } = ctx.query;
+  const { subcategory } = ctx.query;
 
-  const selectedCategory = await getData(SelectedCategoryQuery, 'categories', { category_slug: category });
+  const selectedSubCategory = await getData(SelectedSubCategoryQuery, 'subcategories', {
+    subcategory_slug: subcategory,
+  });
 
   return {
     props: {
-      category: selectedCategory[0],
+      subcategory: selectedSubCategory[0],
     },
   };
 };

@@ -42,6 +42,7 @@ const Special = ({products}) => {
                                 price={`$${product.price}`}
                                 slug={product.slug}
                                 category={product.product_categories[0].categories_id}
+                                subcategory={product.subcategory}
                             />
                         ))}
                     </div>

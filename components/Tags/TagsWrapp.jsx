@@ -13,8 +13,10 @@ const TagsWrapp = ({
   selectedSubCategory,
   getSearchInputValue,
   inputSearchValue,
-  page_url
+  page_url,
+  selectedCategorySlug
 }) => {
+
   return (
     <section className="tags">
       <div className="container">
@@ -43,6 +45,9 @@ const TagsWrapp = ({
               id={subcategory.id}
               getSelectedSubCategory={getSelectedSubCategory}
               selectedSubCategory={selectedSubCategory}
+              page_url={page_url}
+              category_slug={selectedCategorySlug}
+              slug={subcategory.slug}
             />
           ))}
         </div>

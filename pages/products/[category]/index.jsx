@@ -96,7 +96,7 @@ export default function CategoryPage({ category }) {
       isSuccess && setShowProducts([...showProducts, ...filteredProducts]);
     }
   }, [filteredProducts]);
-  console.log(showProducts);
+
   return (
     <div>
       <TagsWrapp
@@ -109,6 +109,7 @@ export default function CategoryPage({ category }) {
         getSearchInputValue={getSearchInputValue}
         inputSearchValue={inputSearchValue}
         page_url={page_url}
+        selectedCategorySlug={category.slug}
       />
       {showProducts && (
         <>

@@ -3,6 +3,7 @@ import './Tags.sass';
 import Link from 'next/link';
 
 const TagItem = ({ title, id, getSelectedCategory, selectedCategory, inputSearchValue, slug, page_url }) => {
+
   return (
     <Link
       href={`/${page_url}/${slug}`}

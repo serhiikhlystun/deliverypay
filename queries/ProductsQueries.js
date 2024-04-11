@@ -120,6 +120,24 @@ export const SubCategoriesQuery = `
     }
 `;
 
+export const SelectedSubCategoryQuery = `
+    #graphql
+    query SubCategories ($subcategory_slug: String) {
+        subcategories (
+            filter: { slug: { _eq: $subcategory_slug } }
+        ) {
+            id
+            subcategory_name
+            slug
+            parent_category {
+                id
+                category_name
+                slug
+            }
+        }
+    }
+`;
+
 export const FilteredProductsQuery = `
     #graphql
     query Products ($category: GraphQLStringOrFloat, $offset: Int) {
@@ -252,5 +270,3 @@ export const SaleProductsQuery = `
         }
     }
  `;
-
-

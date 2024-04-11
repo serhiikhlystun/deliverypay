@@ -2,7 +2,7 @@ import getData from "@/queries/getData"
 import { SingleProductQuery } from "@/queries/SingleProductQueries"
 import ProductItem from "@/components/ProductItem/ProductItem"
 import Special from "@/components/Special/Special"
-import { SaleProductsQuery } from "@/queries/ProductsQueries"
+import { SaleProductsQuery } from "@/queries/SpecialQueries"
 
 export default function ProductPage({product, products}){
     return (
