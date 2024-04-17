@@ -1,48 +1,53 @@
-import React from "react";
-import CartItem from "./../../components/CartItem/CartItem";
-import img_01 from "./../../components/WishListItem/img/card-img-01.jpg";
-import img_02 from "./../../components/WishListItem/img/card-img-02.jpg";
-import img_03 from "./../../components/WishListItem/img/card-img-03.jpg";
-import img_04 from "./../../components/WishListItem/img/card-img-04.jpg";
-import Delivery from "./../../components/Auth/Delivery";
-import CheckoutPrices from "./../../components/Auth/CheckoutPrices";
+import React, { useEffect } from 'react';
+import CartItem from './../../components/CartItem/CartItem';
+import Delivery from './../../components/Auth/Delivery';
+import CheckoutPrices from './../../components/Auth/CheckoutPrices';
+import { useQuery, useMutation } from 'react-query';
+import getData from '@/queries/getData';
+import setData from '@/helpers/setData';
+import { getSession, updateSession } from '@/queries/sessions';
+import useStore from '@/store/temp_order';
 
-const cartListItems = [
-  {
-    title: "Ribbed polo-Neck Jumper",
-    subtitle: "Neck Jumper",
-    price: "$39.90",
-    priceOld: "$59.90",
-    img: img_01.src,
-  },
-  {
-    title: "Ribbed polo-Neck Jumper",
-    subtitle: "Jack jones",
-    price: "$39.90",
-    priceOld: "$59.90",
-    img: img_02.src,
-  },
-  {
-    title: "Ribbed polo-Neck Jumper",
-    subtitle: "Neck Jumper",
-    price: "$39.90",
-    priceOld: "$59.90",
-    img: img_03.src,
-  },
-  {
-    title: "Ribbed polo-Neck Jumper",
-    subtitle: "Weed Jumper",
-    price: "$39.90",
-    priceOld: "$59.90",
-    img: img_04.src,
-  },
-];
 const prices = {
-  totalPrice: "267.90",
-  discount: "7.90",
-  currency: "$",
+  totalPrice: '267.90',
+  discount: '7.90',
+  currency: '$',
 };
-const ProductPage = () => {
+const CartPage = () => {
+  const { data: session, isSuccess } = useQuery(
+    ['session'],
+    async () => await getData(getSession, 'session_by_id', { id: localStorage.getItem('session_id') })
+  );
+  const { tempOrder, setInitialTempOrder, deleteFromTempOrder } = useStore();
+  const mutation = useMutation(newSession => {
+    setData(updateSession, { data: newSession, id: localStorage.getItem('session_id') });
+  });
+  useEffect(() => {
+    if (isSuccess && session) {
+      setInitialTempOrder(session.temp_order);
+    }
+  }, [isSuccess, session]);
+
+  const deleteFromCart = id => {
+    deleteFromTempOrder(id);
+    mutation.mutate({
+      status: 'draft',
+      temp_order: useStore.getState().tempOrder,
+    });
+  };
+
+  if (!useStore.getState().tempOrder.length) {
+    return (
+      <section>
+        <div className="container">
+          <h2 className="cart__title">PRODUCT CART</h2>
+          <h3 className="cart__title-small">PRODUCT ITEMS</h3>
+          <div className="cart__wrapp">YOUR CART IS EMPTY</div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section>
       <div className="container">
@@ -51,14 +56,17 @@ const ProductPage = () => {
         <div className="cart__wrapp">
           <div className="cart-list__wrapp">
             <ul className="cart-list">
-              {cartListItems.map((item, index) => (
+              {tempOrder.map((item, index) => (
                 <CartItem
                   key={index}
-                  image={item.img}
-                  title={item.title}
-                  subtitle={item.subtitle}
-                  price={item.price}
-                  priceOld={item.priceOld}
+                  image={item.image}
+                  product_name={item.product_name}
+                  brand={item.brand}
+                  price={item.new_price ? item.new_price : null}
+                  priceOld={item.price}
+                  quantity={item.quantity}
+                  id={item.id}
+                  deleteFromCart={deleteFromCart}
                 />
               ))}
             </ul>
@@ -71,4 +79,4 @@ const ProductPage = () => {
   );
 };
 
-export default ProductPage;
+export default CartPage;

@@ -6,6 +6,7 @@ export const SingleProductQuery = `
             slug
             product_name
             price
+            brand
             product_description
             new_price
             product_image {

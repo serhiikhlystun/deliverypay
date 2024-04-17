@@ -1,23 +1,58 @@
-import React, { useState } from 'react';
-import 'swiper/scss';
+import React, { useState, useEffect } from 'react';
 import './ProductItem.sass';
 import bucketIcon from './img/bucket-icon.svg';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/scss';
 import 'swiper/scss/pagination';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import img_01 from './img/card-img-01.jpg';
 import img_02 from './img/card-img-02.jpg';
 import img_03 from './img/card-img-03.jpg';
 import img_04 from './img/card-img-04.jpg';
+import setData from '@/helpers/setData';
+import getData from '@/queries/getData';
+import { createSession, updateSession, getSession } from '@/queries/sessions';
+import { v4 as uuidv4 } from 'uuid';
+import useStore from '../../store/temp_order';
 
 const ProductItem = ({ product }) => {
+  const queryClient = useQueryClient();
   const [count, setCount] = useState(1);
+  const [isSessionSet, setSessionSet] = useState(
+    typeof window !== 'undefined' && localStorage.getItem('session_id') !== null
+  );
+  const { data: session, isSuccess } = useQuery(
+    ['session'],
+    async () => await getData(getSession, 'session_by_id', { id: localStorage.getItem('session_id') }),
+    {
+      enabled: isSessionSet,
+    }
+  );
+
   const [isActive, setIsActive] = useState(false);
+
+  const mutation = useMutation(
+    newSession => {
+      if (!isSessionSet) {
+        setData(createSession, { data: newSession }).then(response => {
+          localStorage.setItem('session_id', response.create_session_item.id);
+        });
+        setSessionSet(true);
+      } else {
+        setData(updateSession, { data: newSession, id: localStorage.getItem('session_id') });
+      }
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('session');
+      },
+    }
+  );
 
   const toggleActive = e => {
     e.preventDefault();
-    setIsActive(!isActive);
+    isActive ? deleteFromWishes(product.id) : addToWishes();
   };
 
   const handleClickBack = () => {
@@ -33,10 +68,10 @@ const ProductItem = ({ product }) => {
     document.querySelector('.text-slider').style.setProperty('display', 'none');
   };
 
-  const hendleIncrement = () => {
+  const handleIncrement = () => {
     setCount(count + 1);
   };
-  const hendleDecrement = () => {
+  const handleDecrement = () => {
     setCount(() => (count > 1 ? count - 1 : count));
   };
 
@@ -47,6 +82,72 @@ const ProductItem = ({ product }) => {
     } else {
       setCount(number[0].charAt(number[0].length - 1));
     }
+  };
+
+  useEffect(() => {
+    localStorage.getItem('session_id') ? setSessionSet(true) : setSessionSet(false);
+  });
+
+  const { addToTempOrder, setInitialTempOrder, addToWishList, setInitialWishList, deleteFromWishList } =
+    useStore();
+
+  useEffect(() => {
+    if (isSuccess && session) {
+      if (session.temp_order) {
+        setInitialTempOrder(session.temp_order);
+      }
+      if (session.wish_list) {
+        setInitialWishList(session.wish_list);
+      }
+    }
+  }, [isSuccess, session]);
+
+useEffect(()=>{
+  if (isSuccess && session) {  
+  setIsActive(!!session.wish_list.find(item => item.product_id == product.id));
+  }
+  }, [isSuccess])
+
+  const addToWishes = e => {
+    addToWishList({
+      product_id: product.id,
+      product_name: product.product_name,
+      new_price: product.new_price,
+      price: product.price,
+      brand: product.brand,
+      image: product.product_image ? (product.product_image.id): (null),
+    });
+    mutation.mutate({
+      status: 'draft',
+      wish_list: useStore.getState().wishList,
+    });
+    setIsActive(true);
+  };
+
+  const deleteFromWishes = id => {
+    deleteFromWishList(id);
+    mutation.mutate({
+      status: 'draft',
+      wish_list: useStore.getState().wishList,
+    });
+    setIsActive(false);
+  };
+
+  const addToCart = () => {
+    addToTempOrder({
+      product_id: product.id,
+      image: product.product_image ? (product.product_image.id): (null),
+      product_name: product.product_name,
+      new_price: product.new_price,
+      price: product.price,
+      brand: product.brand,
+      quantity: count,
+      id: uuidv4(),
+    });
+    mutation.mutate({
+      status: 'draft',
+      temp_order: useStore.getState().tempOrder,
+    });
   };
 
   return (
@@ -99,7 +200,7 @@ const ProductItem = ({ product }) => {
               </div>
               <div className="product-item__like">
                 <svg
-                  onClick={toggleActive}
+                  onClick={ toggleActive}
                   className="product-item__like-icon"
                   width="39"
                   height="39"
@@ -131,7 +232,7 @@ const ProductItem = ({ product }) => {
             <p className="product-item__descr-text">{product.product_description}</p>
             <div className="product-item__counter">
               <svg
-                onClick={hendleDecrement}
+                onClick={handleDecrement}
                 className="product-item__counter-item"
                 width="20"
                 height="20"
@@ -160,7 +261,7 @@ const ProductItem = ({ product }) => {
                 onChange={handleChangeInput}
               />
               <svg
-                onClick={hendleIncrement}
+                onClick={handleIncrement}
                 className="product-item__counter-item"
                 width="20"
                 height="20"
@@ -187,7 +288,7 @@ const ProductItem = ({ product }) => {
                   <p className="product-item__price">{product.price}</p>
                 )}
               </div>
-              <button className="product-item__btn">
+              <button className="product-item__btn" onClick={addToCart}>
                 <img className="product-item__btn-icon" src={bucketIcon} alt="" />
                 ADD TO BAG
               </button>

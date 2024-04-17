@@ -1,17 +1,135 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CardItem.sass';
 import bucketIcon from './img/bucket-icon.svg';
 import Link from 'next/link';
+import useStore from '@/store/temp_order';
+import { v4 as uuidv4 } from 'uuid';
+import setData from '@/helpers/setData';
+import getData from '@/queries/getData';
+import { createSession, updateSession, getSession } from '@/queries/sessions';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 
 const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL;
 
-const CardItem = ({ image, title, brand, price, priceOld, description, category, slug, page_url, subcategory }) => {
+const CardItem = ({
+  image,
+  id,
+  title,
+  brand,
+  price,
+  priceOld,
+  description,
+  category,
+  slug,
+  page_url,
+  subcategory,
+}) => {
   const [isActive, setIsActive] = useState(false);
+  const queryClient = useQueryClient();
+  const [isSessionSet, setSessionSet] = useState(
+    typeof window !== 'undefined' && localStorage.getItem('session_id') !== null
+  );
+  const { data: session, isSuccess } = useQuery(
+    'session',
+    async () => await getData(getSession, 'session_by_id', { id: localStorage.getItem('session_id') }),
+    {
+      enabled: isSessionSet,
+    }
+  );
 
-  const toggleActive = (e) => {
-    e.preventDefault()
-    setIsActive(!isActive);
+  const mutation = useMutation(
+    newSession => {
+      if (!isSessionSet) {
+        setData(createSession, { data: newSession }).then(response => {
+          localStorage.setItem('session_id', response.create_session_item.id);
+        });
+        setSessionSet(true);
+      } else {
+        setData(updateSession, { data: newSession, id: localStorage.getItem('session_id') });
+      }
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('session');
+      },
+    }
+  );
+
+  useEffect(() => {
+    localStorage.getItem('session_id') ? setSessionSet(true) : setSessionSet(false);
+  });
+
+  const toggleActive = e => {
+    e.preventDefault();
+    isActive ? deleteFromWishes(id) : addToWishes();
   };
+
+  const { addToTempOrder, setInitialTempOrder, addToWishList, setInitialWishList, deleteFromWishList } =
+    useStore();
+
+  useEffect(() => {
+    if (isSuccess && session) {
+      if (session.temp_order) {
+        setInitialTempOrder(session.temp_order);
+      }
+      if (session.wish_list) {
+        setInitialWishList(session.wish_list);
+      }
+    }
+  }, [isSuccess, session]);
+
+  const addToCart = e => {
+    e.preventDefault();
+    addToTempOrder({
+      product_id: id,
+      quantity: 1,
+      image: image,
+      brand: brand,
+      product_name: title,
+      new_price: price,
+      price: priceOld,
+      id: uuidv4(),
+    });
+    mutation.mutate({
+      status: 'draft',
+      temp_order: useStore.getState().tempOrder,
+    });
+  };
+
+  const addToWishes = e => {
+    if (!isActive){
+      addToWishList({
+        product_id: id,
+        brand: brand,
+        product_name: title,
+        new_price: price,
+        price: priceOld,
+        image: image,
+      });
+      mutation.mutate({
+        status: 'draft',
+        wish_list: useStore.getState().wishList,
+      });
+      setIsActive(true);
+    } 
+  };
+
+  const deleteFromWishes = id => {
+    if(isActive){
+      deleteFromWishList(id);
+      mutation.mutate({
+        status: 'draft',
+        wish_list: useStore.getState().wishList,
+      });
+      setIsActive(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isSuccess && session) {
+        setIsActive(!!session.wish_list.find(item => item.product_id == id));
+      }
+    }, [isSuccess]);
 
   return (
     <Link href={`/${page_url}/${category.slug}/${subcategory.slug}/${slug}`}>
@@ -80,7 +198,7 @@ const CardItem = ({ image, title, brand, price, priceOld, description, category,
                 <p className="card-item__price">{priceOld}</p>
               )}
             </div>
-            <button className="card-item__btn">
+            <button className="card-item__btn" onClick={e => addToCart(e)}>
               <img className="card-item__btn-icon" src={bucketIcon.src} alt="" />
               ADD
             </button>

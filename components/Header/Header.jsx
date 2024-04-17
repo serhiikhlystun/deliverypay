@@ -1,21 +1,29 @@
-"use client";
+'use client';
 
-import React, { useEffect } from "react";
-import Link from "next/link";
-import "./Header.sass";
-import profileIcon from "./img/profile-icon.svg";
-import bucketIcon from "./img/bucket-icon.svg";
-import logo from "./img/logo.svg";
-import "./Hamburger.sass";
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import './Header.sass';
+import profileIcon from './img/profile-icon.svg';
+import bucketIcon from './img/bucket-icon.svg';
+import logo from './img/logo.svg';
+import './Hamburger.sass';
+import useStore from '@/store/temp_order';
 
 const Header = () => {
+  const [itemsInCart, setItemsInCart] = useState(0);
+
   useEffect(() => {
-    const hamburgerToggle =
-      document.querySelectorAll(".hamburger-close");
-    const overlay = document.getElementById("overlay");
+    useStore.getState().tempOrder ?
+    setItemsInCart(useStore.getState().tempOrder.length):
+    null
+  });
+
+  useEffect(() => {
+    const hamburgerToggle = document.querySelectorAll('.hamburger-close');
+    const overlay = document.getElementById('overlay');
 
     const clickHandler = () => {
-      overlay.classList.toggle("open");
+      overlay.classList.toggle('open');
     };
 
     const hamburgerLogic = () => {
@@ -23,16 +31,16 @@ const Header = () => {
         return;
       }
 
-      hamburgerToggle.forEach((activeBtn) => {
-        activeBtn.addEventListener("click", clickHandler);
+      hamburgerToggle.forEach(activeBtn => {
+        activeBtn.addEventListener('click', clickHandler);
       });
     };
 
     hamburgerLogic();
 
     return () => {
-      hamburgerToggle.forEach((activeBtn) => {
-        activeBtn.removeEventListener("click", clickHandler);
+      hamburgerToggle.forEach(activeBtn => {
+        activeBtn.removeEventListener('click', clickHandler);
       });
     };
   }, []);
@@ -80,10 +88,7 @@ const Header = () => {
                     <h4 className="hamburger__overlay-title">Shop:</h4>
                     <ul>
                       <li className="hamburger__overlay-list_item">
-                        <Link
-                          href="/"
-                          className="hamburger__overlay-list_item-link active"
-                        >
+                        <Link href="/" className="hamburger__overlay-list_item-link active">
                           HOME
                         </Link>
                         <svg
@@ -112,10 +117,7 @@ const Header = () => {
                         </svg>
                       </li>
                       <li className="hamburger__overlay-list_item">
-                        <Link
-                          href="/products"
-                          className="hamburger__overlay-list_item-link"
-                        >
+                        <Link href="/products" className="hamburger__overlay-list_item-link">
                           All Products
                         </Link>
                         <svg
@@ -144,10 +146,7 @@ const Header = () => {
                         </svg>
                       </li>
                       <li className="hamburger__overlay-list_item">
-                        <Link
-                          href={'/special'}
-                          className="hamburger__overlay-list_item-link"
-                        >
+                        <Link href={'/special'} className="hamburger__overlay-list_item-link">
                           TODAY Specials
                         </Link>
                         <svg
@@ -176,10 +175,7 @@ const Header = () => {
                         </svg>
                       </li>
                       <li className="hamburger__overlay-list_item">
-                        <a
-                          href="#"
-                          className="hamburger__overlay-list_item-link"
-                        >
+                        <a href="#" className="hamburger__overlay-list_item-link">
                           Delivery
                         </a>
                         <svg
@@ -208,10 +204,7 @@ const Header = () => {
                         </svg>
                       </li>
                       <li className="hamburger__overlay-list_item">
-                        <a
-                          href="#"
-                          className="hamburger__overlay-list_item-link"
-                        >
+                        <a href="#" className="hamburger__overlay-list_item-link">
                           Contacts
                         </a>
                         <svg
@@ -244,15 +237,10 @@ const Header = () => {
                 </div>
                 <div className="hamburger__overlay-list">
                   <div className="hamburger__overlay-group">
-                    <h4 className="hamburger__overlay-title">
-                      Account:
-                    </h4>
+                    <h4 className="hamburger__overlay-title">Account:</h4>
                     <ul>
                       <li className="hamburger__overlay-list_item">
-                        <a
-                          href="#"
-                          className="hamburger__overlay-list_item-link"
-                        >
+                        <a href="#" className="hamburger__overlay-list_item-link">
                           Profile
                         </a>
                         <svg
@@ -281,10 +269,7 @@ const Header = () => {
                         </svg>
                       </li>
                       <li className="hamburger__overlay-list_item">
-                        <a
-                          href="#"
-                          className="hamburger__overlay-list_item-link"
-                        >
+                        <a href="#" className="hamburger__overlay-list_item-link">
                           Login
                         </a>
                         <svg
@@ -313,10 +298,7 @@ const Header = () => {
                         </svg>
                       </li>
                       <li className="hamburger__overlay-list_item">
-                        <a
-                          href="#"
-                          className="hamburger__overlay-list_item-link"
-                        >
+                        <a href="#" className="hamburger__overlay-list_item-link">
                           Registration
                         </a>
                         <svg
@@ -345,10 +327,7 @@ const Header = () => {
                         </svg>
                       </li>
                       <li className="hamburger__overlay-list_item">
-                        <a
-                          href="#"
-                          className="hamburger__overlay-list_item-link"
-                        >
+                        <a href="#" className="hamburger__overlay-list_item-link">
                           LogOUT
                         </a>
                         <svg
@@ -382,50 +361,38 @@ const Header = () => {
               </div>
             </div>
           </div>
-          <ul className={"header__nav"}>
-            <li className={"header__nav-item active"}>
-              <Link href={"/"} alt="home">
+          <ul className={'header__nav'}>
+            <li className={'header__nav-item active'}>
+              <Link href={'/'} alt="home">
                 HOME
               </Link>
             </li>
-            <li className={"header__nav-item"}>
-              <Link href={"/products"} alt="products">
+            <li className={'header__nav-item'}>
+              <Link href={'/products'} alt="products">
                 ALL PRODUCTS
               </Link>
             </li>
-            <li className={"header__nav-item"}>
-              <Link href={"/special"} alt="special">
+            <li className={'header__nav-item'}>
+              <Link href={'/special'} alt="special">
                 TODAY’S SPECIAL
               </Link>
             </li>
           </ul>
           <a href="/" className="header__logo">
-            <img
-              src={logo.src}
-              alt="logo"
-              className="header__logo-img"
-            />
+            <img src={logo.src} alt="logo" className="header__logo-img" />
           </a>
           <div className="header__right">
-            <ul className={"header__nav"}>
-              <li className={"header__nav-item"}>DELIVERY</li>
-              <li className={"header__nav-item"}>CONTACT</li>
+            <ul className={'header__nav'}>
+              <li className={'header__nav-item'}>DELIVERY</li>
+              <li className={'header__nav-item'}>CONTACT</li>
             </ul>
             <div className="header__icon-wrapp">
-              <Link href={"/profile-page"} className="header__icon">
-                <img
-                  src={profileIcon.src}
-                  alt="profile"
-                  className="header__icon-img"
-                />
+              <Link href={'/profile-page'} className="header__icon">
+                <img src={profileIcon.src} alt="profile" className="header__icon-img" />
               </Link>
-              <Link href={"cart-page"} className="header__icon bucket">
-                <p className="header__icon-bucket-message">1</p>
-                <img
-                  src={bucketIcon.src}
-                  alt="busket"
-                  className="header__icon-img"
-                />
+              <Link href={'/cart-page'} className="header__icon bucket">
+                <p className="header__icon-bucket-message">{itemsInCart}</p>
+                <img src={bucketIcon.src} alt="busket" className="header__icon-img" />
               </Link>
             </div>
           </div>

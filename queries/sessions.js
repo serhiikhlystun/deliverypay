@@ -22,6 +22,7 @@ export const getSession = `
         session_by_id(id: $id) {
             id
             temp_order
+            wish_list
         }
     }
 `
