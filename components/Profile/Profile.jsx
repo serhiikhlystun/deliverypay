@@ -51,16 +51,22 @@ const Profile = () => {
     setData(updateSession, { data: newSession, id: localStorage.getItem('session_id') });
   });
 
-  const { addToTempOrder, setInitialTempOrder, wishList, setInitialWishList, deleteFromWishList } =
+  const { addToTempOrder, wishList, setInitialTempOrder, setInitialWishList, deleteFromWishList } =
     useStore();
 
   useEffect(() => {
-    if (isSuccess && session && session.wish_list) {
-      setInitialWishList(session.wish_list);
+    if (isSuccess && session) {
+      if (session.temp_order) {
+        setInitialTempOrder(session.temp_order);
+      }
+      if (session.wish_list) {
+        setInitialWishList(session.wish_list);
+      }
     }
   }, [isSuccess, session]);
 
-  const deleteFromWishes = id => {
+  const deleteFromWishes = (e, id) => {
+    e.preventDefault();
     deleteFromWishList(id);
     mutation.mutate({
       status: 'draft',
@@ -81,7 +87,8 @@ const Profile = () => {
     setIsPopupOpen(false);
   };
 
-  const addToCart = item => {
+  const addToCart = (e, item) => {
+    e.preventDefault();
     addToTempOrder({
       product_id: item.id,
       image: item.image,
@@ -91,6 +98,9 @@ const Profile = () => {
       brand: item.brand,
       quantity: 1,
       id: uuidv4(),
+      slug: item.slug,
+      category_slug: item.category_slug,
+      subcategory_slug: item.subcategory_slug,
     });
     mutation.mutate({
       status: 'draft',

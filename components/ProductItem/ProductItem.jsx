@@ -103,7 +103,7 @@ const ProductItem = ({ product }) => {
   }, [isSuccess, session]);
 
 useEffect(()=>{
-  if (isSuccess && session) {  
+  if (isSuccess && session.wish_list) {  
   setIsActive(!!session.wish_list.find(item => item.product_id == product.id));
   }
   }, [isSuccess])
@@ -116,6 +116,9 @@ useEffect(()=>{
       price: product.price,
       brand: product.brand,
       image: product.product_image ? (product.product_image.id): (null),
+      slug: product.slug,
+      category_slug: product.product_categories[0].categories_id.slug,
+      subcategory_slug: product.subcategory.slug,
     });
     mutation.mutate({
       status: 'draft',
@@ -143,6 +146,9 @@ useEffect(()=>{
       brand: product.brand,
       quantity: count,
       id: uuidv4(),
+      slug: product.slug,
+      category_slug: product.product_categories[0].categories_id.slug,
+      subcategory_slug: product.subcategory.slug,
     });
     mutation.mutate({
       status: 'draft',

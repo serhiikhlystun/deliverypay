@@ -7,6 +7,11 @@ export const SingleProductQuery = `
             product_name
             price
             brand
+            subcategory {
+                id
+                subcategory_name
+                slug
+            }
             product_description
             new_price
             product_image {

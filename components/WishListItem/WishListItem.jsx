@@ -1,12 +1,15 @@
 import React from 'react';
 import './WishListItem.sass';
 import bucketIcon from './img/bucket-icon.svg';
+import Link from 'next/link';
 
 const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL;
 
 const WishListItem = ({item, deleteFromWishes, addToCart }) => {
+  console.log(item);
 
   return (
+    <Link href={`/products/${item.category_slug}/${item.subcategory_slug}/${item.slug}`}>
     <li className="wish-list-item">
       <div className="wish-list-item__img-box">
         <img className="wish-list-item__img" src={`${assetsUrl}/${item.image}?width=580&height=700`} alt="" />
@@ -19,7 +22,7 @@ const WishListItem = ({item, deleteFromWishes, addToCart }) => {
           </div>
           <div className="wish-list-item__like">
             <svg
-              onClick={()=>deleteFromWishes(item.product_id)}
+              onClick={(e)=>deleteFromWishes(e, item.product_id)}
               className="wish-list-item__like-icon"
               width="39"
               height="39"
@@ -58,13 +61,14 @@ const WishListItem = ({item, deleteFromWishes, addToCart }) => {
               <p className="wish-list-item__price">${item.price}</p>
             )}
           </div>
-          <button className="wish-list-item__btn" onClick={()=>addToCart(item)}>
+          <button className="wish-list-item__btn" onClick={(e)=>addToCart(e, item)}>
             <img className="wish-list-item__btn-icon" src={bucketIcon} alt="" />
             ADD
           </button>
         </div>
       </div>
     </li>
+    </Link>
   );
 };
 

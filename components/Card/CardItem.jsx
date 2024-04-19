@@ -89,6 +89,9 @@ const CardItem = ({
       new_price: price,
       price: priceOld,
       id: uuidv4(),
+      slug: slug,
+      category_slug: category.slug,
+      subcategory_slug: subcategory.slug,
     });
     mutation.mutate({
       status: 'draft',
@@ -105,6 +108,9 @@ const CardItem = ({
         new_price: price,
         price: priceOld,
         image: image,
+        slug: slug,
+        category_slug: category.slug,
+        subcategory_slug: subcategory.slug,
       });
       mutation.mutate({
         status: 'draft',
@@ -126,7 +132,7 @@ const CardItem = ({
   };
 
   useEffect(() => {
-    if (isSuccess && session) {
+    if (isSuccess && session && session.wish_list) {
         setIsActive(!!session.wish_list.find(item => item.product_id == id));
       }
     }, [isSuccess]);
@@ -177,11 +183,11 @@ const CardItem = ({
             <div className="card-item__price-wrapp desk">
               {price ? (
                 <>
-                  <p className="card-item__price">{price}</p>
-                  <p className="card-item__price-old">{priceOld}</p>
+                  <p className="card-item__price">${price}</p>
+                  <p className="card-item__price-old">${priceOld}</p>
                 </>
               ) : (
-                <p className="card-item__price">{priceOld}</p>
+                <p className="card-item__price">${priceOld}</p>
               )}
             </div>
             <p className="card-item__descr-title">Short Description</p>

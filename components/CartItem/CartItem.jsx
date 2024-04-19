@@ -1,41 +1,48 @@
 import React, { useState } from 'react';
 import './CartItem.sass';
+import Link from 'next/link';
 
 const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL;
 
-const CartItem = ({ image, product_name, brand, price, priceOld, id, quantity, deleteFromCart }) => {
-  const [count, setCount] = useState(quantity);
+const CartItem = ({ item, deleteFromCart, updateOrder }) => {
+  const [count, setCount] = useState(item.quantity);
 
   const handleIncrement = () => {
     setCount(count + 1);
+    updateOrder(item.id, count+1)
   };
   const handleDecrement = () => {
     setCount(() => (count > 1 ? count - 1 : count));
+    updateOrder(item.id, count-1)
   };
 
   const handleChangeInput = e => {
-    let number = e.target.value.match(/\d+/g);
-    if (number[1] !== undefined) {
+    let number = e.target.value.match(/\d*[1-9]\d*/g);
+    console.log(number);
+    if (number[1] !== undefined && number !== null) {
       setCount(() => Number(number[1]));
+      updateOrder(item.id, Number(number[1]))
     } else {
       setCount(number[0].charAt(number[0].length - 1));
+      updateOrder(item.id, number[0].charAt(number[0].length - 1))
     }
   };
 
   return (
+    <Link href={`/products/${item.category_slug}/${item.subcategory_slug}/${item.slug}`}>
     <li className="cart-list-item">
       <div className="cart-list-item__img-box">
-        <img src={`${assetsUrl}/${image}?width=580&height=700`} className="cart-list-item__img" alt="" />
+        <img src={`${assetsUrl}/${item.image}?width=580&height=700`} className="cart-list-item__img" alt="" />
       </div>
       <div className="cart-list-item__content">
         <div className="cart-list-item__title-inn">
           <div className="cart-list-item__title-box">
-            <h3 className="cart-list-item__title">{product_name}</h3>
-            <p className="cart-list-item__subtitle">{brand}</p>
+            <h3 className="cart-list-item__title">{item.product_name}</h3>
+            <p className="cart-list-item__subtitle">{item.brand}</p>
           </div>
           <div className="cart-list-item__like">
             <svg
-            onClick={()=>deleteFromCart(id)}
+            onClick={(e)=>deleteFromCart(e, item.id)}
               className="cart-list-item__like-icon"
               width="41"
               height="39"
@@ -77,16 +84,16 @@ const CartItem = ({ image, product_name, brand, price, priceOld, id, quantity, d
         </div>
         <div className="cart-list-item__btn-wrapp">
           <div className="cart-list-item__price-wrapp">
-            {price ? (
+            {item.new_price ? (
               <>
-                <p className="cart-list-item__price">${price}</p>
-                <p className="cart-list-item__price-old">${priceOld}</p>
+                <p className="cart-list-item__price">${item.new_price}</p>
+                <p className="cart-list-item__price-old">${item.price}</p>
               </>
             ) : (
-              <p className="cart-list-item__price">${priceOld}</p>
+              <p className="cart-list-item__price">${item.price}</p>
             )}
           </div>
-          <div className="cart-list-item__counter">
+          <div className="cart-list-item__counter" onClick={e => e.preventDefault()}>
             <svg
               onClick={handleDecrement}
               className="cart-list-item__counter-item"
@@ -136,6 +143,7 @@ const CartItem = ({ image, product_name, brand, price, priceOld, id, quantity, d
         </div>
       </div>
     </li>
+    </Link>
   );
 };
 
