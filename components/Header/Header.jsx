@@ -7,15 +7,44 @@ import profileIcon from './img/profile-icon.svg';
 import bucketIcon from './img/bucket-icon.svg';
 import logo from './img/logo.svg';
 import './Hamburger.sass';
-import useStore from '@/store/temp_order';
+import LoginPopup from '../Popups/Login';
+import SignUpPopup from '../Popups/SignUp';
+import getData from '@/queries/getData';
+import { getSession } from '@/queries/sessions';
+import { useQuery } from 'react-query';
 
 const Header = () => {
+  
+  const { data: session, isSuccess } = useQuery(
+    ['session'],
+    async () => await getData(getSession, 'session_by_id', { id: localStorage.getItem('session_id') })
+  );
   const [itemsInCart, setItemsInCart] = useState(0);
 
+  // Стан для відображення попапа
+  const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
+  const [isSignUpPopupOpen, setIsSignUpPopupOpen] = useState(false);
+
+  const handleOpenPopup = (e) => {
+    if(e.target.id === 'registration'){
+      setIsSignUpPopupOpen(true);
+    }
+    if(e.target.id === 'login'){
+      setIsLoginPopupOpen(true);
+    }
+    document.body.style.setProperty('overflow', 'hidden');
+  };
+
+  // Обробник закриття попапа
+  const handleClosePopup = () => {
+    setIsSignUpPopupOpen(false);
+    setIsLoginPopupOpen(false);
+  };
+
   useEffect(() => {
-    useStore.getState().tempOrder ?
-    setItemsInCart(useStore.getState().tempOrder.length):
-    null
+    if(isSuccess && session.temp_order){
+      setItemsInCart(session.temp_order.length)
+    }
   });
 
   useEffect(() => {
@@ -239,10 +268,10 @@ const Header = () => {
                   <div className="hamburger__overlay-group">
                     <h4 className="hamburger__overlay-title">Account:</h4>
                     <ul>
-                      <li className="hamburger__overlay-list_item">
-                        <a href="#" className="hamburger__overlay-list_item-link">
+                      <li onClick={handleOpenPopup} className="hamburger__overlay-list_item">
+                        <Link href={'/profile-page'} className="hamburger__overlay-list_item-link">
                           Profile
-                        </a>
+                        </Link>
                         <svg
                           width="6"
                           height="12"
@@ -269,9 +298,13 @@ const Header = () => {
                         </svg>
                       </li>
                       <li className="hamburger__overlay-list_item">
-                        <a href="#" className="hamburger__overlay-list_item-link">
+                        <div
+                          id="login"
+                          className="hamburger__overlay-list_item-link"
+                          onClick={handleOpenPopup}
+                        >
                           Login
-                        </a>
+                        </div>
                         <svg
                           width="6"
                           height="12"
@@ -298,9 +331,13 @@ const Header = () => {
                         </svg>
                       </li>
                       <li className="hamburger__overlay-list_item">
-                        <a href="#" className="hamburger__overlay-list_item-link">
+                        <div
+                          id="registration"
+                          className="hamburger__overlay-list_item-link"
+                          onClick={handleOpenPopup}
+                        >
                           Registration
-                        </a>
+                        </div>
                         <svg
                           width="6"
                           height="12"
@@ -397,6 +434,8 @@ const Header = () => {
             </div>
           </div>
         </div>
+        {isLoginPopupOpen && <LoginPopup onClose={handleClosePopup} />}
+        {isSignUpPopupOpen && <SignUpPopup onClose={handleClosePopup} />}
       </div>
     </header>
   );

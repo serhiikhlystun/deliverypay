@@ -6,7 +6,6 @@ import Link from 'next/link';
 const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL;
 
 const WishListItem = ({item, deleteFromWishes, addToCart }) => {
-  console.log(item);
 
   return (
     <Link href={`/products/${item.category_slug}/${item.subcategory_slug}/${item.slug}`}>

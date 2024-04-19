@@ -2,7 +2,7 @@ import './Profile.sass';
 import React, { useState, useEffect } from 'react';
 import WishListItem from '../WishListItem/WishListItem';
 import OrderItem from '../OrderItem/OrderItem';
-import SettingsPopup from '../Popups/SettingsPopup';
+import SettingsPopup from '../Popups/Settings';
 import { useQuery, useMutation } from 'react-query';
 import { getSession, updateSession } from '@/queries/sessions';
 import useStore from '@/store/temp_order';
@@ -54,6 +54,7 @@ const Profile = () => {
   const { addToTempOrder, wishList, setInitialTempOrder, setInitialWishList, deleteFromWishList } =
     useStore();
 
+  // Отримання списків бажань та корзини
   useEffect(() => {
     if (isSuccess && session) {
       if (session.temp_order) {
@@ -65,6 +66,7 @@ const Profile = () => {
     }
   }, [isSuccess, session]);
 
+  // Видалення продукту зі списку бажань
   const deleteFromWishes = (e, id) => {
     e.preventDefault();
     deleteFromWishList(id);
@@ -87,6 +89,7 @@ const Profile = () => {
     setIsPopupOpen(false);
   };
 
+  // Додає продукт до корзини
   const addToCart = (e, item) => {
     e.preventDefault();
     addToTempOrder({
@@ -156,7 +159,9 @@ const Profile = () => {
                 ))}
               </ul>
               <div className="wish-list__more">
-                <button className="wish-list__more-btn">Load more</button>
+                <button className="wish-list__more-btn" onClick={() => setLoadMoreCount(loadMoreCount + 20)}>
+                  Load more
+                </button>
               </div>
             </>
           ) : (

@@ -37,7 +37,7 @@ const CartPage = () => {
       let price = Number(item.new_price ? item.new_price : item.price);
       let priceAll = price * item.quantity;
       tempTotal.totalPrice = (Number(tempTotal.totalPrice) + priceAll).toFixed(2);
-      tempTotal.discount = 2;
+      tempTotal.discount = 2.5;
     });
     setPrices(tempTotal);
   };
