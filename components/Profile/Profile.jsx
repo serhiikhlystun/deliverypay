@@ -9,6 +9,9 @@ import useStore from '@/store/temp_order';
 import getData from '@/queries/getData';
 import setData from '@/helpers/setData';
 import { v4 as uuidv4 } from 'uuid';
+import { getCurrentUser, updateCurrentUser } from '@/queries/Users';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 const orderItems = [
   {
@@ -41,7 +44,66 @@ const orderItems = [
   },
 ];
 
+const fetchData = async (query, token, { variables = {} }) => {
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  };
+
+  const res = await fetch('https://crm.web3flow.online/graphql/system', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      query,
+      variables,
+    }),
+  });
+
+  const json = await res.json();
+
+  if (json.errors) {
+    throw new Error(json.errors);
+  }
+
+  return json.data.users_me;
+};
+
+const setUpdatedUser = async (mutation, token, data = {}) => {
+  const query = JSON.stringify({
+    query: mutation,
+    variables: data,
+  });
+
+  const response = await fetch('https://crm.web3flow.online/graphql/system', {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    method: 'POST',
+    body: query,
+  });
+
+  const responseJson = await response.json();
+  return responseJson.data;
+};
+
 const Profile = () => {
+  const router = useRouter();
+  const { data: userSession, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      router.push('/');
+    },
+  });
+
+  const { data: user, isUserSuccess } = useQuery(
+    ['currentUser'],
+    async () => await fetchData(getCurrentUser, userSession.user.accessToken, {}),
+    {
+      enabled: status === 'authenticated',
+    }
+  );
+
   const { data: session, isSuccess } = useQuery(
     ['session'],
     async () => await getData(getSession, 'session_by_id', { id: localStorage.getItem('session_id') })
@@ -111,12 +173,31 @@ const Profile = () => {
     });
   };
 
+  const updateMutation = useMutation(
+    updatedUser => {
+      status === 'authenticated' && setUpdatedUser(updateCurrentUser, userSession.user.accessToken, { data: updatedUser });
+    },
+  );
+
+  const handleUpdate = e => {
+    e.preventDefault(
+      updateMutation.mutate({
+        email: e.target.email.value,
+        password: e.target.password.value,
+        location: e.target.location.value,
+        phone: e.target.phone.value,
+      })
+    );
+  };
+
+  if (status !== 'authenticated') return null;
+
   return (
     <section className="profile">
       <div className="container">
         <div className="profile__wrapp">
           <h2 className="profile__title">
-            andre@gmail.com
+            {user?.email}
             <svg
               onClick={handleOpenPopup}
               width="31"
@@ -142,7 +223,7 @@ const Profile = () => {
               </defs>
             </svg>
           </h2>
-          <p className="profile__subtitle">Chicago 123, avenue, Room 123</p>
+          <p className="profile__subtitle">{user?.location}</p>
         </div>
         <h2 className="wish-list__title">My WISH LIST</h2>
         <div className="wish-list__wrapp">
@@ -159,9 +240,7 @@ const Profile = () => {
                 ))}
               </ul>
               <div className="wish-list__more">
-                <button className="wish-list__more-btn" onClick={() => setLoadMoreCount(loadMoreCount + 20)}>
-                  Load more
-                </button>
+                <button className="wish-list__more-btn">Load more</button>
               </div>
             </>
           ) : (
@@ -185,7 +264,7 @@ const Profile = () => {
             <button className="order__more-btn">Load more</button>
           </div>
         </div>
-        {isPopupOpen && <SettingsPopup onClose={handleClosePopup} />}
+        {isPopupOpen && <SettingsPopup onClose={handleClosePopup} user={user} handleUpdate={handleUpdate} />}
       </div>
     </section>
   );

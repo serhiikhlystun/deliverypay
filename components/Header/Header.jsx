@@ -12,9 +12,10 @@ import SignUpPopup from '../Popups/SignUp';
 import getData from '@/queries/getData';
 import { getSession } from '@/queries/sessions';
 import { useQuery } from 'react-query';
+import { useSession, signOut } from 'next-auth/react';
 
 const Header = () => {
-  
+  const { status } = useSession();
   const { data: session, isSuccess } = useQuery(
     ['session'],
     async () => await getData(getSession, 'session_by_id', { id: localStorage.getItem('session_id') })
@@ -25,11 +26,13 @@ const Header = () => {
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
   const [isSignUpPopupOpen, setIsSignUpPopupOpen] = useState(false);
 
-  const handleOpenPopup = (e) => {
-    if(e.target.id === 'registration'){
+  const handleOpenPopup = e => {
+
+    e.preventDefault()
+    if (e.target.id === 'registration') {
       setIsSignUpPopupOpen(true);
     }
-    if(e.target.id === 'login'){
+    if (e.target.id === 'login' || e.target.id === 'login-btn') {
       setIsLoginPopupOpen(true);
     }
     document.body.style.setProperty('overflow', 'hidden');
@@ -42,8 +45,8 @@ const Header = () => {
   };
 
   useEffect(() => {
-    if(isSuccess && session.temp_order){
-      setItemsInCart(session.temp_order.length)
+    if (isSuccess && session.temp_order) {
+      setItemsInCart(session.temp_order.length);
     }
   });
 
@@ -268,130 +271,137 @@ const Header = () => {
                   <div className="hamburger__overlay-group">
                     <h4 className="hamburger__overlay-title">Account:</h4>
                     <ul>
-                      <li onClick={handleOpenPopup} className="hamburger__overlay-list_item">
-                        <Link href={'/profile-page'} className="hamburger__overlay-list_item-link">
-                          Profile
-                        </Link>
-                        <svg
-                          width="6"
-                          height="12"
-                          viewBox="0 0 6 12"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <g clipPath="url(#clip0_1_1060)">
-                            <path
-                              d="M0.242503 1.51579C0.101695 1.34436 0.023468 1.1188 0.0312905 0.884212C0.0312906 0.649625 0.109518 0.433083 0.258149 0.261654C0.398957 0.0992484 0.594524 4.81113e-07 0.797914 4.98893e-07C1.0013 5.16674e-07 1.19687 0.081204 1.3455 0.24361L5.77314 5.35038C5.84355 5.43158 5.89831 5.53083 5.93742 5.6391C5.97653 5.74737 6 5.86466 6 5.98196C6 6.09925 5.97653 6.21654 5.93742 6.33384C5.89831 6.44211 5.84355 6.54135 5.77314 6.62256L1.3455 11.7293C1.2751 11.8105 1.18905 11.8827 1.09518 11.9278C0.99348 11.9729 0.891786 12 0.790091 12C0.688396 12 0.578878 11.982 0.485005 11.9368C0.391133 11.8917 0.305084 11.8195 0.226857 11.7383C0.156453 11.6571 0.101694 11.5489 0.0625806 11.4406C0.0156441 11.3323 -8.85051e-07 11.215 -8.74008e-07 11.0887C-8.63754e-07 10.9714 0.0234672 10.8541 0.0625807 10.7459C0.101694 10.6376 0.164275 10.5383 0.242502 10.4481L4.11473 5.98196L3.3794 5.14286L0.242503 1.51579Z"
-                              fill="#171717"
-                            />
-                          </g>
-                          <defs>
-                            <clipPath id="clip0_1_1060">
-                              <rect
-                                width="6"
-                                height="12"
-                                fill="white"
-                                transform="translate(6 12) rotate(-180)"
-                              />
-                            </clipPath>
-                          </defs>
-                        </svg>
-                      </li>
-                      <li className="hamburger__overlay-list_item">
-                        <div
-                          id="login"
-                          className="hamburger__overlay-list_item-link"
-                          onClick={handleOpenPopup}
-                        >
-                          Login
-                        </div>
-                        <svg
-                          width="6"
-                          height="12"
-                          viewBox="0 0 6 12"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <g clipPath="url(#clip0_1_1060)">
-                            <path
-                              d="M0.242503 1.51579C0.101695 1.34436 0.023468 1.1188 0.0312905 0.884212C0.0312906 0.649625 0.109518 0.433083 0.258149 0.261654C0.398957 0.0992484 0.594524 4.81113e-07 0.797914 4.98893e-07C1.0013 5.16674e-07 1.19687 0.081204 1.3455 0.24361L5.77314 5.35038C5.84355 5.43158 5.89831 5.53083 5.93742 5.6391C5.97653 5.74737 6 5.86466 6 5.98196C6 6.09925 5.97653 6.21654 5.93742 6.33384C5.89831 6.44211 5.84355 6.54135 5.77314 6.62256L1.3455 11.7293C1.2751 11.8105 1.18905 11.8827 1.09518 11.9278C0.99348 11.9729 0.891786 12 0.790091 12C0.688396 12 0.578878 11.982 0.485005 11.9368C0.391133 11.8917 0.305084 11.8195 0.226857 11.7383C0.156453 11.6571 0.101694 11.5489 0.0625806 11.4406C0.0156441 11.3323 -8.85051e-07 11.215 -8.74008e-07 11.0887C-8.63754e-07 10.9714 0.0234672 10.8541 0.0625807 10.7459C0.101694 10.6376 0.164275 10.5383 0.242502 10.4481L4.11473 5.98196L3.3794 5.14286L0.242503 1.51579Z"
-                              fill="#171717"
-                            />
-                          </g>
-                          <defs>
-                            <clipPath id="clip0_1_1060">
-                              <rect
-                                width="6"
-                                height="12"
-                                fill="white"
-                                transform="translate(6 12) rotate(-180)"
-                              />
-                            </clipPath>
-                          </defs>
-                        </svg>
-                      </li>
-                      <li className="hamburger__overlay-list_item">
-                        <div
-                          id="registration"
-                          className="hamburger__overlay-list_item-link"
-                          onClick={handleOpenPopup}
-                        >
-                          Registration
-                        </div>
-                        <svg
-                          width="6"
-                          height="12"
-                          viewBox="0 0 6 12"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <g clipPath="url(#clip0_1_1060)">
-                            <path
-                              d="M0.242503 1.51579C0.101695 1.34436 0.023468 1.1188 0.0312905 0.884212C0.0312906 0.649625 0.109518 0.433083 0.258149 0.261654C0.398957 0.0992484 0.594524 4.81113e-07 0.797914 4.98893e-07C1.0013 5.16674e-07 1.19687 0.081204 1.3455 0.24361L5.77314 5.35038C5.84355 5.43158 5.89831 5.53083 5.93742 5.6391C5.97653 5.74737 6 5.86466 6 5.98196C6 6.09925 5.97653 6.21654 5.93742 6.33384C5.89831 6.44211 5.84355 6.54135 5.77314 6.62256L1.3455 11.7293C1.2751 11.8105 1.18905 11.8827 1.09518 11.9278C0.99348 11.9729 0.891786 12 0.790091 12C0.688396 12 0.578878 11.982 0.485005 11.9368C0.391133 11.8917 0.305084 11.8195 0.226857 11.7383C0.156453 11.6571 0.101694 11.5489 0.0625806 11.4406C0.0156441 11.3323 -8.85051e-07 11.215 -8.74008e-07 11.0887C-8.63754e-07 10.9714 0.0234672 10.8541 0.0625807 10.7459C0.101694 10.6376 0.164275 10.5383 0.242502 10.4481L4.11473 5.98196L3.3794 5.14286L0.242503 1.51579Z"
-                              fill="#171717"
-                            />
-                          </g>
-                          <defs>
-                            <clipPath id="clip0_1_1060">
-                              <rect
-                                width="6"
-                                height="12"
-                                fill="white"
-                                transform="translate(6 12) rotate(-180)"
-                              />
-                            </clipPath>
-                          </defs>
-                        </svg>
-                      </li>
-                      <li className="hamburger__overlay-list_item">
-                        <a href="#" className="hamburger__overlay-list_item-link">
-                          LogOUT
-                        </a>
-                        <svg
-                          width="6"
-                          height="12"
-                          viewBox="0 0 6 12"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <g clipPath="url(#clip0_1_1060)">
-                            <path
-                              d="M0.242503 1.51579C0.101695 1.34436 0.023468 1.1188 0.0312905 0.884212C0.0312906 0.649625 0.109518 0.433083 0.258149 0.261654C0.398957 0.0992484 0.594524 4.81113e-07 0.797914 4.98893e-07C1.0013 5.16674e-07 1.19687 0.081204 1.3455 0.24361L5.77314 5.35038C5.84355 5.43158 5.89831 5.53083 5.93742 5.6391C5.97653 5.74737 6 5.86466 6 5.98196C6 6.09925 5.97653 6.21654 5.93742 6.33384C5.89831 6.44211 5.84355 6.54135 5.77314 6.62256L1.3455 11.7293C1.2751 11.8105 1.18905 11.8827 1.09518 11.9278C0.99348 11.9729 0.891786 12 0.790091 12C0.688396 12 0.578878 11.982 0.485005 11.9368C0.391133 11.8917 0.305084 11.8195 0.226857 11.7383C0.156453 11.6571 0.101694 11.5489 0.0625806 11.4406C0.0156441 11.3323 -8.85051e-07 11.215 -8.74008e-07 11.0887C-8.63754e-07 10.9714 0.0234672 10.8541 0.0625807 10.7459C0.101694 10.6376 0.164275 10.5383 0.242502 10.4481L4.11473 5.98196L3.3794 5.14286L0.242503 1.51579Z"
-                              fill="#171717"
-                            />
-                          </g>
-                          <defs>
-                            <clipPath id="clip0_1_1060">
-                              <rect
-                                width="6"
-                                height="12"
-                                fill="white"
-                                transform="translate(6 12) rotate(-180)"
-                              />
-                            </clipPath>
-                          </defs>
-                        </svg>
-                      </li>
+                      {status !== 'authenticated' ? (
+                        <>
+                          <li className="hamburger__overlay-list_item">
+                            <div
+                              id="login"
+                              className="hamburger__overlay-list_item-link"
+                              onClick={handleOpenPopup}
+                            >
+                              Login
+                            </div>
+                            <svg
+                              width="6"
+                              height="12"
+                              viewBox="0 0 6 12"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g clipPath="url(#clip0_1_1060)">
+                                <path
+                                  d="M0.242503 1.51579C0.101695 1.34436 0.023468 1.1188 0.0312905 0.884212C0.0312906 0.649625 0.109518 0.433083 0.258149 0.261654C0.398957 0.0992484 0.594524 4.81113e-07 0.797914 4.98893e-07C1.0013 5.16674e-07 1.19687 0.081204 1.3455 0.24361L5.77314 5.35038C5.84355 5.43158 5.89831 5.53083 5.93742 5.6391C5.97653 5.74737 6 5.86466 6 5.98196C6 6.09925 5.97653 6.21654 5.93742 6.33384C5.89831 6.44211 5.84355 6.54135 5.77314 6.62256L1.3455 11.7293C1.2751 11.8105 1.18905 11.8827 1.09518 11.9278C0.99348 11.9729 0.891786 12 0.790091 12C0.688396 12 0.578878 11.982 0.485005 11.9368C0.391133 11.8917 0.305084 11.8195 0.226857 11.7383C0.156453 11.6571 0.101694 11.5489 0.0625806 11.4406C0.0156441 11.3323 -8.85051e-07 11.215 -8.74008e-07 11.0887C-8.63754e-07 10.9714 0.0234672 10.8541 0.0625807 10.7459C0.101694 10.6376 0.164275 10.5383 0.242502 10.4481L4.11473 5.98196L3.3794 5.14286L0.242503 1.51579Z"
+                                  fill="#171717"
+                                />
+                              </g>
+                              <defs>
+                                <clipPath id="clip0_1_1060">
+                                  <rect
+                                    width="6"
+                                    height="12"
+                                    fill="white"
+                                    transform="translate(6 12) rotate(-180)"
+                                  />
+                                </clipPath>
+                              </defs>
+                            </svg>
+                          </li>
+                          <li className="hamburger__overlay-list_item">
+                            <div
+                              id="registration"
+                              className="hamburger__overlay-list_item-link"
+                              onClick={handleOpenPopup}
+                            >
+                              Registration
+                            </div>
+                            <svg
+                              width="6"
+                              height="12"
+                              viewBox="0 0 6 12"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g clipPath="url(#clip0_1_1060)">
+                                <path
+                                  d="M0.242503 1.51579C0.101695 1.34436 0.023468 1.1188 0.0312905 0.884212C0.0312906 0.649625 0.109518 0.433083 0.258149 0.261654C0.398957 0.0992484 0.594524 4.81113e-07 0.797914 4.98893e-07C1.0013 5.16674e-07 1.19687 0.081204 1.3455 0.24361L5.77314 5.35038C5.84355 5.43158 5.89831 5.53083 5.93742 5.6391C5.97653 5.74737 6 5.86466 6 5.98196C6 6.09925 5.97653 6.21654 5.93742 6.33384C5.89831 6.44211 5.84355 6.54135 5.77314 6.62256L1.3455 11.7293C1.2751 11.8105 1.18905 11.8827 1.09518 11.9278C0.99348 11.9729 0.891786 12 0.790091 12C0.688396 12 0.578878 11.982 0.485005 11.9368C0.391133 11.8917 0.305084 11.8195 0.226857 11.7383C0.156453 11.6571 0.101694 11.5489 0.0625806 11.4406C0.0156441 11.3323 -8.85051e-07 11.215 -8.74008e-07 11.0887C-8.63754e-07 10.9714 0.0234672 10.8541 0.0625807 10.7459C0.101694 10.6376 0.164275 10.5383 0.242502 10.4481L4.11473 5.98196L3.3794 5.14286L0.242503 1.51579Z"
+                                  fill="#171717"
+                                />
+                              </g>
+                              <defs>
+                                <clipPath id="clip0_1_1060">
+                                  <rect
+                                    width="6"
+                                    height="12"
+                                    fill="white"
+                                    transform="translate(6 12) rotate(-180)"
+                                  />
+                                </clipPath>
+                              </defs>
+                            </svg>
+                          </li>
+                        </>
+                      ) : (
+                        <>
+                          <li className="hamburger__overlay-list_item">
+                            <Link href={'/profile-page'} className="hamburger__overlay-list_item-link">
+                              Profile
+                            </Link>
+                            <svg
+                              width="6"
+                              height="12"
+                              viewBox="0 0 6 12"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g clipPath="url(#clip0_1_1060)">
+                                <path
+                                  d="M0.242503 1.51579C0.101695 1.34436 0.023468 1.1188 0.0312905 0.884212C0.0312906 0.649625 0.109518 0.433083 0.258149 0.261654C0.398957 0.0992484 0.594524 4.81113e-07 0.797914 4.98893e-07C1.0013 5.16674e-07 1.19687 0.081204 1.3455 0.24361L5.77314 5.35038C5.84355 5.43158 5.89831 5.53083 5.93742 5.6391C5.97653 5.74737 6 5.86466 6 5.98196C6 6.09925 5.97653 6.21654 5.93742 6.33384C5.89831 6.44211 5.84355 6.54135 5.77314 6.62256L1.3455 11.7293C1.2751 11.8105 1.18905 11.8827 1.09518 11.9278C0.99348 11.9729 0.891786 12 0.790091 12C0.688396 12 0.578878 11.982 0.485005 11.9368C0.391133 11.8917 0.305084 11.8195 0.226857 11.7383C0.156453 11.6571 0.101694 11.5489 0.0625806 11.4406C0.0156441 11.3323 -8.85051e-07 11.215 -8.74008e-07 11.0887C-8.63754e-07 10.9714 0.0234672 10.8541 0.0625807 10.7459C0.101694 10.6376 0.164275 10.5383 0.242502 10.4481L4.11473 5.98196L3.3794 5.14286L0.242503 1.51579Z"
+                                  fill="#171717"
+                                />
+                              </g>
+                              <defs>
+                                <clipPath id="clip0_1_1060">
+                                  <rect
+                                    width="6"
+                                    height="12"
+                                    fill="white"
+                                    transform="translate(6 12) rotate(-180)"
+                                  />
+                                </clipPath>
+                              </defs>
+                            </svg>
+                          </li>
+                          <li className="hamburger__overlay-list_item">
+                            <div onClick={signOut} className="hamburger__overlay-list_item-link">
+                              LogOUT
+                            </div>
+                            <svg
+                              width="6"
+                              height="12"
+                              viewBox="0 0 6 12"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g clipPath="url(#clip0_1_1060)">
+                                <path
+                                  d="M0.242503 1.51579C0.101695 1.34436 0.023468 1.1188 0.0312905 0.884212C0.0312906 0.649625 0.109518 0.433083 0.258149 0.261654C0.398957 0.0992484 0.594524 4.81113e-07 0.797914 4.98893e-07C1.0013 5.16674e-07 1.19687 0.081204 1.3455 0.24361L5.77314 5.35038C5.84355 5.43158 5.89831 5.53083 5.93742 5.6391C5.97653 5.74737 6 5.86466 6 5.98196C6 6.09925 5.97653 6.21654 5.93742 6.33384C5.89831 6.44211 5.84355 6.54135 5.77314 6.62256L1.3455 11.7293C1.2751 11.8105 1.18905 11.8827 1.09518 11.9278C0.99348 11.9729 0.891786 12 0.790091 12C0.688396 12 0.578878 11.982 0.485005 11.9368C0.391133 11.8917 0.305084 11.8195 0.226857 11.7383C0.156453 11.6571 0.101694 11.5489 0.0625806 11.4406C0.0156441 11.3323 -8.85051e-07 11.215 -8.74008e-07 11.0887C-8.63754e-07 10.9714 0.0234672 10.8541 0.0625807 10.7459C0.101694 10.6376 0.164275 10.5383 0.242502 10.4481L4.11473 5.98196L3.3794 5.14286L0.242503 1.51579Z"
+                                  fill="#171717"
+                                />
+                              </g>
+                              <defs>
+                                <clipPath id="clip0_1_1060">
+                                  <rect
+                                    width="6"
+                                    height="12"
+                                    fill="white"
+                                    transform="translate(6 12) rotate(-180)"
+                                  />
+                                </clipPath>
+                              </defs>
+                            </svg>
+                          </li>
+                        </>
+                      )}
                     </ul>
                   </div>
                 </div>
@@ -415,18 +425,24 @@ const Header = () => {
               </Link>
             </li>
           </ul>
-          <a href="/" className="header__logo">
+          <Link href="/" className="header__logo">
             <img src={logo.src} alt="logo" className="header__logo-img" />
-          </a>
+          </Link>
           <div className="header__right">
             <ul className={'header__nav'}>
               <li className={'header__nav-item'}>DELIVERY</li>
               <li className={'header__nav-item'}>CONTACT</li>
             </ul>
             <div className="header__icon-wrapp">
-              <Link href={'/profile-page'} className="header__icon">
-                <img src={profileIcon.src} alt="profile" className="header__icon-img" />
-              </Link>
+              {status === 'authenticated' ? (
+                <Link href={'/profile-page'} className="header__icon">
+                  <img src={profileIcon.src} alt="profile" className="header__icon-img" />
+                </Link>
+              ) : (
+                <button type='button' className="header__icon btn">
+                  <img id="login-btn" onClick={handleOpenPopup} src={profileIcon.src} alt="profile" className="header__icon-img" />
+                </button>
+              )}
               <Link href={'/cart-page'} className="header__icon bucket">
                 <p className="header__icon-bucket-message">{itemsInCart}</p>
                 <img src={bucketIcon.src} alt="busket" className="header__icon-img" />

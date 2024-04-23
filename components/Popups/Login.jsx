@@ -19,14 +19,14 @@ const LoginPopup = ({ isOpen, onClose, csrfToken }) => {
       redirect: false,
       email: e.target.email.value,
       password: e.target.password.value,
-      callbackUrl: `/user-area`,
+      callbackUrl: `${window.location.origin}`,
     });
 
     if (res?.error) {
-      setError(true);
-      console.log(res);
+      setError(res.error);
     } else {
-      router.push('/user-area');
+      router.push(`${window.location.origin}`)
+      closeLoginPopup()
     }
   };
 
@@ -65,7 +65,7 @@ const LoginPopup = ({ isOpen, onClose, csrfToken }) => {
           <p className="popup__subtitle">You will receive 2.5% cashback from each purchase</p>
         </div>
         <form action="" onSubmit={e => handleSubmit(e)}>
-        <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
+          <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
           <div className="popup__input-wrapp">
             <input
               id="email-address"
@@ -85,8 +85,9 @@ const LoginPopup = ({ isOpen, onClose, csrfToken }) => {
               className="popup__input"
               placeholder="PASSWORD"
             />
+            {error ? <div>{error}</div> : null}
           </div>
-          <button className="popup__save-btn" type='submit'>
+          <button className="popup__save-btn" type="submit">
             LOGIN
           </button>
         </form>

@@ -1,3 +1,5 @@
+'use client';
+
 import './Footer.sass';
 import logo from './img/logo-text.svg';
 import fb from './img/fb.svg';
@@ -6,8 +8,12 @@ import ins from './img/in.svg';
 import LoginPopup from '../Popups/Login';
 import SignUpPopup from '../Popups/SignUp';
 import { useState } from 'react';
+import { signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 const Footer = () => {
+  const { status } = useSession();
+
   // Стан для відображення попапа
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
   const [isSignUpPopupOpen, setIsSignUpPopupOpen] = useState(false);
@@ -102,16 +108,33 @@ const Footer = () => {
             <div className="footer__box">
               <ul className="footer__pages">
                 <li className="footer__item-title">My Account</li>
-                <li className="footer__item">
-                  <div id="registration" className="footer__item-link" onClick={handleOpenPopup}>
-                    Sign Up
-                  </div>
-                </li>
-                <li className="footer__item">
-                  <div id="login" className="footer__item-link" onClick={handleOpenPopup}>
-                    Login
-                  </div>
-                </li>
+                {status === 'authenticated' ? (
+                  <>
+                    <li className="footer__item">
+                      <Link href={'/profile-page'} id="profile" className="footer__item-link">
+                        Profile
+                      </Link>
+                    </li>
+                    <li className="footer__item">
+                      <div id="logout" className="footer__item-link" onClick={signOut}>
+                        Logout
+                      </div>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li className="footer__item">
+                      <div id="registration" className="footer__item-link" onClick={handleOpenPopup}>
+                        Sign Up
+                      </div>
+                    </li>
+                    <li className="footer__item">
+                      <div id="login" className="footer__item-link" onClick={handleOpenPopup}>
+                        Login
+                      </div>
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
           </div>

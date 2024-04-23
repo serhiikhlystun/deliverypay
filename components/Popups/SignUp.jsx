@@ -1,14 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../common/Popup.sass';
 import { useMutation } from 'react-query';
 import setData from '@/helpers/setData';
 import { createNewUser } from '@/queries/Users';
 
 const SignUpPopup = ({ isOpen, onClose }) => {
+  const [error, setError] = useState();
   const signUpMutation = useMutation(newUser => {
     setData(createNewUser, { data: newUser }, '/system').then(response => {
       if(response.create_users_item){
         closeSignUpPopup()
+      } else {
+        setError('This email has already used')
       }
     });
   });
@@ -25,7 +28,6 @@ const SignUpPopup = ({ isOpen, onClose }) => {
       password: e.target.password.value,
       role: '721b4233-f89f-4fcc-9b2a-1864e14ad601',
       status: 'active',
-      provider: '',
     });
   };
 
@@ -84,6 +86,7 @@ const SignUpPopup = ({ isOpen, onClose }) => {
               placeholder="PASSWORD"
             />
             <input className="popup__input" type="password" placeholder="REPEAT PASSWORD" />
+            {error ? <div>{error}</div> : null}
           </div>
           <button type="submit" className="popup__save-btn">
             REGISTER

@@ -6,8 +6,8 @@ const options = {
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        email: {label: 'Email', type: 'text', placeholder: 'Enter your email'},
-        password: {label: 'Password', type: 'password', placeholder: 'Enter your password'},
+        email: { label: 'Email', type: 'text', placeholder: 'Enter your email' },
+        password: { label: 'Password', type: 'password', placeholder: 'Enter your password' },
       },
       async authorize(credentials) {
         const payload = {
@@ -35,11 +35,11 @@ const options = {
         }
 
         return null;
-      }
+      },
     }),
   ],
   session: {
-    jwt: true
+    jwt: true,
   },
   jwt: {
     secret: 'SUPER_SECRET_JWT_SECRET',
@@ -66,7 +66,7 @@ const options = {
   },
   pages: {
     signIn: '/',
-  }
-}
+  },
+};
 
 export default (req, res) => NextAuth(req, res, options);
