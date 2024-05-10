@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './CartItem.sass';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL;
 
@@ -18,7 +19,6 @@ const CartItem = ({ item, deleteFromCart, updateOrder }) => {
 
   const handleChangeInput = e => {
     let number = e.target.value.match(/\d*[1-9]\d*/g);
-    console.log(number);
     if (number[1] !== undefined && number !== null) {
       setCount(() => Number(number[1]));
       updateOrder(item.id, Number(number[1]))
@@ -32,7 +32,7 @@ const CartItem = ({ item, deleteFromCart, updateOrder }) => {
     <Link href={`/products/${item.category_slug}/${item.subcategory_slug}/${item.slug}`}>
     <li className="cart-list-item">
       <div className="cart-list-item__img-box">
-        <img src={`${assetsUrl}/${item.image}?width=580&height=700`} className="cart-list-item__img" alt="" />
+        <Image src={`${assetsUrl}/${item.image}?width=580&height=700`} width={580} height={700} className="cart-list-item__img" alt="" />
       </div>
       <div className="cart-list-item__content">
         <div className="cart-list-item__title-inn">

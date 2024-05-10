@@ -24,6 +24,12 @@ export const SingleProductQuery = `
                     slug
                 }
             }
+            slides {
+                id
+                directus_files_id {
+                    id
+                }
+            }
         }
     }
 `

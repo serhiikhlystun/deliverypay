@@ -8,6 +8,7 @@ import setData from '@/helpers/setData';
 import getData from '@/queries/getData';
 import { createSession, updateSession, getSession } from '@/queries/sessions';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
+import Image from 'next/image';
 
 const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL;
 
@@ -141,7 +142,7 @@ const CardItem = ({
     <Link href={`/${page_url}/${category.slug}/${subcategory.slug}/${slug}`}>
       <div className="card-item">
         <div className="card-item__img-wrapp">
-          <img src={`${assetsUrl}/${image}?width=580&height=700`} className="card-item__img" alt="" />
+          <Image src={`${assetsUrl}/${image}?width=580&height=700`} width={580} height={700} className="card-item__img" alt="" />
         </div>
         <div className="card-item__content">
           <div className="card-item__content-inn">
@@ -205,7 +206,7 @@ const CardItem = ({
               )}
             </div>
             <button className="card-item__btn" onClick={e => addToCart(e)}>
-              <img className="card-item__btn-icon" src={bucketIcon.src} alt="" />
+              <Image className="card-item__btn-icon" src={bucketIcon.src} width={48} height={48} alt="" />
               ADD
             </button>
           </div>

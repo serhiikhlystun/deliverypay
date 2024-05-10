@@ -1,9 +1,12 @@
 const graphQLAPI = process.env.NEXT_PUBLIC_GRAPHQL;
 
-const fetchData = async (query, { variables = {} }) => {
-  const headers = { 'Content-Type': 'application/json' };
+const fetchData = async (query, { variables = {} }, additionalPath = '', token) => {
+  let headers = { 'Content-Type': 'application/json' };
+  if (token) {
+    headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
+  }
 
-  const res = await fetch(graphQLAPI, {
+  const res = await fetch(`${graphQLAPI}${additionalPath}`, {
     method: 'POST',
     headers,
     body: JSON.stringify({
@@ -16,6 +19,10 @@ const fetchData = async (query, { variables = {} }) => {
 
   if (json.errors) {
     throw new Error(json.errors);
+  }
+
+  if (token) {
+    return json.data.users_me;
   }
 
   return json;

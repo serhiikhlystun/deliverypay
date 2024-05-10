@@ -1,19 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../common/Popup.sass';
 
 const SettingsPopup = ({ isOpen, onClose, user, handleUpdate }) => {
 
-  const closeSettingsPopup = () => {
-    onClose();
-    document.body.style.setProperty('overflow', 'inherit');
-  };
 
   return (
     <div className={`popup__wrapp ${isOpen ? 'open' : ''}`}>
       <div className="popup__bg"></div>
       <div className="popup__content">
         <div className="popup__close-btn-wrapp">
-          <button className="popup__close-btn" onClick={closeSettingsPopup}>
+          <button className="popup__close-btn" onClick={onClose}>
             <svg width="17" height="18" viewBox="0 0 17 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clipPath="url(#clip0_2001_1679)">
                 <path
@@ -46,8 +42,8 @@ const SettingsPopup = ({ isOpen, onClose, user, handleUpdate }) => {
           <div className="popup__input-wrapp">
             <input name="email" className="popup__input" type="text" placeholder={user.email} />
             <input name="password" className="popup__input" type="password" placeholder="****************" />
-            <input name="phone" className="popup__input" type="text" placeholder={user.phone} />
-            <input name="location" className="popup__input" type="text" placeholder={user.location} />
+            <input name="phone" className="popup__input" type="tel" placeholder={user.phone ? user.phone : '+12025550118' } />
+            <input name="location" className="popup__input" type="text" placeholder={user.location ? user.location : 'Chicago 123, avenue, Room 123 '} />
             <input className="popup__input" type="text" placeholder="420comrades" />
           </div>
           <button type="submit" className="popup__save-btn">

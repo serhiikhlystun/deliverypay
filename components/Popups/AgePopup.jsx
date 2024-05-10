@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import '../common/Popup.sass';
 
 import logoBig from './img/420-logo-big.svg';
+import Image from 'next/image';
 
 const AgePopup = ({ onClose }) => {
     const [shouldShowPopup, setShouldShowPopup] = useState(false);
@@ -27,7 +28,7 @@ const AgePopup = ({ onClose }) => {
     return shouldShowPopup ? (
         <div className="popup__wrapp">
             <div className="popup__age">
-                <img src={logoBig} alt="" className="popup__age-logo" />
+                <Image src={logoBig} alt="" width={546} height={681} className="popup__age-logo" />
                 <h4 className="popup__age-title">
                     Are you 21 years old?
                 </h4>

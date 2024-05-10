@@ -1,5 +1,6 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { refreshAuth } from '@/queries/Users';
 
 const options = {
   providers: [
@@ -46,6 +47,22 @@ const options = {
   },
   callbacks: {
     async jwt({ token, user, account }) {
+     // Check if token is expired
+     if (token && Date.now() > token.exp * 1000) {
+      try {
+        // Refresh the access token
+        const refreshedToken = await refreshAccessToken(token);
+
+        // Update the token with the new access token
+        token.accessToken = refreshedToken.accessToken;
+        token.expires = Math.floor(refreshedToken.expires / 1000);
+      } catch (error) {
+        console.error('Failed to refresh access token:', error);
+        // Handle error
+        // For example, redirect to login page
+      }
+    }
+
       if (account && user) {
         return {
           ...token,
@@ -60,6 +77,7 @@ const options = {
     async session({ session, token }) {
       session.user.accessToken = token.accessToken;
       session.user.refreshToken = token.refreshToken;
+      session.user.exp = token.exp;
 
       return session;
     },
@@ -68,5 +86,25 @@ const options = {
     signIn: '/',
   },
 };
+
+async function refreshAccessToken(token) {
+  const variables = {
+    refresh_token: token.refreshToken,
+  }
+  // Logic for refreshing the access token
+  const response = await fetch('https://crm.web3flow.online/graphql/system', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token.refreshToken}`,
+    },
+    body: JSON.stringify({
+      refreshAuth,
+      variables
+    }),
+  });
+  const refreshedToken = await response.json();
+  return refreshedToken;
+}
 
 export default (req, res) => NextAuth(req, res, options);

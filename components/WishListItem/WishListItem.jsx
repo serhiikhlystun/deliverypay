@@ -2,6 +2,7 @@ import React from 'react';
 import './WishListItem.sass';
 import bucketIcon from './img/bucket-icon.svg';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL;
 
@@ -11,7 +12,7 @@ const WishListItem = ({item, deleteFromWishes, addToCart }) => {
     <Link href={`/products/${item.category_slug}/${item.subcategory_slug}/${item.slug}`}>
     <li className="wish-list-item">
       <div className="wish-list-item__img-box">
-        <img className="wish-list-item__img" src={`${assetsUrl}/${item.image}?width=580&height=700`} alt="" />
+        <Image className="wish-list-item__img" src={`${assetsUrl}/${item.image}?width=580&height=700`} width={580} height={700} alt="" />
       </div>
       <div className="wish-list-item__content">
         <div className="wish-list-item__title-inn">
@@ -61,7 +62,7 @@ const WishListItem = ({item, deleteFromWishes, addToCart }) => {
             )}
           </div>
           <button className="wish-list-item__btn" onClick={(e)=>addToCart(e, item)}>
-            <img className="wish-list-item__btn-icon" src={bucketIcon} alt="" />
+            <Image className="wish-list-item__btn-icon" src={bucketIcon} width={25} height={26} alt="" />
             ADD
           </button>
         </div>

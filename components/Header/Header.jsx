@@ -4,31 +4,46 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import './Header.sass';
 import profileIcon from './img/profile-icon.svg';
-import bucketIcon from './img/bucket-icon.svg';
 import logo from './img/logo.svg';
 import './Hamburger.sass';
 import LoginPopup from '../Popups/Login';
 import SignUpPopup from '../Popups/SignUp';
-import getData from '@/queries/getData';
-import { getSession } from '@/queries/sessions';
-import { useQuery } from 'react-query';
+import setData from '@/helpers/setData';
+import { useQuery, useMutation } from 'react-query';
 import { useSession, signOut } from 'next-auth/react';
+import Image from 'next/image';
+import { logoutUser } from '@/queries/Users';
+import BusketIcon from './BusketIcon';
+import { getSession } from '@/queries/sessions';
+import getData from '@/queries/getData';
+import useStore from '@/store/temp_order';
 
 const Header = () => {
-  const { status } = useSession();
-  const { data: session, isSuccess } = useQuery(
+  const [itemsInCart, setItemsInCart] = useState(0);
+  const { data: userSession, status } = useSession();
+  const store = useStore();
+
+  const { data: localSession, isSuccess } = useQuery(
     ['session'],
     async () => await getData(getSession, 'session_by_id', { id: localStorage.getItem('session_id') })
   );
-  const [itemsInCart, setItemsInCart] = useState(0);
+
+  useEffect(() => {
+    setItemsInCart(store.tempOrder.reduce((acc, item) => acc + item.quantity, 0));
+  }, [store]);
+
+  useEffect(() => {
+    if (localSession && localSession.temp_order) {
+      setItemsInCart(localSession.temp_order.reduce((acc, item) => acc + item.quantity, 0));
+    }
+  }, [isSuccess]);
 
   // Стан для відображення попапа
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
   const [isSignUpPopupOpen, setIsSignUpPopupOpen] = useState(false);
 
   const handleOpenPopup = e => {
-
-    e.preventDefault()
+    e.preventDefault();
     if (e.target.id === 'registration') {
       setIsSignUpPopupOpen(true);
     }
@@ -43,12 +58,6 @@ const Header = () => {
     setIsSignUpPopupOpen(false);
     setIsLoginPopupOpen(false);
   };
-
-  useEffect(() => {
-    if (isSuccess && session.temp_order) {
-      setItemsInCart(session.temp_order.length);
-    }
-  });
 
   useEffect(() => {
     const hamburgerToggle = document.querySelectorAll('.hamburger-close');
@@ -76,6 +85,15 @@ const Header = () => {
       });
     };
   }, []);
+
+  const mutation = useMutation(refresh_token => {
+    setData(logoutUser, { refresh_token: refresh_token }, '/system');
+  });
+
+  const handleLogout = () => {
+    mutation.mutate(userSession.user.refreshToken);
+    signOut();
+  };
 
   return (
     <header className="header">
@@ -372,7 +390,7 @@ const Header = () => {
                             </svg>
                           </li>
                           <li className="hamburger__overlay-list_item">
-                            <div onClick={signOut} className="hamburger__overlay-list_item-link">
+                            <div onClick={handleLogout} className="hamburger__overlay-list_item-link">
                               LogOUT
                             </div>
                             <svg
@@ -426,7 +444,7 @@ const Header = () => {
             </li>
           </ul>
           <Link href="/" className="header__logo">
-            <img src={logo.src} alt="logo" className="header__logo-img" />
+            <Image src={logo.src} alt="logo" width={231} height={96} className="header__logo-img" />
           </Link>
           <div className="header__right">
             <ul className={'header__nav'}>
@@ -436,17 +454,28 @@ const Header = () => {
             <div className="header__icon-wrapp">
               {status === 'authenticated' ? (
                 <Link href={'/profile-page'} className="header__icon">
-                  <img src={profileIcon.src} alt="profile" className="header__icon-img" />
+                  <Image
+                    src={profileIcon.src}
+                    alt="profile"
+                    width={48}
+                    height={48}
+                    className="header__icon-img"
+                  />
                 </Link>
               ) : (
-                <button type='button' className="header__icon btn">
-                  <img id="login-btn" onClick={handleOpenPopup} src={profileIcon.src} alt="profile" className="header__icon-img" />
+                <button type="button" className="header__icon btn">
+                  <Image
+                    id="login-btn"
+                    onClick={handleOpenPopup}
+                    src={profileIcon.src}
+                    width={48}
+                    height={48}
+                    alt="profile"
+                    className="header__icon-img"
+                  />
                 </button>
               )}
-              <Link href={'/cart-page'} className="header__icon bucket">
-                <p className="header__icon-bucket-message">{itemsInCart}</p>
-                <img src={bucketIcon.src} alt="busket" className="header__icon-img" />
-              </Link>
+              <BusketIcon itemsInCart={itemsInCart} />
             </div>
           </div>
         </div>

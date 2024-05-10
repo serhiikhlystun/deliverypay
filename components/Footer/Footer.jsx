@@ -10,9 +10,13 @@ import SignUpPopup from '../Popups/SignUp';
 import { useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { useMutation } from 'react-query';
+import setData from '@/helpers/setData';
+import { logoutUser } from '@/queries/Users';
 
 const Footer = () => {
-  const { status } = useSession();
+  const { data: session, status } = useSession();
 
   // Стан для відображення попапа
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
@@ -33,28 +37,38 @@ const Footer = () => {
     setIsSignUpPopupOpen(false);
     setIsLoginPopupOpen(false);
   };
+
+  const mutation = useMutation(refresh_token => {
+    setData(logoutUser, { refresh_token: refresh_token }, '/system');
+  });
+
+  const handleLogout = () => {
+    mutation.mutate(session.user.refreshToken);
+    signOut();
+  };
+
   return (
     <footer className="footer">
       <div className="container">
         <div className="footer__wrapper">
           <div className="footer__left">
             <a href="#" className="footer__link">
-              <img className="footer__logo" src={logo.src} alt="" />
+              <Image className="footer__logo" src={logo.src} width={231} height={37} alt="" />
             </a>
             <ul className="footer__social">
               <li className="footer__social-item">
                 <a className="footer__social-item-link" href="">
-                  <img src={fb.src} alt="Fb" />
+                  <Image src={fb.src} alt="Fb" width={51} height={51} />
                 </a>
               </li>
               <li className="footer__social-item">
                 <a className="footer__social-item-link" href="">
-                  <img src={ins.src} alt="In" />
+                  <Image src={ins.src} alt="In" width={52} height={51} />
                 </a>
               </li>
               <li className="footer__social-item">
                 <a className="footer__social-item-link" href="">
-                  <img src={tw.src} alt="Tw" />
+                  <Image src={tw.src} alt="Tw" width={52} height={51} />
                 </a>
               </li>
             </ul>
@@ -116,7 +130,7 @@ const Footer = () => {
                       </Link>
                     </li>
                     <li className="footer__item">
-                      <div id="logout" className="footer__item-link" onClick={signOut}>
+                      <div id="logout" className="footer__item-link" onClick={handleLogout}>
                         Logout
                       </div>
                     </li>

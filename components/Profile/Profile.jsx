@@ -8,6 +8,7 @@ import { getSession, updateSession } from '@/queries/sessions';
 import useStore from '@/store/temp_order';
 import getData from '@/queries/getData';
 import setData from '@/helpers/setData';
+import fetchData from '@/helpers/fetchData';
 import { v4 as uuidv4 } from 'uuid';
 import { getCurrentUser, updateCurrentUser } from '@/queries/Users';
 import { useRouter } from 'next/navigation';
@@ -44,49 +45,6 @@ const orderItems = [
   },
 ];
 
-const fetchData = async (query, token, { variables = {} }) => {
-  const headers = {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
-  };
-
-  const res = await fetch('https://crm.web3flow.online/graphql/system', {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
-      query,
-      variables,
-    }),
-  });
-
-  const json = await res.json();
-
-  if (json.errors) {
-    throw new Error(json.errors);
-  }
-
-  return json.data.users_me;
-};
-
-const setUpdatedUser = async (mutation, token, data = {}) => {
-  const query = JSON.stringify({
-    query: mutation,
-    variables: data,
-  });
-
-  const response = await fetch('https://crm.web3flow.online/graphql/system', {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    method: 'POST',
-    body: query,
-  });
-
-  const responseJson = await response.json();
-  return responseJson.data;
-};
-
 const Profile = () => {
   const router = useRouter();
   const { data: userSession, status } = useSession({
@@ -96,13 +54,27 @@ const Profile = () => {
     },
   });
 
+  // Стан для відображення попапа
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
   const { data: user, isUserSuccess } = useQuery(
     ['currentUser'],
-    async () => await fetchData(getCurrentUser, userSession.user.accessToken, {}),
+    async () =>  await fetchData(getCurrentUser, {}, '/system', userSession.user.accessToken),
     {
       enabled: status === 'authenticated',
     }
   );
+  
+  const [updatedUserInfo, setUpdatedUserInfo] = useState({});
+
+  useEffect(() => {
+    if (user) {
+      setUpdatedUserInfo({
+        email: user.email,
+        location: user.location,
+      });
+    }
+  }, [user]);
 
   const { data: session, isSuccess } = useQuery(
     ['session'],
@@ -138,9 +110,6 @@ const Profile = () => {
     });
   };
 
-  // Стан для відображення попапа
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-
   const handleOpenPopup = () => {
     setIsPopupOpen(true);
     document.body.style.setProperty('overflow', 'hidden');
@@ -149,6 +118,7 @@ const Profile = () => {
   // Обробник закриття попапа
   const handleClosePopup = () => {
     setIsPopupOpen(false);
+    document.body.style.setProperty('overflow', 'inherit');
   };
 
   // Додає продукт до корзини
@@ -173,21 +143,24 @@ const Profile = () => {
     });
   };
 
-  const updateMutation = useMutation(
-    updatedUser => {
-      status === 'authenticated' && setUpdatedUser(updateCurrentUser, userSession.user.accessToken, { data: updatedUser });
-    },
-  );
+  const updateMutation = useMutation(updatedUser => {
+    status === 'authenticated' &&
+      setData(updateCurrentUser, { data: updatedUser }, '/system', userSession.user.accessToken,);
+  });
 
   const handleUpdate = e => {
-    e.preventDefault(
-      updateMutation.mutate({
-        email: e.target.email.value,
-        password: e.target.password.value,
-        location: e.target.location.value,
-        phone: e.target.phone.value,
-      })
-    );
+    e.preventDefault();
+    setUpdatedUserInfo({
+      email: e.target.email.value ? e.target.email.value : user.email,
+      location: e.target.location.value ? e.target.location.value : user.location,
+    });
+    updateMutation.mutate({
+      email: e.target.email.value ? e.target.email.value : user.email,
+      password: e.target.password.value ? e.target.password.value : user.password,
+      location: e.target.location.value ? e.target.location.value : user.location,
+      phone: e.target.phone.value ? e.target.phone.value : user.phone,
+    });
+    handleClosePopup();
   };
 
   if (status !== 'authenticated') return null;
@@ -197,7 +170,7 @@ const Profile = () => {
       <div className="container">
         <div className="profile__wrapp">
           <h2 className="profile__title">
-            {user?.email}
+            {updatedUserInfo?.email}
             <svg
               onClick={handleOpenPopup}
               width="31"
@@ -223,7 +196,7 @@ const Profile = () => {
               </defs>
             </svg>
           </h2>
-          <p className="profile__subtitle">{user?.location}</p>
+          <p className="profile__subtitle">{updatedUserInfo?.location}</p>
         </div>
         <h2 className="wish-list__title">My WISH LIST</h2>
         <div className="wish-list__wrapp">

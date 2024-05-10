@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import '../common/Popup.sass';
 import { useMutation } from 'react-query';
 import setData from '@/helpers/setData';
@@ -8,10 +8,10 @@ const SignUpPopup = ({ isOpen, onClose }) => {
   const [error, setError] = useState();
   const signUpMutation = useMutation(newUser => {
     setData(createNewUser, { data: newUser }, '/system').then(response => {
-      if(response.create_users_item){
-        closeSignUpPopup()
+      if (response.create_users_item) {
+        closeSignUpPopup();
       } else {
-        setError('This email has already used')
+        setError('This email has already used');
       }
     });
   });
@@ -23,6 +23,10 @@ const SignUpPopup = ({ isOpen, onClose }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    if (e.target.password.value !== e.target.repeat_password.value) {
+      setError("Password doesn't match");
+      return
+    } else setError('')
     signUpMutation.mutate({
       email: e.target.email.value,
       password: e.target.password.value,
@@ -85,7 +89,12 @@ const SignUpPopup = ({ isOpen, onClose }) => {
               className="popup__input"
               placeholder="PASSWORD"
             />
-            <input className="popup__input" type="password" placeholder="REPEAT PASSWORD" />
+            <input
+              name="repeat_password"
+              className="popup__input"
+              type="password"
+              placeholder="REPEAT PASSWORD"
+            />
             {error ? <div>{error}</div> : null}
           </div>
           <button type="submit" className="popup__save-btn">

@@ -8,12 +8,6 @@ import setData from '@/helpers/setData';
 import { getSession, updateSession } from '@/queries/sessions';
 import useStore from '@/store/temp_order';
 
-// const prices = {
-//   totalPrice: '267.90',
-//   discount: '7.90',
-//   currency: '$',
-// };
-
 const CartPage = () => {
   const [prices, setPrices] = useState({});
   const { data: session, isSuccess } = useQuery(
@@ -28,12 +22,13 @@ const CartPage = () => {
     if (isSuccess && session && session.temp_order) {
       setInitialTempOrder(session.temp_order);
     }
-    calculatePrices()
+    calculatePrices();
   }, [isSuccess, session]);
 
   const calculatePrices = () => {
     let tempTotal = { totalPrice: 0 };
-    session?.temp_order.forEach(item => {
+    session && session?.temp_order &&
+    session.temp_order.forEach(item => {
       let price = Number(item.new_price ? item.new_price : item.price);
       let priceAll = price * item.quantity;
       tempTotal.totalPrice = (Number(tempTotal.totalPrice) + priceAll).toFixed(2);
@@ -57,8 +52,8 @@ const CartPage = () => {
       status: 'draft',
       temp_order: useStore.getState().tempOrder,
     });
-    calculatePrices()
-  }
+    calculatePrices();
+  };
 
   if (!useStore.getState().tempOrder.length) {
     return (

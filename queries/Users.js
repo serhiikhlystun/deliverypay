@@ -32,3 +32,21 @@ export const updateCurrentUser = `
         }
     }
 `;
+
+export const logoutUser = `
+    #graphql
+        mutation Auth_logout ($refresh_token: String) {
+            auth_logout(refresh_token: $refresh_token)
+    }
+`;
+
+export const refreshAuth = `
+    #graphql
+        mutation Auth_refresh ($refresh_token: String) {
+            auth_refresh(refresh_token: $refresh_token, mode: json) {
+                access_token
+                expires
+                refresh_token
+            }
+    }
+`;

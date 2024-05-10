@@ -15,6 +15,9 @@ import getData from '@/queries/getData';
 import { createSession, updateSession, getSession } from '@/queries/sessions';
 import { v4 as uuidv4 } from 'uuid';
 import useStore from '../../store/temp_order';
+import Image from 'next/image';
+
+const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL;
 
 const ProductItem = ({ product }) => {
   const queryClient = useQueryClient();
@@ -86,7 +89,7 @@ const ProductItem = ({ product }) => {
 
   useEffect(() => {
     localStorage.getItem('session_id') ? setSessionSet(true) : setSessionSet(false);
-  });
+  }, []);
 
   const { addToTempOrder, setInitialTempOrder, addToWishList, setInitialWishList, deleteFromWishList } =
     useStore();
@@ -102,11 +105,11 @@ const ProductItem = ({ product }) => {
     }
   }, [isSuccess, session]);
 
-useEffect(()=>{
-  if (isSuccess && session.wish_list) {  
-  setIsActive(!!session.wish_list.find(item => item.product_id == product.id));
-  }
-  }, [isSuccess])
+  useEffect(() => {
+    if (isSuccess && session && session.wish_list && product) {
+      setIsActive(!!session.wish_list.find(item => item.product_id == product.id));
+    }
+  }, [isSuccess]);
 
   const addToWishes = e => {
     addToWishList({
@@ -115,7 +118,7 @@ useEffect(()=>{
       new_price: product.new_price,
       price: product.price,
       brand: product.brand,
-      image: product.product_image ? (product.product_image.id): (null),
+      image: product.product_image ? product.product_image.id : null,
       slug: product.slug,
       category_slug: product.product_categories[0].categories_id.slug,
       subcategory_slug: product.subcategory.slug,
@@ -139,7 +142,7 @@ useEffect(()=>{
   const addToCart = () => {
     addToTempOrder({
       product_id: product.id,
-      image: product.product_image ? (product.product_image.id): (null),
+      image: product.product_image ? product.product_image.id : null,
       product_name: product.product_name,
       new_price: product.new_price,
       price: product.price,
@@ -176,28 +179,70 @@ useEffect(()=>{
             </svg>
           </a>
           <div className="product-item__slider">
-            <Swiper
-              modules={[Pagination, Autoplay]}
-              spaceBetween={50}
-              slidesPerView={1}
-              loop={true}
-              pagination={{ clickable: true }}
-              autoplay={{ delay: 10000, disableOnInteraction: false }}
-              scrollbar={{ draggable: true }}
-            >
-              <SwiperSlide>
-                <img src={img_01.src} alt="Slide 1" />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img src={img_02.src} alt="Slide 2" />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img src={img_03.src} alt="Slide 3" />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img src={img_04.src} alt="Slide 4" />
-              </SwiperSlide>
-            </Swiper>
+            {product.slides.length ? (
+              <Swiper
+                modules={[Pagination, Autoplay]}
+                spaceBetween={50}
+                slidesPerView={1}
+                loop={true}
+                pagination={{ clickable: true }}
+                autoplay={{ delay: 10000, disableOnInteraction: false }}
+                scrollbar={{ draggable: true }}
+              >
+                <SwiperSlide>
+                  <Image
+                    src={`${assetsUrl}/${product.slides[0].directus_files_id.id}?width=580&height=700`}
+                    width={580}
+                    height={700}
+                    alt="Slide 1"
+                  />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <Image
+                    src={`${assetsUrl}/${product.slides[1].directus_files_id.id}?width=580&height=700`}
+                    width={580}
+                    height={700}
+                    alt="Slide 2"
+                  />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <Image
+                    src={`${assetsUrl}/${product.slides[2].directus_files_id.id}?width=580&height=700`}
+                    width={580}
+                    height={700}
+                    alt="Slide 3"
+                  />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <Image
+                    src={`${assetsUrl}/${product.slides[3].directus_files_id.id}?width=580&height=700`}
+                    width={580}
+                    height={700}
+                    alt="Slide 4"
+                  />
+                </SwiperSlide>
+              </Swiper>
+            ) : (
+              <Swiper
+                modules={[Pagination, Autoplay]}
+                spaceBetween={50}
+                slidesPerView={1}
+                loop={true}
+                pagination={{ clickable: true }}
+                autoplay={{ delay: 10000, disableOnInteraction: false }}
+                scrollbar={{ draggable: true }}
+              >
+                <SwiperSlide>
+                  <Image
+                    src={`${assetsUrl}/${product.product_image.id}?width=580&height=700`}
+                    width={580}
+                    height={700}
+                    className="card-item__img"
+                    alt="image"
+                  />
+                </SwiperSlide>
+              </Swiper>
+            )}
           </div>
           <div className="product-item__content">
             <div className="product-item__title-inn">
@@ -206,7 +251,7 @@ useEffect(()=>{
               </div>
               <div className="product-item__like">
                 <svg
-                  onClick={ toggleActive}
+                  onClick={toggleActive}
                   className="product-item__like-icon"
                   width="39"
                   height="39"
@@ -295,7 +340,7 @@ useEffect(()=>{
                 )}
               </div>
               <button className="product-item__btn" onClick={addToCart}>
-                <img className="product-item__btn-icon" src={bucketIcon} alt="" />
+                <Image className="product-item__btn-icon" src={bucketIcon} width={25} height={26} alt="" />
                 ADD TO BAG
               </button>
             </div>

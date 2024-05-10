@@ -3,7 +3,7 @@ import './Tags.sass';
 import Link from 'next/link'
 
 const TagSubItem = ({ title, id, getSelectedSubCategory, selectedSubCategory, category_slug, slug, page_url }) => {
-  // console.log(category_slug);
+
   return (
     <Link
       id={id}

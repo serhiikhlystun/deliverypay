@@ -7,10 +7,10 @@ const SearchResultBar = ({ count, inputSearchText }) => {
       <div className="container">
         <div className="search-result-bar">
           <h3 className="search-result-bar__title">
-            search results for "<b>{inputSearchText ? inputSearchText : ' '}</b>"
+            search results for &ldquo;<b>{inputSearchText ? inputSearchText : ' '}</b>&ldquo;
           </h3>
           <p className="search-result-bar__quantity">
-            "<b>{count}</b>" results
+          &ldquo;<b>{count}</b>&ldquo; results
           </p>
         </div>
       </div>
