@@ -14,6 +14,7 @@ import { getCurrentUser, updateCurrentUser } from '@/queries/Users';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { userOrderHistory } from '@/queries/orderQueries';
+import { toast } from 'react-toastify';
 
 const orderItems = [
   {
@@ -128,26 +129,50 @@ const Profile = () => {
   };
 
   // Додає продукт до корзини
+
   const addToCart = (e, item) => {
     e.preventDefault();
-    addToTempOrder({
-      product_id: item.id,
-      image: item.image,
-      product_name: item.product_name,
-      new_price: item.new_price,
-      price: item.price,
-      brand: item.brand,
-      quantity: 1,
-      id: uuidv4(),
-      slug: item.slug,
-      category_slug: item.category_slug,
-      subcategory_slug: item.subcategory_slug,
-    });
-    mutation.mutate({
-      status: 'draft',
-      temp_order: useStore.getState().tempOrder,
-    });
-  };
+    const existingItem = useStore.getState().tempOrder.find(item_temp => item_temp.product_id === item.product_id);
+    if (existingItem) {
+      existingItem.quantity += 1;
+      mutation.mutate({
+        status: 'draft',
+        temp_order: useStore.getState().tempOrder,
+      });
+    } else {
+      addToTempOrder({
+        product_id: item.product_id,
+        image: item.image,
+        product_name: item.product_name,
+        new_price: item.new_price,
+        price: item.price,
+        brand: item.brand,
+        quantity: 1,
+        id: uuidv4(),
+        slug: item.slug,
+        category_slug: item.category_slug,
+        subcategory_slug: item.subcategory_slug,
+      });
+      mutation.mutate({
+        status: 'draft',
+        temp_order: useStore.getState().tempOrder,
+      });
+    }
+     
+
+      // Add the product to the cart
+      // ...
+      // Show notification that the product is added to the cart
+      toast.dark('Product added to the cart', {
+        position:  "top-center",//toast.POSITION.TOP_RIGHT,
+        autoClose: 500, // 3000 milliseconds = 3 seconds
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+      });
+    } 
 
   const updateMutation = useMutation(updatedUser => {
     status === 'authenticated' &&
@@ -218,14 +243,15 @@ const Profile = () => {
                   />
                 ))}
               </ul>
-              <div className="wish-list__more">
+              {/* <div className="wish-list__more">
                 <button className="wish-list__more-btn">Load more</button>
-              </div>
+              </div> */}
             </>
           ) : (
-            <h3 className="wish-list__title">YOUR WISH LIST IS EMPTY</h3>
+            <p>YOUR WISH LIST IS EMPTY</p>
           )}
         </div>
+        <h2 className="wish-list__title">My ORDERS</h2>
         <div className="order__wrapp">
           <ul className="order">
             {orderItems.map((item, index) => (
@@ -239,9 +265,9 @@ const Profile = () => {
               />
             ))}
           </ul>
-          <div className="order__more">
+          {/* <div className="order__more">
             <button className="order__more-btn">Load more</button>
-          </div>
+          </div> */}
         </div>
         {isPopupOpen && <SettingsPopup onClose={handleClosePopup} user={user} handleUpdate={handleUpdate} />}
       </div>

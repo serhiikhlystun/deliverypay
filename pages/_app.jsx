@@ -1,5 +1,7 @@
 import RootLayout from './../app/layout';
 import { QueryClientProvider, QueryClient } from 'react-query';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata = {
   title: 'E-commerce Site',
@@ -12,6 +14,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <QueryClientProvider client={queryClient}>
       <RootLayout session={session}>
+        <ToastContainer />
         <Component {...pageProps} />
       </RootLayout>
     </QueryClientProvider>

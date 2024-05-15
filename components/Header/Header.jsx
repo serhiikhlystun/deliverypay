@@ -37,7 +37,7 @@ const Header = () => {
     if (localSession && localSession.temp_order) {
       setItemsInCart(localSession.temp_order.reduce((acc, item) => acc + item.quantity, 0));
     }
-  }, [isSuccess]);
+  }, [isSuccess]); 
 
   // Стан для відображення попапа
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
