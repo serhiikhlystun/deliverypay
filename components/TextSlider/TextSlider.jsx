@@ -15,13 +15,10 @@ const TextSlider = () => {
   const sliderRef = useRef(null);
   let swiper;
 
-  const { data: text, isSuccess } = useQuery(
-    ['text_for_slider'],
+  const { data: data, isSuccess } = useQuery(
+    ['textForSlider'],
     async () => await fetchData(TextForSlider, {}),
   );
-// const res = async () =>  await fetchData(TextForSlider, {})
-// res().then(response => console.log(response.data))
-
 
   useEffect(() => {
     swiper = new SwiperCore(sliderRef.current, {
@@ -53,14 +50,6 @@ const TextSlider = () => {
     }
   };
 
-  const customTexts = [
-    "Spend 200$ in purchase to get a free: Vape of your choice.",
-    "Custom Text 2",
-    "Custom Text 3",
-    "Custom Text 4",
-    "Custom Text 5",
-  ];
-
   return (
     <section className="text-slider">
       <div className="container text-slider__wrapp">
@@ -80,12 +69,12 @@ const TextSlider = () => {
         </div>
         <div className="swiper-container" ref={sliderRef}>
           <div className="swiper-wrapper text-slider__wrapp">
-            {customTexts.map((text, index) => (
+            {isSuccess && data.data.text_for_slider.map((text, index) => (
               <div
                 className="swiper-slide text-slider__item"
                 key={index}
               >
-                {text}
+                {text.Text}
               </div>
             ))}
           </div>
