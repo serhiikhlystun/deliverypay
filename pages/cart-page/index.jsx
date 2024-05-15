@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CartItem from './../../components/CartItem/CartItem';
 import Delivery from './../../components/Auth/Delivery';
-import CheckoutPrices from './../../components/Auth/CheckoutPrices';
 import { useQuery, useMutation } from 'react-query';
 import getData from '@/queries/getData';
 import setData from '@/helpers/setData';
@@ -18,6 +17,7 @@ const CartPage = () => {
   const mutation = useMutation(newSession => {
     setData(updateSession, { data: newSession, id: localStorage.getItem('session_id') });
   });
+
   useEffect(() => {
     if (isSuccess && session && session.temp_order) {
       setInitialTempOrder(session.temp_order);
@@ -27,13 +27,14 @@ const CartPage = () => {
 
   const calculatePrices = () => {
     let tempTotal = { totalPrice: 0 };
-    session && session?.temp_order &&
-    session.temp_order.forEach(item => {
-      let price = Number(item.new_price ? item.new_price : item.price);
-      let priceAll = price * item.quantity;
-      tempTotal.totalPrice = (Number(tempTotal.totalPrice) + priceAll).toFixed(2);
-      tempTotal.discount = 2.5;
-    });
+    session &&
+      session?.temp_order &&
+      session.temp_order.forEach(item => {
+        let price = Number(item.new_price ? item.new_price : item.price);
+        let priceAll = price * item.quantity;
+        tempTotal.totalPrice = (Number(tempTotal.totalPrice) + priceAll).toFixed(2);
+        tempTotal.discount = 2.5;
+      });
     setPrices(tempTotal);
   };
 
@@ -80,8 +81,7 @@ const CartPage = () => {
               ))}
             </ul>
           </div>
-          <Delivery prices={prices} deviceClass="desk" />
-          <CheckoutPrices prices={prices} deviceClass="mob" />
+            <Delivery prices={prices} products={session?.temp_order} deviceClass="desk" />
         </div>
       </div>
     </section>

@@ -270,3 +270,12 @@ export const SaleProductsQuery = `
         }
     }
  `;
+
+ export const TextForSlider = `
+    query Text_for_slider {
+        text_for_slider {
+            id
+            Text
+        }
+    }
+ `;

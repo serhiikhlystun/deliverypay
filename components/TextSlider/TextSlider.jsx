@@ -5,12 +5,23 @@ import React, { useRef, useEffect } from "react";
 import SwiperCore from "swiper/core";
 import { Autoplay } from "swiper/modules";
 import "swiper/swiper-bundle.css";
+import { TextForSlider } from "@/queries/ProductsQueries";
+import { useQuery } from "react-query";
+import fetchData from "@/helpers/fetchData";
 
 SwiperCore.use([Autoplay]);
 
 const TextSlider = () => {
   const sliderRef = useRef(null);
   let swiper;
+
+  const { data: text, isSuccess } = useQuery(
+    ['text_for_slider'],
+    async () => await fetchData(TextForSlider, {}),
+  );
+// const res = async () =>  await fetchData(TextForSlider, {})
+// res().then(response => console.log(response.data))
+
 
   useEffect(() => {
     swiper = new SwiperCore(sliderRef.current, {

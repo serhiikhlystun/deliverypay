@@ -1,6 +1,7 @@
 const graphQLAPI = process.env.NEXT_PUBLIC_GRAPHQL;
 
 const fetchData = async (query, { variables = {} }, additionalPath = '', token) => {
+
   let headers = { 'Content-Type': 'application/json' };
   if (token) {
     headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
@@ -21,11 +22,10 @@ const fetchData = async (query, { variables = {} }, additionalPath = '', token) 
     throw new Error(json.errors);
   }
 
-  if (token) {
+  if (json.data.users_me) {
     return json.data.users_me;
-  }
+  } else return json
 
-  return json;
 };
 
 export default fetchData;

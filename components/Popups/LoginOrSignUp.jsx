@@ -1,14 +1,11 @@
 import React from 'react';
 import '../common/Popup.sass';
 
-const GuestPopup = ({ isOpen, onClose }) => {
-  const closeGuestPopup = () => {
+const LoginOrSignUp = ({ isOpen, onClose, loginOpen, signUpOpen }) => {
+
+  const closeLoginPopup = () => {
     onClose();
     document.body.style.setProperty('overflow', 'inherit');
-  };
-
-  const handleSubmit = e => {
-    e.prevendDefault();
   };
 
   return (
@@ -16,7 +13,7 @@ const GuestPopup = ({ isOpen, onClose }) => {
       <div className="popup__bg"></div>
       <div className="popup__content">
         <div className="popup__close-btn-wrapp">
-          <button className="popup__close-btn" onClick={closeGuestPopup}>
+          <button className="popup__close-btn" onClick={closeLoginPopup}>
             <svg width="17" height="18" viewBox="0 0 17 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clipPath="url(#clip0_2001_1679)">
                 <path
@@ -42,36 +39,18 @@ const GuestPopup = ({ isOpen, onClose }) => {
           </button>
         </div>
         <div className="popup__title-wrapp">
-          <h2 className="popup__title">GUEST</h2>
-          <p className="popup__subtitle">Please enter Delivery data</p>
+          <h2 className="popup__title">LOGIN OR REGISTER</h2>
+          <p className="popup__subtitle">Log in and you will receive 2.5% cashback from each purchase</p>
         </div>
-        <form action="" onSubmit={e => handleSubmit(e)}>
-          <div className="popup__input-wrapp">
-            <input
-              id="email-address"
-              name="email"
-              type="email"
-              autoComplete="email"
-              className="popup__input"
-              required
-              placeholder="PHONE NUMBER"
-            />
-            <input
-              id="adress"
-              name="text"
-              type="text"
-              required
-              className="popup__input"
-              placeholder="ADRESS"
-            />
-          </div>
-          <button className="popup__save-btn" onClick={closeGuestPopup}>
-            CHECKOUT
+          <button className="popup__save-btn success" onClick={loginOpen}>
+            LOGIN
           </button>
-        </form>
+          <button className="popup__save-btn success" onClick={signUpOpen}>
+            SIGN UP
+          </button>
       </div>
     </div>
   );
 };
 
-export default GuestPopup;
+export default LoginOrSignUp;

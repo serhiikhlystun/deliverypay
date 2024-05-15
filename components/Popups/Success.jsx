@@ -1,14 +1,34 @@
 import React from 'react';
 import '../common/Popup.sass';
+import Link from 'next/link';
+import useStore from '@/store/temp_order';
+import { updateSession } from '@/queries/sessions';
+import { useMutation, useQueryClient } from 'react-query';
+import setData from '@/helpers/setData';
 
-const GuestPopup = ({ isOpen, onClose }) => {
+const Success = ({ isOpen, onClose }) => {
+  const {resetTempOrder} = useStore();
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    newSession => {
+        setData(updateSession, { data: newSession, id: localStorage.getItem('session_id') });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('session');
+      },
+    }
+  );
+
   const closeGuestPopup = () => {
     onClose();
     document.body.style.setProperty('overflow', 'inherit');
-  };
-
-  const handleSubmit = e => {
-    e.prevendDefault();
+    resetTempOrder();
+    mutation.mutate({
+      status: 'draft',
+      temp_order: useStore.getState().tempOrder,
+    });
   };
 
   return (
@@ -42,36 +62,22 @@ const GuestPopup = ({ isOpen, onClose }) => {
           </button>
         </div>
         <div className="popup__title-wrapp">
-          <h2 className="popup__title">GUEST</h2>
-          <p className="popup__subtitle">Please enter Delivery data</p>
+          <h2 className="popup__title">SUCCESS</h2>
+          <p className="popup__subtitle">THANK YOU FOR ORDER</p>
         </div>
-        <form action="" onSubmit={e => handleSubmit(e)}>
-          <div className="popup__input-wrapp">
-            <input
-              id="email-address"
-              name="email"
-              type="email"
-              autoComplete="email"
-              className="popup__input"
-              required
-              placeholder="PHONE NUMBER"
-            />
-            <input
-              id="adress"
-              name="text"
-              type="text"
-              required
-              className="popup__input"
-              placeholder="ADRESS"
-            />
-          </div>
-          <button className="popup__save-btn" onClick={closeGuestPopup}>
-            CHECKOUT
+        <Link href={'/'}>
+          <button className="popup__save-btn success" onClick={closeGuestPopup}>
+            HOME
           </button>
-        </form>
+        </Link>
+        <Link href={'/profile-page'}>
+          <button className="popup__save-btn success" onClick={closeGuestPopup}>
+            PROFILE
+          </button>
+        </Link>
       </div>
     </div>
   );
 };
 
-export default GuestPopup;
+export default Success;

@@ -8,6 +8,7 @@ import logo from './img/logo.svg';
 import './Hamburger.sass';
 import LoginPopup from '../Popups/Login';
 import SignUpPopup from '../Popups/SignUp';
+import LoginOrSignUp from '../Popups/LoginOrSignUp';
 import setData from '@/helpers/setData';
 import { useQuery, useMutation } from 'react-query';
 import { useSession, signOut } from 'next-auth/react';
@@ -41,15 +42,25 @@ const Header = () => {
   // Стан для відображення попапа
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
   const [isSignUpPopupOpen, setIsSignUpPopupOpen] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleOpenPopup = e => {
     e.preventDefault();
-    if (e.target.id === 'registration') {
-      setIsSignUpPopupOpen(true);
-    }
-    if (e.target.id === 'login' || e.target.id === 'login-btn') {
-      setIsLoginPopupOpen(true);
-    }
+    setIsPopupOpen(true);
+    document.body.style.setProperty('overflow', 'hidden');
+  };
+
+  const loginOpen = (e) => {
+    e.preventDefault();
+    setIsLoginPopupOpen(true);
+    setIsPopupOpen(false);
+    document.body.style.setProperty('overflow', 'hidden');
+  };
+
+  const signUpOpen = (e) => {
+    e.preventDefault();
+    setIsSignUpPopupOpen(true);
+    setIsPopupOpen(false);
     document.body.style.setProperty('overflow', 'hidden');
   };
 
@@ -57,6 +68,7 @@ const Header = () => {
   const handleClosePopup = () => {
     setIsSignUpPopupOpen(false);
     setIsLoginPopupOpen(false);
+    setIsPopupOpen(false);
   };
 
   useEffect(() => {
@@ -225,9 +237,9 @@ const Header = () => {
                         </svg>
                       </li>
                       <li className="hamburger__overlay-list_item">
-                        <a href="#" className="hamburger__overlay-list_item-link">
+                        <Link href={'/delivery'} className="hamburger__overlay-list_item-link">
                           Delivery
-                        </a>
+                        </Link>
                         <svg
                           width="6"
                           height="12"
@@ -254,9 +266,9 @@ const Header = () => {
                         </svg>
                       </li>
                       <li className="hamburger__overlay-list_item">
-                        <a href="#" className="hamburger__overlay-list_item-link">
+                        <Link href={'/contact'} className="hamburger__overlay-list_item-link">
                           Contacts
-                        </a>
+                        </Link>
                         <svg
                           width="6"
                           height="12"
@@ -292,11 +304,7 @@ const Header = () => {
                       {status !== 'authenticated' ? (
                         <>
                           <li className="hamburger__overlay-list_item">
-                            <div
-                              id="login"
-                              className="hamburger__overlay-list_item-link"
-                              onClick={handleOpenPopup}
-                            >
+                            <div id="login" className="hamburger__overlay-list_item-link" onClick={loginOpen}>
                               Login
                             </div>
                             <svg
@@ -328,7 +336,7 @@ const Header = () => {
                             <div
                               id="registration"
                               className="hamburger__overlay-list_item-link"
-                              onClick={handleOpenPopup}
+                              onClick={signUpOpen}
                             >
                               Registration
                             </div>
@@ -448,8 +456,12 @@ const Header = () => {
           </Link>
           <div className="header__right">
             <ul className={'header__nav'}>
-              <li className={'header__nav-item'}>DELIVERY</li>
-              <li className={'header__nav-item'}>CONTACT</li>
+              <li className={'header__nav-item'}>
+                <Link href={'/delivery'}>DELIVERY</Link>
+              </li>
+              <li className={'header__nav-item'}>
+                <Link href={'/contact'}>CONTACT</Link>
+              </li>
             </ul>
             <div className="header__icon-wrapp">
               {status === 'authenticated' ? (
@@ -479,6 +491,9 @@ const Header = () => {
             </div>
           </div>
         </div>
+        {isPopupOpen && (
+          <LoginOrSignUp onClose={handleClosePopup} loginOpen={loginOpen} signUpOpen={signUpOpen} />
+        )}
         {isLoginPopupOpen && <LoginPopup onClose={handleClosePopup} />}
         {isSignUpPopupOpen && <SignUpPopup onClose={handleClosePopup} />}
       </div>

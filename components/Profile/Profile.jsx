@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getCurrentUser, updateCurrentUser } from '@/queries/Users';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { userOrderHistory } from '@/queries/orderQueries';
 
 const orderItems = [
   {
@@ -59,13 +60,13 @@ const Profile = () => {
 
   const { data: user, isUserSuccess } = useQuery(
     ['currentUser'],
-    async () =>  await fetchData(getCurrentUser, {}, '/system', userSession.user.accessToken),
+    async () => await fetchData(getCurrentUser, {}, '/system', userSession.user.accessToken),
     {
       enabled: status === 'authenticated',
     }
   );
-  
   const [updatedUserInfo, setUpdatedUserInfo] = useState({});
+  const [orderHistory, setOrderHistory] = useState();
 
   useEffect(() => {
     if (user) {
@@ -73,8 +74,13 @@ const Profile = () => {
         email: user.email,
         location: user.location,
       });
+      const getHistory = async ()=>  await fetchData(userOrderHistory, {variables:{user_id: user.id}}, '', userSession.user.accessToken)
+      getHistory().then((response) => setOrderHistory(response));
     }
   }, [user]);
+
+  console.log(orderHistory);
+
 
   const { data: session, isSuccess } = useQuery(
     ['session'],
@@ -145,7 +151,7 @@ const Profile = () => {
 
   const updateMutation = useMutation(updatedUser => {
     status === 'authenticated' &&
-      setData(updateCurrentUser, { data: updatedUser }, '/system', userSession.user.accessToken,);
+      setData(updateCurrentUser, { data: updatedUser }, '/system', userSession.user.accessToken);
   });
 
   const handleUpdate = e => {

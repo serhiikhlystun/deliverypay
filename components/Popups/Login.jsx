@@ -25,7 +25,6 @@ const LoginPopup = ({ isOpen, onClose, csrfToken }) => {
     if (res?.error) {
       setError(res.error);
     } else {
-      router.push(`${window.location.origin}`)
       closeLoginPopup()
     }
   };

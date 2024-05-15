@@ -5,6 +5,7 @@ const useStore = create((set) => ({
   addToTempOrder: (items) => set((state) => ({ tempOrder: [...state.tempOrder, items] })),
   setInitialTempOrder: (order) => set(() => ({ tempOrder: order })),
   deleteFromTempOrder:(id) => set((state) => ({ tempOrder: state.tempOrder.filter((el)=> el.id !== id) })),
+  resetTempOrder:() => set({tempOrder: []}),
   updateTempOrder:(id, count) => set((state) => ({ tempOrder: state.tempOrder.map((el)=> {
     if(el.id === id){
       el.quantity = count;

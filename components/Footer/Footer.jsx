@@ -78,24 +78,24 @@ const Footer = () => {
               <ul className="footer__pages">
                 <li className="footer__item-title">Support</li>
                 <li className="footer__item">
-                  <a href="" className="footer__item-link">
+                  <Link href={'/feedback'} className="footer__item-link">
                     Feedback
-                  </a>
+                  </Link>
                 </li>
                 <li className="footer__item">
-                  <a href="" className="footer__item-link">
+                  <Link href={'/contact'} className="footer__item-link">
                     Contact us
-                  </a>
+                  </Link>
                 </li>
                 <li className="footer__item">
-                  <a href="" className="footer__item-link">
+                  <Link href={'/service'} className="footer__item-link">
                     Customer Service
-                  </a>
+                  </Link>
                 </li>
                 <li className="footer__item">
-                  <a href="" className="footer__item-link">
+                  <Link href={'/terms'} className="footer__item-link">
                     Terms & condition
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -103,19 +103,19 @@ const Footer = () => {
               <ul className="footer__pages">
                 <li className="footer__item-title">Help</li>
                 <li className="footer__item">
-                  <a href="" className="footer__item-link">
+                  <Link href={'/privacy'} className="footer__item-link">
                     Privacy Policy
-                  </a>
+                  </Link>
                 </li>
                 <li className="footer__item">
-                  <a href="" className="footer__item-link">
+                  <Link href={'/delivery'} className="footer__item-link">
                     Shipping & Delivery
-                  </a>
+                  </Link>
                 </li>
                 <li className="footer__item">
-                  <a href="" className="footer__item-link">
+                  <Link href={'/refund'} className="footer__item-link">
                     Refund Policy
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
