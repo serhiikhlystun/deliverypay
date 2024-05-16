@@ -1,38 +1,32 @@
 import React, { useState } from 'react';
 import '../common/Popup.sass';
-import { useMutation } from 'react-query';
-import setData from '@/helpers/setData';
-import { createNewUser } from '@/queries/Users';
+import { getCsrfToken, signIn } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
-const SignUpPopup = ({ isOpen, onClose }) => {
-  const [error, setError] = useState();
-  const signUpMutation = useMutation(newUser => {
-    setData(createNewUser, { data: newUser }, '/system').then(response => {
-      if (response.create_users_item) {
-        closeSignUpPopup();
-      } else {
-        setError('This email has already used');
-      }
-    });
-  });
+const LoginPopup = ({ isOpen, onClose, csrfToken }) => {
+  const router = useRouter();
+  const [error, setError] = useState(false);
 
-  const closeSignUpPopup = () => {
+  const closeLoginPopup = () => {
     onClose();
     document.body.style.setProperty('overflow', 'inherit');
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    if (e.target.password.value !== e.target.repeat_password.value) {
-      setError("Password doesn't match");
-      return
-    } else setError('')
-    signUpMutation.mutate({
+
+    const res = await signIn('credentials', {
+      redirect: false,
       email: e.target.email.value,
       password: e.target.password.value,
-      role: '721b4233-f89f-4fcc-9b2a-1864e14ad601',
-      status: 'active',
+      callbackUrl: `${window.location.origin}`,
     });
+
+    if (res?.error) {
+      setError(res.error);
+    } else {
+      closeLoginPopup()
+    }
   };
 
   return (
@@ -40,7 +34,7 @@ const SignUpPopup = ({ isOpen, onClose }) => {
       <div className="popup__bg"></div>
       <div className="popup__content">
         <div className="popup__close-btn-wrapp">
-          <button className="popup__close-btn" onClick={closeSignUpPopup}>
+          <button className="popup__close-btn" onClick={closeLoginPopup}>
             <svg width="17" height="18" viewBox="0 0 17 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clipPath="url(#clip0_2001_1679)">
                 <path
@@ -66,10 +60,11 @@ const SignUpPopup = ({ isOpen, onClose }) => {
           </button>
         </div>
         <div className="popup__title-wrapp">
-          <h2 className="popup__title">SIGN UP</h2>
+          <h2 className="popup__title">LOGIN</h2>
           <p className="popup__subtitle">You will receive 2.5% cashback from each purchase</p>
         </div>
-        <form onSubmit={e => handleSubmit(e)}>
+        <form action="" onSubmit={e => handleSubmit(e)}>
+          <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
           <div className="popup__input-wrapp">
             <input
               id="email-address"
@@ -78,7 +73,7 @@ const SignUpPopup = ({ isOpen, onClose }) => {
               autoComplete="email"
               className="popup__input"
               required
-              placeholder="EMAIL"
+              placeholder="EMAIL / MOBILE NUMBER"
             />
             <input
               id="password"
@@ -89,16 +84,10 @@ const SignUpPopup = ({ isOpen, onClose }) => {
               className="popup__input"
               placeholder="PASSWORD"
             />
-            <input
-              name="repeat_password"
-              className="popup__input"
-              type="password"
-              placeholder="REPEAT PASSWORD"
-            />
             {error ? <div>{error}</div> : null}
           </div>
-          <button type="submit" className="popup__save-btn">
-            REGISTER
+          <button className="popup__save-btn" type="submit">
+            LOGIN
           </button>
         </form>
       </div>
@@ -106,4 +95,12 @@ const SignUpPopup = ({ isOpen, onClose }) => {
   );
 };
 
-export default SignUpPopup;
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      csrfToken: await getCsrfToken(context),
+    },
+  };
+}
+
+export default LoginPopup;

@@ -78,7 +78,7 @@ const SignUpPopup = ({ isOpen, onClose }) => {
               autoComplete="email"
               className="popup__input"
               required
-              placeholder="EMAIL"
+              placeholder="EMAIL / MOBILE NUMBER"
             />
             <input
               id="password"
