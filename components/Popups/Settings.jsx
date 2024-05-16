@@ -38,7 +38,7 @@ const SettingsPopup = ({ isOpen, onClose, user, handleUpdate }) => {
           <h2 className="popup__title">SETTINGS</h2>
           <p className="popup__subtitle">CHANGE ACCOUNT INFRORMATION</p>
         </div>
-        <form onSubmit={handleUpdate}>
+        <form className="popup__form" onSubmit={handleUpdate}>
           <div className="popup__input-wrapp">
             <input name="email" className="popup__input" type="text" value={user.email} placeholder={user.email??"Email"} />
             <input name="password" className="popup__input" autoComplete="off" type="password" placeholder="****************" />

@@ -63,7 +63,7 @@ const LoginPopup = ({ isOpen, onClose, csrfToken }) => {
           <h2 className="popup__title">LOGIN</h2>
           <p className="popup__subtitle">You will receive 2.5% cashback from each purchase</p>
         </div>
-        <form action="" onSubmit={e => handleSubmit(e)}>
+        <form className='popup__form' onSubmit={e => handleSubmit(e)}>
           <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
           <div className="popup__input-wrapp">
             <input

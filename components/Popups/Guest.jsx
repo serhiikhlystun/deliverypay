@@ -45,7 +45,7 @@ const GuestPopup = ({ isOpen, onClose }) => {
           <h2 className="popup__title">GUEST</h2>
           <p className="popup__subtitle">Please enter Delivery data</p>
         </div>
-        <form action="" onSubmit={e => handleSubmit(e)}>
+        <form className='popup__form' onSubmit={e => handleSubmit(e)}>
           <div className="popup__input-wrapp">
             <input
               id="email-address"

@@ -69,7 +69,7 @@ const SignUpPopup = ({ isOpen, onClose }) => {
           <h2 className="popup__title">SIGN UP</h2>
           <p className="popup__subtitle">You will receive 2.5% cashback from each purchase</p>
         </div>
-        <form onSubmit={e => handleSubmit(e)}>
+        <form className='popup__form' onSubmit={e => handleSubmit(e)}>
           <div className="popup__input-wrapp">
             <input
               id="email-address"

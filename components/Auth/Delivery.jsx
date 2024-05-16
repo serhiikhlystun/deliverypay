@@ -75,7 +75,7 @@ const Delivery = ({ prices, deviceClass, products }) => {
               <input className="delivery__input" name="email" required type="email" placeholder="Email" />
               <input className="delivery__input" name="phone" required type="number" placeholder="PHONE" />
               <input className="delivery__input" name="adress" required type="text" placeholder="ADDRESS " />
-              <input className="delivery__input" name="tg" type="text" placeholder="TG USERNAME" />
+              {/* <input className="delivery__input" name="tg" type="text" placeholder="TG USERNAME" /> */}
             </div>
             <CheckoutPrices prices={prices} status={status} deviceClass={deviceClass} />
           </form>
