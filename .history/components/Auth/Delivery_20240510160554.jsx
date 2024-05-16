@@ -18,7 +18,7 @@ const Delivery = ({prices, deviceClass}) => {
                 <input className="delivery__input" type="email" placeholder="Email"/>
                 <input className="delivery__input" type="number" placeholder="PHONE"/>
                 <input className="delivery__input" type="text" placeholder="ADDRESS "/>
-                <input className="delivery__input" type="text" placeholder="TG USERNAME"/>
+                {/* <input className="delivery__input" type="text" placeholder="TG USERNAME"/> */}
             </div>
             <CheckoutPrices
                 prices={prices}

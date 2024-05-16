@@ -73,7 +73,7 @@ const LoginPopup = ({ isOpen, onClose, csrfToken }) => {
               autoComplete="email"
               className="popup__input"
               required
-              placeholder="EMAIL / MOBILE NUMBER"
+              placeholder="EMAIL"
             />
             <input
               id="password"
