@@ -2,25 +2,39 @@
 
 import './Footer.sass';
 import logo from './img/logo-text.svg';
-import fb from './img/fb.svg';
-import tw from './img/tw.svg';
-import ins from './img/in.svg';
 import LoginPopup from '../Popups/Login';
 import SignUpPopup from '../Popups/SignUp';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import setData from '@/helpers/setData';
 import { logoutUser } from '@/queries/Users';
+import fetchData from '@/helpers/fetchData';
+import { socialQuery } from '@/queries/socialsQueries';
+import SocialList from './SocialList';
 
 const Footer = () => {
   const { data: session, status } = useSession();
+  const [socials, setSocials] = useState([]);
 
   // Стан для відображення попапа
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
   const [isSignUpPopupOpen, setIsSignUpPopupOpen] = useState(false);
+
+  const { data: data, isSuccess } = useQuery(['social'], async () => await fetchData(socialQuery, {}));
+
+  useEffect(() => {
+    if (isSuccess && data.data.socials) {
+      // data.data.socials.forEach((social)=>{
+      //   setSocials(socials.concat([social]))
+      // })
+      setSocials(data.data);
+    }
+  }, [socials, data]);
+
+  // console.log(data.data.socials);
 
   const handleOpenPopup = e => {
     if (e.target.id === 'registration') {
@@ -55,23 +69,7 @@ const Footer = () => {
             <a href="#" className="footer__link">
               <Image className="footer__logo" src={logo.src} width={231} height={37} alt="" />
             </a>
-            <ul className="footer__social">
-              <li className="footer__social-item">
-                <a className="footer__social-item-link" href="">
-                  <Image src={fb.src} alt="Fb" width={51} height={51} />
-                </a>
-              </li>
-              <li className="footer__social-item">
-                <a className="footer__social-item-link" href="">
-                  <Image src={ins.src} alt="In" width={52} height={51} />
-                </a>
-              </li>
-              <li className="footer__social-item">
-                <a className="footer__social-item-link" href="">
-                  <Image src={tw.src} alt="Tw" width={52} height={51} />
-                </a>
-              </li>
-            </ul>
+            {isSuccess && data.data.socials ? <SocialList socials={data.data.socials} /> : null}
           </div>
           <div className="footer__links">
             <div className="footer__box">

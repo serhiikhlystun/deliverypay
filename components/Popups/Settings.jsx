@@ -40,10 +40,10 @@ const SettingsPopup = ({ isOpen, onClose, user, handleUpdate }) => {
         </div>
         <form className="popup__form" onSubmit={handleUpdate}>
           <div className="popup__input-wrapp">
-            <input name="email" className="popup__input" type="text" value={user.email} placeholder={user.email??"Email"} />
+            <input name="email" className="popup__input" type="text" defaultValue={user.email} placeholder="Email" />
             <input name="password" className="popup__input" autoComplete="off" type="password" placeholder="****************" />
-            <input name="phone" className="popup__input" type="tel" value={user.phone} placeholder={user.phone??'Enter your phone' } />
-            <input name="location" className="popup__input" type="text" value={user.location} placeholder={user.location??'Enter your Address'} />
+            <input name="phone" className="popup__input" type="tel" defaultValue={user.phone} placeholder='Enter your phone' />
+            <input name="location" className="popup__input" type="text" defaultValue={user.location} placeholder='Enter your Address' />
             {/* <input className="popup__input" type="text" placeholder="420comrades" /> */}
           </div>
           <button type="submit" className="popup__save-btn">

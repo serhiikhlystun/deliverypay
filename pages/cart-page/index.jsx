@@ -4,11 +4,16 @@ import Delivery from './../../components/Auth/Delivery';
 import { useQuery, useMutation } from 'react-query';
 import getData from '@/queries/getData';
 import setData from '@/helpers/setData';
+import fetchData from '@/helpers/fetchData';
 import { getSession, updateSession } from '@/queries/sessions';
 import useStore from '@/store/temp_order';
+import { getCurrentUser } from '@/queries/Users';
+import { useSession } from 'next-auth/react';
 
 const CartPage = () => {
   const [prices, setPrices] = useState({});
+  const { data: userSession, status } = useSession();
+
   const { data: session, isSuccess } = useQuery(
     ['session'],
     async () => await getData(getSession, 'session_by_id', { id: localStorage.getItem('session_id') })
@@ -17,6 +22,14 @@ const CartPage = () => {
   const mutation = useMutation(newSession => {
     setData(updateSession, { data: newSession, id: localStorage.getItem('session_id') });
   });
+
+  const { data: user, isUserSuccess } = useQuery(
+    ['currentUser'],
+    async () => await fetchData(getCurrentUser, {}, '/system', userSession.user.accessToken),
+    {
+      enabled: status === 'authenticated',
+    }
+  );
 
   useEffect(() => {
     if (isSuccess && session && session.temp_order) {
@@ -81,7 +94,9 @@ const CartPage = () => {
               ))}
             </ul>
           </div>
-            <Delivery prices={prices} products={session?.temp_order} deviceClass="desk" />
+            {user &&
+          <Delivery prices={prices} products={session?.temp_order} user={user} status={status} deviceClass="desk" />
+            }
         </div>
       </div>
     </section>
