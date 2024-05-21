@@ -75,13 +75,18 @@ const Profile = () => {
         email: user.email,
         location: user.location,
       });
-      const getHistory = async ()=>  await fetchData(userOrderHistory, {variables:{user_id: user.id}}, '', userSession.user.accessToken)
-      getHistory().then((response) => setOrderHistory(response));
+      const getHistory = async () =>
+        await fetchData(
+          userOrderHistory,
+          { variables: { user_id: user.id } },
+          '',
+          userSession?.user.accessToken
+        );
+      getHistory()
+        .then(response => response.data)
+        .then(data => (data.orders ? setOrderHistory(data.orders) : null));
     }
   }, [user]);
-
-  console.log(orderHistory);
-
 
   const { data: session, isSuccess } = useQuery(
     ['session'],
@@ -132,7 +137,9 @@ const Profile = () => {
 
   const addToCart = (e, item) => {
     e.preventDefault();
-    const existingItem = useStore.getState().tempOrder.find(item_temp => item_temp.product_id === item.product_id);
+    const existingItem = useStore
+      .getState()
+      .tempOrder.find(item_temp => item_temp.product_id === item.product_id);
     if (existingItem) {
       existingItem.quantity += 1;
       mutation.mutate({
@@ -158,21 +165,19 @@ const Profile = () => {
         temp_order: useStore.getState().tempOrder,
       });
     }
-     
-
-      // Add the product to the cart
-      // ...
-      // Show notification that the product is added to the cart
-      toast.dark('Product added to the cart', {
-        position:  "top-center",//toast.POSITION.TOP_RIGHT,
-        autoClose: 500, // 3000 milliseconds = 3 seconds
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-      });
-    } 
+    // Add the product to the cart
+    // ...
+    // Show notification that the product is added to the cart
+    toast.dark('Product added to the cart', {
+      position: 'top-center', //toast.POSITION.TOP_RIGHT,
+      autoClose: 500, // 3000 milliseconds = 3 seconds
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
+  };
 
   const updateMutation = useMutation(updatedUser => {
     status === 'authenticated' &&
@@ -253,18 +258,22 @@ const Profile = () => {
         </div>
         <h2 className="wish-list__title">My ORDERS</h2>
         <div className="order__wrapp">
-          <ul className="order">
-            {orderItems.map((item, index) => (
-              <OrderItem
-                key={index}
-                number={item.number}
-                status={item.status}
-                address={item.address}
-                quantity={item.quantity}
-                total={item.total}
-              />
-            ))}
-          </ul>
+          {orderHistory && orderHistory.length ? (
+            <ul className="order">
+              {orderHistory.map((order, index) => (
+                <OrderItem
+                  key={index}
+                  number={order.id}
+                  status={order.status}
+                  address={order.location}
+                  quantity={order.products.length}
+                  total={order.total_price}
+                />
+              ))}
+            </ul>
+          ) : (
+            <p>YOU HAVE NO ORDERS YET</p>
+          )}
           {/* <div className="order__more">
             <button className="order__more-btn">Load more</button>
           </div> */}

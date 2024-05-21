@@ -23,9 +23,9 @@ const OrderItem = ({number, status, address, quantity, total}) => {
                 <div className="order-item__text-wrapp">
                     <p className="order-item__text">Total: <span>{total}</span></p>
                 </div>
-                <button className="order-item__btn">
+                {/* <button className="order-item__btn">
                     MORE
-                </button>
+                </button> */}
             </div>
         </li>
     );

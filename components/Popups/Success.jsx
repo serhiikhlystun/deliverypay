@@ -6,13 +6,13 @@ import { updateSession } from '@/queries/sessions';
 import { useMutation, useQueryClient } from 'react-query';
 import setData from '@/helpers/setData';
 
-const Success = ({ isOpen, onClose }) => {
-  const {resetTempOrder} = useStore();
+const Success = ({ isOpen, onClose, user }) => {
+  const { resetTempOrder } = useStore();
   const queryClient = useQueryClient();
 
   const mutation = useMutation(
     newSession => {
-        setData(updateSession, { data: newSession, id: localStorage.getItem('session_id') });
+      setData(updateSession, { data: newSession, id: localStorage.getItem('session_id') });
     },
     {
       onSuccess: () => {
@@ -70,11 +70,19 @@ const Success = ({ isOpen, onClose }) => {
             HOME
           </button>
         </Link>
-        <Link href={'/profile-page'}>
-          <button className="popup__save-btn success" onClick={closeGuestPopup}>
-            PROFILE
-          </button>
-        </Link>
+        {user ? (
+          <Link href={'/profile-page'}>
+            <button className="popup__save-btn success" onClick={closeGuestPopup}>
+              PROFILE
+            </button>
+          </Link>
+        ) : (
+          <Link href={'/products'}>
+            <button className="popup__save-btn success" onClick={closeGuestPopup}>
+              ALL PRODUCTS
+            </button>
+          </Link>
+        )}
       </div>
     </div>
   );

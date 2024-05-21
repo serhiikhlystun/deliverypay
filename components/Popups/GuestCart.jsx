@@ -5,7 +5,7 @@ import SignUpPopup from '../Popups/SignUp';
 import GuestPopup from './Guest';
 import { useState } from 'react';
 
-const GuestCartPopup = ({ }) => {
+const GuestCartPopup = ({ handleGuestSubmit }) => {
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
   const [isSignUpPopupOpen, setIsSignUpPopupOpen] = useState(false);
   const [isGuestPopupOpen, setIsGuestPopupOpen] = useState(false);
@@ -82,7 +82,7 @@ const GuestCartPopup = ({ }) => {
       </button>
       {isLoginPopupOpen && <LoginPopup onClose={handleClosePopup} />}
       {isSignUpPopupOpen && <SignUpPopup onClose={handleClosePopup} />}
-      {isGuestPopupOpen && <GuestPopup onClose={handleClosePopup} />}
+      {isGuestPopupOpen && <GuestPopup onClose={handleClosePopup} handleGuestSubmit={handleGuestSubmit}/>}
     </div>
   );
 };

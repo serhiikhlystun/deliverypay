@@ -1,14 +1,10 @@
 import React from 'react';
 import '../common/Popup.sass';
 
-const GuestPopup = ({ isOpen, onClose }) => {
+const GuestPopup = ({ isOpen, onClose, handleGuestSubmit }) => {
   const closeGuestPopup = () => {
     onClose();
     document.body.style.setProperty('overflow', 'inherit');
-  };
-
-  const handleSubmit = e => {
-    e.prevendDefault();
   };
 
   return (
@@ -45,27 +41,27 @@ const GuestPopup = ({ isOpen, onClose }) => {
           <h2 className="popup__title">GUEST</h2>
           <p className="popup__subtitle">Please enter Delivery data</p>
         </div>
-        <form className='popup__form' onSubmit={e => handleSubmit(e)}>
+        <form className='popup__form' onSubmit={handleGuestSubmit}>
           <div className="popup__input-wrapp">
             <input
-              id="email-address"
-              name="email"
-              type="email"
-              autoComplete="email"
+              id="phone-number"
+              name="phone"
+              type="phone"
+              autoComplete="phone"
               className="popup__input"
               required
               placeholder="PHONE NUMBER"
             />
             <input
               id="adress"
-              name="text"
+              name="adress"
               type="text"
               required
               className="popup__input"
               placeholder="ADRESS"
             />
           </div>
-          <button className="popup__save-btn" onClick={closeGuestPopup}>
+          <button className="popup__save-btn" type='submit'>
             CHECKOUT
           </button>
         </form>

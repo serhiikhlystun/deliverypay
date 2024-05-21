@@ -12,6 +12,7 @@ import { useSession } from 'next-auth/react';
 
 const CartPage = () => {
   const [prices, setPrices] = useState({});
+  const [deviceClass, setDeviceClass] = useState('desk');
   const { data: userSession, status } = useSession();
 
   const { data: session, isSuccess } = useQuery(
@@ -30,6 +31,12 @@ const CartPage = () => {
       enabled: status === 'authenticated',
     }
   );
+
+  useEffect(() => {
+    if (window.innerWidth < 440) {
+      setDeviceClass('mobile');
+    }
+  }, []);
 
   useEffect(() => {
     if (isSuccess && session && session.temp_order) {
@@ -94,9 +101,7 @@ const CartPage = () => {
               ))}
             </ul>
           </div>
-            {user &&
-          <Delivery prices={prices} products={session?.temp_order} user={user} status={status} deviceClass="desk" />
-            }
+            <Delivery prices={prices} products={session?.temp_order} user={user} deviceClass={deviceClass} />
         </div>
       </div>
     </section>
