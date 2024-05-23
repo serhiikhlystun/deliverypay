@@ -101,10 +101,11 @@ const CardItem = ({
         setInitialWishList(session.wish_list);
       }
     }
-  }, [isSuccess, session]);
+  }, [isSuccess]);
 
   const addToCart = e => {
     e.preventDefault();
+
     const existingItem = useStore.getState().tempOrder.find(item => item.product_id === id);
     if (existingItem) {
       existingItem.quantity += 1;
@@ -142,6 +143,7 @@ const CardItem = ({
     });
   };
 
+
   const addToWishes = e => {
     if (!isActive) {
       addToWishList({
@@ -176,6 +178,7 @@ const CardItem = ({
 
   useEffect(() => {
     if (isSuccess && session && session.wish_list) {
+      console.log(session.wish_list);
       setIsActive(!!session.wish_list.find(item => item.product_id == id));
     }
   }, [isSuccess]);

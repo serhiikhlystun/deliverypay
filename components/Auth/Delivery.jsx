@@ -39,6 +39,7 @@ const Delivery = ({ prices, deviceClass, products, user }) => {
       mutation.mutate({
         user_id: user.id,
         products: arr,
+        status: "new",
         name: e.target.name.value,
         email: e.target.email.value,
         phone: e.target.phone.value,
@@ -48,6 +49,7 @@ const Delivery = ({ prices, deviceClass, products, user }) => {
     } else {
       mutationGuest.mutate({
         guest: true,
+        status: "new",
         products: arr,
         phone: e.target.phone.value,
         location: e.target.adress.value,
@@ -89,7 +91,6 @@ const Delivery = ({ prices, deviceClass, products, user }) => {
               <input
                 className="delivery__input"
                 name="name"
-                // defaultValue={user && user.first_name && user.last_name ? (user.first_name ?? '' + ' ' + user.last_name ?? '') : (null)}
                 defaultValue={name}
                 required
                 type="text"
