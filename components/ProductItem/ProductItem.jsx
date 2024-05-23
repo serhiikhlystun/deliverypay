@@ -13,10 +13,24 @@ import { v4 as uuidv4 } from 'uuid';
 import useStore from '../../store/temp_order';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
+import { updateUserSession } from '@/queries/Users';
+import { useSession } from 'next-auth/react';
+import { getCurrentUser } from '@/queries/Users';
+import fetchData from '@/helpers/fetchData';
 
 const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL;
 
 const ProductItem = ({ product }) => {
+  const { data: userSession, status } = useSession();
+
+  const { data: user, isUserSuccess } = useQuery(
+    ['currentUser'],
+    async () => await fetchData(getCurrentUser, {}, '/system', userSession.user.accessToken),
+    {
+      enabled: status === 'authenticated',
+    }
+  );
+
   const queryClient = useQueryClient();
   const [count, setCount] = useState(1);
   const [isSessionSet, setSessionSet] = useState(
@@ -34,9 +48,17 @@ const ProductItem = ({ product }) => {
 
   const mutation = useMutation(
     newSession => {
-      if (!isSessionSet) {
+      if (!isSessionSet && !user?.session) {
         setData(createSession, { data: newSession }).then(response => {
           localStorage.setItem('session_id', response.create_session_item.id);
+          if (user) {
+            setData(
+              updateUserSession,
+              { data: { session: { id: response.create_session_item.id } }, user_id: user?.id },
+              '/system',
+              userSession.user.accessToken
+            );
+          }
         });
         setSessionSet(true);
       } else {

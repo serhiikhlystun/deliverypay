@@ -97,6 +97,7 @@ const Header = () => {
   const handleLogout = () => {
     mutation.mutate(userSession.user.refreshToken);
     signOut();
+    localStorage.removeItem('session_id')
   };
 
   return (

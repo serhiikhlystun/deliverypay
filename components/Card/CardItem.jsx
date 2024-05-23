@@ -10,6 +10,10 @@ import { createSession, updateSession, getSession } from '@/queries/sessions';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
+import { updateUserSession } from '@/queries/Users';
+import { useSession } from 'next-auth/react';
+import { getCurrentUser } from '@/queries/Users';
+import fetchData from '@/helpers/fetchData';
 
 const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL;
 
@@ -26,6 +30,16 @@ const CardItem = ({
   page_url,
   subcategory,
 }) => {
+  const { data: userSession, status } = useSession();
+
+  const { data: user, isUserSuccess } = useQuery(
+    ['currentUser'],
+    async () => await fetchData(getCurrentUser, {}, '/system', userSession.user.accessToken),
+    {
+      enabled: status === 'authenticated',
+    }
+  );
+
   const [isActive, setIsActive] = useState(false);
   const queryClient = useQueryClient();
   const [isSessionSet, setSessionSet] = useState(
@@ -39,11 +53,20 @@ const CardItem = ({
     }
   );
 
+
   const mutation = useMutation(
     newSession => {
-      if (!isSessionSet) {
+      if (!isSessionSet && !user?.session) {
         setData(createSession, { data: newSession }).then(response => {
           localStorage.setItem('session_id', response.create_session_item.id);
+          if (user) {
+            setData(
+              updateUserSession,
+              { data: { session: { id: response.create_session_item.id } }, user_id: user?.id },
+              '/system',
+              userSession.user.accessToken
+            );
+          }
         });
         setSessionSet(true);
       } else {
@@ -109,7 +132,7 @@ const CardItem = ({
       });
     }
     toast.dark('Product added to the cart', {
-      position:  "top-center",//toast.POSITION.TOP_RIGHT,
+      position: 'top-center', //toast.POSITION.TOP_RIGHT,
       autoClose: 500, // 3000 milliseconds = 3 seconds
       hideProgressBar: true,
       closeOnClick: true,
@@ -120,7 +143,7 @@ const CardItem = ({
   };
 
   const addToWishes = e => {
-    if (!isActive){
+    if (!isActive) {
       addToWishList({
         product_id: id,
         brand: brand,
@@ -137,11 +160,11 @@ const CardItem = ({
         wish_list: useStore.getState().wishList,
       });
       setIsActive(true);
-    } 
+    }
   };
 
   const deleteFromWishes = id => {
-    if(isActive){
+    if (isActive) {
       deleteFromWishList(id);
       mutation.mutate({
         status: 'draft',
@@ -153,15 +176,21 @@ const CardItem = ({
 
   useEffect(() => {
     if (isSuccess && session && session.wish_list) {
-        setIsActive(!!session.wish_list.find(item => item.product_id == id));
-      }
-    }, [isSuccess]);
+      setIsActive(!!session.wish_list.find(item => item.product_id == id));
+    }
+  }, [isSuccess]);
 
   return (
     <Link href={`/${page_url}/${category.slug}/${subcategory.slug}/${slug}`}>
       <div className="card-item">
         <div className="card-item__img-wrapp">
-          <Image src={`${assetsUrl}/${image}?width=580&height=700`} width={580} height={700} className="card-item__img" alt="" />
+          <Image
+            src={`${assetsUrl}/${image}?width=580&height=700`}
+            width={580}
+            height={700}
+            className="card-item__img"
+            alt=""
+          />
         </div>
         <div className="card-item__content">
           <div className="card-item__content-inn">

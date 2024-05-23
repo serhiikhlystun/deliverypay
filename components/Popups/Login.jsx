@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import '../common/Popup.sass';
 import { getCsrfToken, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { getSession } from 'next-auth/react';
+import fetchData from '@/helpers/fetchData';
+import { getCurrentUser, updateUserSession } from '@/queries/Users';
+import setData from '@/helpers/setData';
 
 const LoginPopup = ({ isOpen, onClose, csrfToken }) => {
   const router = useRouter();
   const [error, setError] = useState(false);
-
   const closeLoginPopup = () => {
     onClose();
     document.body.style.setProperty('overflow', 'inherit');
@@ -25,7 +28,20 @@ const LoginPopup = ({ isOpen, onClose, csrfToken }) => {
     if (res?.error) {
       setError(res.error);
     } else {
-      closeLoginPopup()
+      const userSession = await getSession();
+      await fetchData(getCurrentUser, {}, '/system', userSession.user.accessToken).then(user => {
+        if (user.session) {
+          localStorage.setItem('session_id', user.session.id);
+        } else if (localStorage.getItem('session_id')){
+          setData(
+            updateUserSession,
+            { data: { session: { id: localStorage.getItem('session_id') } }, user_id: user?.id },
+            '/system',
+            userSession.user.accessToken
+          );
+        }
+      });
+      closeLoginPopup();
     }
   };
 
@@ -63,7 +79,7 @@ const LoginPopup = ({ isOpen, onClose, csrfToken }) => {
           <h2 className="popup__title">LOGIN</h2>
           <p className="popup__subtitle">You will receive 2.5% cashback from each purchase</p>
         </div>
-        <form className='popup__form' onSubmit={e => handleSubmit(e)}>
+        <form className="popup__form" onSubmit={e => handleSubmit(e)}>
           <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
           <div className="popup__input-wrapp">
             <input

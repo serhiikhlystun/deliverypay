@@ -15,9 +15,10 @@ const CartPage = () => {
   const [deviceClass, setDeviceClass] = useState('desk');
   const { data: userSession, status } = useSession();
 
-  const { data: session, isSuccess } = useQuery(
-    ['session'],
-    async () => await getData(getSession, 'session_by_id', { id: localStorage.getItem('session_id') })
+  const { data: session, isSuccess } = useQuery(['session'], async () =>
+    localStorage.getItem('session_id')
+      ? await getData(getSession, 'session_by_id', { id: localStorage.getItem('session_id') })
+      : null
   );
   const { tempOrder, setInitialTempOrder, deleteFromTempOrder, updateTempOrder } = useStore();
   const mutation = useMutation(newSession => {
@@ -101,7 +102,7 @@ const CartPage = () => {
               ))}
             </ul>
           </div>
-            <Delivery prices={prices} products={session?.temp_order} user={user} deviceClass={deviceClass} />
+          <Delivery prices={prices} products={session?.temp_order} user={user} deviceClass={deviceClass} />
         </div>
       </div>
     </section>

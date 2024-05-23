@@ -59,6 +59,7 @@ const Footer = () => {
   const handleLogout = () => {
     mutation.mutate(session.user.refreshToken);
     signOut();
+    localStorage.removeItem('session_id')
   };
 
   return (

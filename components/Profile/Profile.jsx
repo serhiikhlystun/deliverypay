@@ -16,37 +16,6 @@ import { useSession } from 'next-auth/react';
 import { userOrderHistory } from '@/queries/orderQueries';
 import { toast } from 'react-toastify';
 
-const orderItems = [
-  {
-    number: '0012',
-    status: 'Done',
-    address: 'Chicago 123, avenu streeet',
-    quantity: '7',
-    total: '$59.90',
-  },
-  {
-    number: '0112',
-    status: 'Done',
-    address: 'Chicago 222, avenu',
-    quantity: '2',
-    total: '$17.90',
-  },
-  {
-    number: '1211',
-    status: 'PENDING',
-    address: 'NEW YORK 123, avenu streeet',
-    quantity: '11',
-    total: '$52.11',
-  },
-  {
-    number: '0111',
-    status: 'In Progress',
-    address: 'Chicago 123, avenu streeet',
-    quantity: '7',
-    total: '$59.90',
-  },
-];
-
 const Profile = () => {
   const router = useRouter();
   const { data: userSession, status } = useSession({
@@ -88,9 +57,10 @@ const Profile = () => {
     }
   }, [user]);
 
-  const { data: session, isSuccess } = useQuery(
-    ['session'],
-    async () => await getData(getSession, 'session_by_id', { id: localStorage.getItem('session_id') })
+  const { data: session, isSuccess } = useQuery(['session'], async () =>
+    localStorage.getItem('session_id')
+      ? await getData(getSession, 'session_by_id', { id: localStorage.getItem('session_id') })
+      : null
   );
 
   const mutation = useMutation(newSession => {

@@ -15,6 +15,9 @@ export const getCurrentUser = `
             last_name
             location
             phone
+            session {
+                id
+            }
         }
     }
 `;
@@ -48,5 +51,19 @@ export const refreshAuth = `
                 expires
                 refresh_token
             }
+    }
+`;
+
+export const updateUserSession = `
+    #graphql
+    mutation Update_users_item ($user_id: ID!, $data: update_directus_users_input!) {
+        update_users_item(
+            id: $user_id
+            data: $data
+        ) {
+            session {
+                id
+            }
+        }
     }
 `;

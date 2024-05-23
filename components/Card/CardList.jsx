@@ -2,6 +2,7 @@ import './Card.sass';
 import CardItem from './CardItem';
 
 const CardList = ({ products, getLoadMoreProducts, page_url }) => {
+
   return (
     <section className="products">
       <div className="container">
