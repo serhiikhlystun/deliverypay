@@ -75,7 +75,7 @@ const Success = ({ isOpen, onClose, user }) => {
               PROFILE
           </Link>
         ) : (
-          <Link className="popup__save-btn success" href={'/products'}>
+          <Link href={'/products'}>
             <button className="popup__save-btn success" onClick={closeGuestPopup}>
               ALL PRODUCTS
             </button>

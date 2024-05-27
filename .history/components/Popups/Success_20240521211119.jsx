@@ -65,17 +65,19 @@ const Success = ({ isOpen, onClose, user }) => {
           <h2 className="popup__title">SUCCESS</h2>
           <p className="popup__subtitle">THANK YOU FOR ORDER</p>
         </div>
-        <Link className="popup__save-btn success" href={'/'}>
+        <Link href={'/'}>
           <button className="popup__save-btn success" onClick={closeGuestPopup}>
             HOME
           </button>
         </Link>
         {user ? (
-          <Link className='popup__save-btn success'  onClick={closeGuestPopup} href={'/profile-page'}>
+          <Link href={'/profile-page'}>
+            <button className="popup__save-btn success" onClick={closeGuestPopup}>
               PROFILE
+            </button>
           </Link>
         ) : (
-          <Link className="popup__save-btn success" href={'/products'}>
+          <Link href={'/products'}>
             <button className="popup__save-btn success" onClick={closeGuestPopup}>
               ALL PRODUCTS
             </button>

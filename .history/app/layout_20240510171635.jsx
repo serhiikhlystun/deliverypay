@@ -12,7 +12,6 @@ function RootLayout({ children, session }) {
   return (
     <>
       <Head>
-      <meta name="viewport" content="width=device-width, user-scalable=no" />
         <title>E-commerce Site</title>
         <link rel="icon" href={favicon.src} />
       </Head>
