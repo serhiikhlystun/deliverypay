@@ -8,13 +8,13 @@ const CheckoutPrices = ({ prices, deviceClass, status }) => {
       <div className="delivery__checkout-box">
         <p className="delivery__checkout-total">Total:</p>
         <p className="delivery__checkout-total">
-          ${(parseFloat(prices.totalPrice) * (1 - prices.discount / 100)).toFixed(2)}
+          ${(prices.totalPrice * (1 - prices.discount / 100)).toFixed(2)}
         </p>
       </div>
       <div className="delivery__checkout-box">
         <p className="delivery__checkout-discount">Discount for registered customers:</p>
         <p className="delivery__checkout-discount">
-          ${(parseFloat(prices.totalPrice) - parseFloat(prices.totalPrice) * (1 - prices.discount / 100)).toFixed(2)}
+          ${(prices.totalPrice - prices.totalPrice * (1 - prices.discount / 100)).toFixed(2)}
         </p>
       </div>
       {status === 'authenticated' ? (

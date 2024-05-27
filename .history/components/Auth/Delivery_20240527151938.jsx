@@ -45,9 +45,9 @@ const Delivery = ({ prices, deviceClass, products, user }) => {
         email: email.value,
         phone: phone.value,
         location: adress.value,
-        discount: parseFloat(prices.totalPrice) - (parseFloat(prices.totalPrice) * (1 - prices.discount / 100)).toFixed(2),
-        total_price: (parseFloat(prices.totalPrice) * (1 - prices.discount / 100)).toFixed(2),
-        total_price_decimal: (parseFloat(prices.totalPrice) * (1 - prices.discount / 100)).toFixed(2),
+        discount: prices.totalPrice - (prices.totalPrice * (1 - prices.discount / 100)).toFixed(2),
+        total_price: (prices.totalPrice * (1 - prices.discount / 100)).toFixed(2),
+        total_price_decimal: (prices.totalPrice * (1 - prices.discount / 100)).toFixed(2),
       };
       mutation.mutate(order);
     } else {
