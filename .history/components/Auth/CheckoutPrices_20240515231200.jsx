@@ -12,7 +12,7 @@ const CheckoutPrices = ({ prices, deviceClass, status }) => {
         </p>
       </div>
       <div className="delivery__checkout-box">
-        <p className="delivery__checkout-discount">Discount for registered customers:</p>
+        <p className="delivery__checkout-discount">Discount:</p>
         <p className="delivery__checkout-discount">
           ${(prices.totalPrice - prices.totalPrice * (1 - prices.discount / 100)).toFixed(2)}
         </p>

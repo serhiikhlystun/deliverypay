@@ -31,7 +31,6 @@ export default function Home() {
       {isSuccess && <Special products={products} />}
       <Newsletter />
       {isAgePopupOpen && <AgePopup onClose={handleCloseAgePopup} />}
-      {/* <ToastContainer /> */}
     </>
   );
 }

@@ -3,6 +3,7 @@ import { createSubscribe } from '@/queries/createSubscribe';
 import { useMutation } from 'react-query';
 import setData from '@/helpers/setData';
 import { toast } from 'react-toastify';
+
 import { useState } from 'react';
 
 const Newsletter = () => {
@@ -24,22 +25,22 @@ const Newsletter = () => {
 
     mutation.mutate(e.target.email.value);
     console.log();
-    e.target.email.value = ""
-    e.target.email.placeholder = "Thank you for subscribing";
 
-    // toast.dark(message, {
-    //   position:  "top-center",//toast.POSITION.TOP_RIGHT,
-    //   autoClose: 500, // 3000 milliseconds = 3 seconds
-    //   hideProgressBar: true,
-    //   closeOnClick: true,
-    //   pauseOnHover: false,
-    //   draggable: true,
-    //   progress: undefined,
-    // });
+    e.target.email.value = ""
+    toast.dark(message, {
+      position:  "top-center",//toast.POSITION.TOP_RIGHT,
+      autoClose: 500, // 3000 milliseconds = 3 seconds
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   return (
     <section className="newsletter">
+      <ToastContainer />
       <div className="container">
         <div className="newsletter__wrapp">
           <h2 className="newsletter__title">Subscribe Newsletter</h2>
@@ -65,6 +66,7 @@ const Newsletter = () => {
         </div>
       </div>
     </section>
+
   );
 };
 

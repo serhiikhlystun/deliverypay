@@ -25,7 +25,6 @@ const Newsletter = () => {
     mutation.mutate(e.target.email.value);
     console.log();
     e.target.email.value = ""
-    e.target.email.placeholder = "Thank you for subscribing";
 
     // toast.dark(message, {
     //   position:  "top-center",//toast.POSITION.TOP_RIGHT,

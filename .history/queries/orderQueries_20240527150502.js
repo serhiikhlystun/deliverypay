@@ -14,7 +14,6 @@ mutation create_orders_item ($data: create_orders_input!) {
         phone
         discount
         total_price
-        total_price_decimal
     }
 }
 `;

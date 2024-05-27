@@ -4,6 +4,7 @@ import { useMutation } from 'react-query';
 import setData from '@/helpers/setData';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Newsletter = () => {
   const [message, setMessage] = useState();
@@ -24,18 +25,17 @@ const Newsletter = () => {
 
     mutation.mutate(e.target.email.value);
     console.log();
-    e.target.email.value = ""
-    e.target.email.placeholder = "Thank you for subscribing";
 
-    // toast.dark(message, {
-    //   position:  "top-center",//toast.POSITION.TOP_RIGHT,
-    //   autoClose: 500, // 3000 milliseconds = 3 seconds
-    //   hideProgressBar: true,
-    //   closeOnClick: true,
-    //   pauseOnHover: false,
-    //   draggable: true,
-    //   progress: undefined,
-    // });
+    e.target.email.value = ""
+    toast.dark(message, {
+      position:  "top-center",//toast.POSITION.TOP_RIGHT,
+      autoClose: 500, // 3000 milliseconds = 3 seconds
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   return (
@@ -65,6 +65,8 @@ const Newsletter = () => {
         </div>
       </div>
     </section>
+      <ToastContainer />
+
   );
 };
 

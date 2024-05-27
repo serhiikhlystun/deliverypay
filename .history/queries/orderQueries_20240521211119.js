@@ -12,9 +12,7 @@ mutation create_orders_item ($data: create_orders_input!) {
         email
         location
         phone
-        discount
         total_price
-        total_price_decimal
     }
 }
 `;
@@ -33,7 +31,6 @@ export const userOrderHistory = `
             location
             phone
             total_price
-            discount
         }
     }
 `;

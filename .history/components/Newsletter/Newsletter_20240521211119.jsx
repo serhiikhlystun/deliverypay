@@ -24,18 +24,16 @@ const Newsletter = () => {
 
     mutation.mutate(e.target.email.value);
     console.log();
-    e.target.email.value = ""
-    e.target.email.placeholder = "Thank you for subscribing";
 
-    // toast.dark(message, {
-    //   position:  "top-center",//toast.POSITION.TOP_RIGHT,
-    //   autoClose: 500, // 3000 milliseconds = 3 seconds
-    //   hideProgressBar: true,
-    //   closeOnClick: true,
-    //   pauseOnHover: false,
-    //   draggable: true,
-    //   progress: undefined,
-    // });
+    toast.dark(message, {
+      position:  "top-center",//toast.POSITION.TOP_RIGHT,
+      autoClose: 500, // 3000 milliseconds = 3 seconds
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   return (

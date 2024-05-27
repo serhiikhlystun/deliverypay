@@ -7,8 +7,7 @@ import Newsletter from '@/components/Newsletter/Newsletter';
 import AgePopup from '@/components/Popups/AgePopup';
 import getData from '@/queries/getData';
 import { CategoriesQuery, SaleProductsQuery } from '@/queries/ProductsQueries';
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
   const [isAgePopupOpen, setIsAgePopupOpen] = useState(true);
@@ -31,7 +30,6 @@ export default function Home() {
       {isSuccess && <Special products={products} />}
       <Newsletter />
       {isAgePopupOpen && <AgePopup onClose={handleCloseAgePopup} />}
-      {/* <ToastContainer /> */}
     </>
   );
 }

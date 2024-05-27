@@ -36,32 +36,26 @@ const Delivery = ({ prices, deviceClass, products, user }) => {
     });
 
     if (user) {
-      const { name, email, phone, adress } = e.target;
-      const order = {
+      mutation.mutate({
         user_id: user.id,
         products: arr,
         status: "New",
-        name: name.value,
-        email: email.value,
-        phone: phone.value,
-        location: adress.value,
-        discount: prices.totalPrice - (prices.totalPrice * (1 - prices.discount / 100)).toFixed(2),
+        name: e.target.name.value,
+        email: e.target.email.value,
+        phone: e.target.phone.value,
+        location: e.target.adress.value,
+        discount: prices.discount,
         total_price: (prices.totalPrice * (1 - prices.discount / 100)).toFixed(2),
-        total_price_decimal: (prices.totalPrice * (1 - prices.discount / 100)).toFixed(2),
-      };
-      mutation.mutate(order);
+      });
     } else {
-      const { phone, adress } = e.target;
-      const order = {
+      mutationGuest.mutate({
         guest: true,
         status: "New",
         products: arr,
-        phone: phone.value,
-        location: adress.value,
+        phone: e.target.phone.value,
+        location: e.target.adress.value,
         total_price: prices.totalPrice,
-        total_price_decimal: prices.totalPrice,
-      };
-      mutationGuest.mutate(order);
+      });
     }
   };
 

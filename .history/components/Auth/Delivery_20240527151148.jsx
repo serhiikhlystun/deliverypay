@@ -47,7 +47,6 @@ const Delivery = ({ prices, deviceClass, products, user }) => {
         location: adress.value,
         discount: prices.totalPrice - (prices.totalPrice * (1 - prices.discount / 100)).toFixed(2),
         total_price: (prices.totalPrice * (1 - prices.discount / 100)).toFixed(2),
-        total_price_decimal: (prices.totalPrice * (1 - prices.discount / 100)).toFixed(2),
       };
       mutation.mutate(order);
     } else {
@@ -59,7 +58,6 @@ const Delivery = ({ prices, deviceClass, products, user }) => {
         phone: phone.value,
         location: adress.value,
         total_price: prices.totalPrice,
-        total_price_decimal: prices.totalPrice,
       };
       mutationGuest.mutate(order);
     }
