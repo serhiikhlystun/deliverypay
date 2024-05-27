@@ -249,11 +249,11 @@ const CardItem = ({
             <div className="card-item__price-wrapp mob">
               {price ? (
                 <>
-                  <p className="card-item__price">${price}</p>
-                  <p className="card-item__price-old">${priceOld}</p>
+                  <p className="card-item__price">{price}</p>
+                  <p className="card-item__price-old">{priceOld}</p>
                 </>
               ) : (
-                <p className="card-item__price">${priceOld}</p>
+                <p className="card-item__price">{priceOld}</p>
               )}
             </div>
             <button className="card-item__btn" onClick={e => addToCart(e)}>
