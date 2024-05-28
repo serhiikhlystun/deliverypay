@@ -101,7 +101,7 @@ const CardItem = ({
         setInitialWishList(session.wish_list);
       }
     }
-  }, [isSuccess]);
+  }, [isSuccess, session]);
 
   const addToCart = e => {
     e.preventDefault();
@@ -132,15 +132,6 @@ const CardItem = ({
         temp_order: useStore.getState().tempOrder,
       });
     }
-    toast.dark('Product added to the cart', {
-      position: 'top-center', //toast.POSITION.TOP_RIGHT,
-      autoClose: 500, // 3000 milliseconds = 3 seconds
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-    });
   };
 
 
@@ -178,7 +169,6 @@ const CardItem = ({
 
   useEffect(() => {
     if (isSuccess && session && session.wish_list) {
-      console.log(session.wish_list);
       setIsActive(!!session.wish_list.find(item => item.product_id == id));
     }
   }, [isSuccess]);
