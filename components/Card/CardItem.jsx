@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { Context } from '@/app/context';
 import './CardItem.sass';
 import bucketIcon from './img/bucket-icon.svg';
 import Link from 'next/link';
@@ -53,7 +54,6 @@ const CardItem = ({
     }
   );
 
-
   const mutation = useMutation(
     newSession => {
       if (!isSessionSet && !user?.session) {
@@ -89,8 +89,14 @@ const CardItem = ({
     isActive ? deleteFromWishes(id) : addToWishes();
   };
 
-  const { addToTempOrder, setInitialTempOrder, addToWishList, setInitialWishList, deleteFromWishList } =
-    useStore();
+  const {
+    addToTempOrder,
+    setInitialTempOrder,
+    addToWishList,
+    setInitialWishList,
+    deleteFromWishList,
+    updateTempOrder,
+  } = useStore();
 
   useEffect(() => {
     if (isSuccess && session) {
@@ -101,19 +107,20 @@ const CardItem = ({
         setInitialWishList(session.wish_list);
       }
     }
-  }, [isSuccess, session]);
+  }, [isSuccess]);
 
-  const addToCart = e => {
+  const tempArrContext = useContext(Context);
+
+  async function addToCart(e) {
     e.preventDefault();
 
-    const existingItem = useStore.getState().tempOrder.find(item => item.product_id === id);
+    let existingItem = tempArrContext.find(item => item.product_id === id);
+    let existingItemStore = useStore.getState().tempOrder.find(item => item.product_id === id);
     if (existingItem) {
-      existingItem.quantity += 1;
-      mutation.mutate({
-        status: 'draft',
-        temp_order: useStore.getState().tempOrder,
-      });
+      existingItemStore.quantity = existingItem.quantity + 1;
+      updateTempOrder(existingItemStore.product_id, existingItemStore.quantity);
     } else {
+      setInitialTempOrder(tempArrContext);
       addToTempOrder({
         product_id: id,
         quantity: 1,
@@ -127,13 +134,12 @@ const CardItem = ({
         category_slug: category.slug,
         subcategory_slug: subcategory.slug,
       });
-      mutation.mutate({
-        status: 'draft',
-        temp_order: useStore.getState().tempOrder,
-      });
     }
-  };
-
+    mutation.mutate({
+      status: 'draft',
+      temp_order: useStore.getState().tempOrder,
+    });
+  }
 
   const addToWishes = e => {
     if (!isActive) {
