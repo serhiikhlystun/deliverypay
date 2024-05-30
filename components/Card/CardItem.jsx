@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Context } from '@/app/context';
+import React, { useState, useEffect } from 'react';
 import './CardItem.sass';
 import bucketIcon from './img/bucket-icon.svg';
 import Link from 'next/link';
@@ -14,7 +13,6 @@ import { toast } from 'react-toastify';
 import { updateUserSession } from '@/queries/Users';
 import { useSession } from 'next-auth/react';
 import { getCurrentUser } from '@/queries/Users';
-import fetchData from '@/helpers/fetchData';
 
 const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_URL;
 
@@ -109,18 +107,19 @@ const CardItem = ({
     }
   }, [isSuccess]);
 
-  const tempArrContext = useContext(Context);
-
   async function addToCart(e) {
     e.preventDefault();
+    if (isSessionSet) {
+      const response = await getData(getSession, 'session_by_id', { id: localStorage.getItem('session_id') });
+      setInitialTempOrder(response.temp_order);
+    }
 
-    let existingItem = tempArrContext.find(item => item.product_id === id);
-    let existingItemStore = useStore.getState().tempOrder.find(item => item.product_id === id);
+    let existingItem = useStore.getState().tempOrder.find(item => item.product_id === id);
+
     if (existingItem) {
-      existingItemStore.quantity = existingItem.quantity + 1;
-      updateTempOrder(existingItemStore.product_id, existingItemStore.quantity);
+      existingItem.quantity += 1;
+      updateTempOrder(existingItem.product_id, existingItem.quantity);
     } else {
-      setInitialTempOrder(tempArrContext);
       addToTempOrder({
         product_id: id,
         quantity: 1,
@@ -138,6 +137,17 @@ const CardItem = ({
     mutation.mutate({
       status: 'draft',
       temp_order: useStore.getState().tempOrder,
+    });
+
+    toast.dark('Product added to the cart', {
+      position:  "top-center",//toast.POSITION.TOP_RIGHT,
+      autoClose: 500, // 3000 milliseconds = 3 seconds
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      
     });
   }
 

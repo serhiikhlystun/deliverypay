@@ -157,7 +157,12 @@ const ProductItem = ({ product }) => {
     });
     setIsActive(false);
   };
-  const addToCart = () => {
+  async function addToCart(e) {
+
+    if (isSessionSet) {
+      const response = await getData(getSession, 'session_by_id', { id: localStorage.getItem('session_id') });
+      setInitialTempOrder(response.temp_order);
+    }
     
     let existingItem = useStore.getState().tempOrder.find(item => item.product_id === product.id);
     if (existingItem) {
