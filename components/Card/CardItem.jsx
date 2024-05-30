@@ -6,6 +6,7 @@ import useStore from '@/store/temp_order';
 import { v4 as uuidv4 } from 'uuid';
 import setData from '@/helpers/setData';
 import getData from '@/queries/getData';
+import fetchData from '@/helpers/fetchData';
 import { createSession, updateSession, getSession } from '@/queries/sessions';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import Image from 'next/image';
