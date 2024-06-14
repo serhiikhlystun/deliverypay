@@ -79,7 +79,7 @@ const Delivery = ({ prices, deviceClass, products, user }) => {
         setName(user.last_name)
       }
     }
-  },[])
+  },[user])
 
   return (
     <div className="delivery__content">
