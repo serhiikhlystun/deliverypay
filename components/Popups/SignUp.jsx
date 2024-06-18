@@ -3,9 +3,19 @@ import '../common/Popup.sass';
 import { useMutation } from 'react-query';
 import setData from '@/helpers/setData';
 import { createNewUser } from '@/queries/Users';
+import ShowPasswordIcon from './img/show-password.svg';
+import HidePassword from './img/hide-password.svg';
+import Image from 'next/image';
 
 const SignUpPopup = ({ isOpen, onClose }) => {
   const [error, setError] = useState();
+  const [isShowPassword, setIsShowPassword] = useState(false);
+  const [isShowConfirmPassword, setIsShowConfrimPassword] = useState(false);
+
+  const showPassword = () => {
+    setIsShowPassword(!isShowPassword);
+  };
+
   const signUpMutation = useMutation(newUser => {
     setData(createNewUser, { data: newUser }, '/system').then(response => {
       if (response.create_users_item) {
@@ -24,9 +34,9 @@ const SignUpPopup = ({ isOpen, onClose }) => {
   const handleSubmit = e => {
     e.preventDefault();
     if (e.target.password.value !== e.target.repeat_password.value) {
-      setError("Password doesn't match");
-      return
-    } else setError('')
+      setError("Passwords doesn't match");
+      return;
+    } else setError('');
     signUpMutation.mutate({
       email: e.target.email.value,
       password: e.target.password.value,
@@ -69,7 +79,7 @@ const SignUpPopup = ({ isOpen, onClose }) => {
           <h2 className="popup__title">SIGN UP</h2>
           <p className="popup__subtitle">You will receive 2.5% cashback from each purchase</p>
         </div>
-        <form className='popup__form' onSubmit={e => handleSubmit(e)}>
+        <form className="popup__form" onSubmit={e => handleSubmit(e)}>
           <div className="popup__input-wrapp">
             <input
               id="email-address"
@@ -80,21 +90,63 @@ const SignUpPopup = ({ isOpen, onClose }) => {
               required
               placeholder="EMAIL"
             />
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              className="popup__input"
-              placeholder="PASSWORD"
-            />
-            <input
-              name="repeat_password"
-              className="popup__input"
-              type="password"
-              placeholder="REPEAT PASSWORD"
-            />
+            <div className="popup__input-icon-wrapp">
+              {isShowPassword ? (
+                <Image
+                  onClick={showPassword}
+                  className="popup__input-icon"
+                  src={ShowPasswordIcon.src}
+                  alt="showPass"
+                  width={25}
+                  height={25}
+                />
+              ) : (
+                <Image
+                  onClick={showPassword}
+                  className="popup__input-icon"
+                  src={HidePassword.src}
+                  alt="hidePass"
+                  width={25}
+                  height={25}
+                />
+              )}
+              <input
+                id="password"
+                name="password"
+                type={isShowPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                required
+                className="popup__input"
+                placeholder="PASSWORD"
+              />
+            </div>
+            <div className="popup__input-icon-wrapp">
+              {isShowConfirmPassword ? (
+                <Image
+                  onClick={() => setIsShowConfrimPassword(!isShowConfirmPassword)}
+                  className="popup__input-icon"
+                  src={ShowPasswordIcon.src}
+                  alt="showPass"
+                  width={25}
+                  height={25}
+                />
+              ) : (
+                <Image
+                  onClick={() => setIsShowConfrimPassword(!isShowConfirmPassword)}
+                  className="popup__input-icon"
+                  src={HidePassword.src}
+                  alt="hidePass"
+                  width={25}
+                  height={25}
+                />
+              )}
+              <input
+                name="repeat_password"
+                className="popup__input"
+                type={isShowConfirmPassword ? 'text' : 'password'}
+                placeholder="REPEAT PASSWORD"
+              />
+            </div>
             {error ? <div>{error}</div> : null}
           </div>
           <button type="submit" className="popup__save-btn">

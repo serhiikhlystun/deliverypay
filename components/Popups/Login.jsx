@@ -6,10 +6,19 @@ import { getSession } from 'next-auth/react';
 import fetchData from '@/helpers/fetchData';
 import { getCurrentUser, updateUserSession } from '@/queries/Users';
 import setData from '@/helpers/setData';
+import ShowPasswordIcon from './img/show-password.svg';
+import HidePassword from './img/hide-password.svg';
+import Image from 'next/image';
 
 const LoginPopup = ({ isOpen, onClose, csrfToken }) => {
   const router = useRouter();
   const [error, setError] = useState(false);
+  const [isShowPassword, setIsShowPassword] = useState(false);
+
+  const showPassword = () => {
+    setIsShowPassword(!isShowPassword);
+  };
+
   const closeLoginPopup = () => {
     onClose();
     document.body.style.setProperty('overflow', 'inherit');
@@ -32,7 +41,7 @@ const LoginPopup = ({ isOpen, onClose, csrfToken }) => {
       await fetchData(getCurrentUser, {}, '/system', userSession.user.accessToken).then(user => {
         if (user.session) {
           localStorage.setItem('session_id', user.session.id);
-        } else if (localStorage.getItem('session_id')){
+        } else if (localStorage.getItem('session_id')) {
           setData(
             updateUserSession,
             { data: { session: { id: localStorage.getItem('session_id') } }, user_id: user?.id },
@@ -91,15 +100,36 @@ const LoginPopup = ({ isOpen, onClose, csrfToken }) => {
               required
               placeholder="EMAIL"
             />
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              className="popup__input"
-              placeholder="PASSWORD"
-            />
+            <div className="popup__input-icon-wrapp">
+              {isShowPassword ? (
+                <Image
+                  onClick={showPassword}
+                  className="popup__input-icon"
+                  src={ShowPasswordIcon.src}
+                  alt="showPass"
+                  width={25}
+                  height={25}
+                />
+              ) : (
+                <Image
+                  onClick={showPassword}
+                  className="popup__input-icon"
+                  src={HidePassword.src}
+                  alt="hidePass"
+                  width={25}
+                  height={25}
+                />
+              )}
+              <input
+                id="password"
+                name="password"
+                type={isShowPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                required
+                className="popup__input"
+                placeholder="PASSWORD"
+              />
+            </div>
             {error ? <div>{error}</div> : null}
           </div>
           <button className="popup__save-btn" type="submit">

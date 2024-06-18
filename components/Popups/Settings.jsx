@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../common/Popup.sass';
+import ShowPasswordIcon from './img/show-password.svg';
+import HidePassword from './img/hide-password.svg';
+import Image from 'next/image';
 
 const SettingsPopup = ({ isOpen, onClose, user, handleUpdate }) => {
+  const [isShowPassword, setIsShowPassword] = useState(false);
 
+  const showPassword = () => {
+    setIsShowPassword(!isShowPassword);
+  };
 
   return (
     <div className={`popup__wrapp ${isOpen ? 'open' : ''}`}>
@@ -40,10 +47,68 @@ const SettingsPopup = ({ isOpen, onClose, user, handleUpdate }) => {
         </div>
         <form className="popup__form" onSubmit={handleUpdate}>
           <div className="popup__input-wrapp">
-            <input name="email" className="popup__input" type="text" defaultValue={user.email} placeholder="Email" />
-            <input name="password" className="popup__input" autoComplete="off" type="password" placeholder="****************" />
-            <input name="phone" className="popup__input" type="tel" defaultValue={user.phone} placeholder='Enter your phone' />
-            <input name="location" className="popup__input" type="text" defaultValue={user.location} placeholder='Enter your Address' />
+            <label className="popup__input-label" htmlFor="name">
+              NAME
+            </label>
+            <input
+              id="name"
+              name="name"
+              className="popup__input"
+              type="text"
+              defaultValue={user.first_name}
+              placeholder="Name"
+            />
+            <label className="popup__input-label" htmlFor="email">
+              EMAIL
+            </label>
+            <input
+              id="email"
+              name="email"
+              className="popup__input"
+              type="text"
+              defaultValue={user.email}
+              placeholder="Email"
+            />
+            <label className="popup__input-label" htmlFor="password">
+              PASSWORD
+            </label>
+            <div className="popup__input-icon-wrapp" onClick={showPassword}>
+              {isShowPassword ? (
+                <Image className='popup__input-icon' src={ShowPasswordIcon.src} alt="showPass" width={25} height={25} />
+              ) : (
+                <Image className='popup__input-icon' src={HidePassword.src} alt="hidePass" width={25} height={25} />
+              )}
+              <input
+                id="password"
+                name="password"
+                className="popup__input"
+                autoComplete="off"
+                type={isShowPassword ? 'text' : 'password'}
+                placeholder="****************"
+              />
+            </div>
+            <label className="popup__input-label" htmlFor="phone">
+              PHONE
+            </label>
+            <input
+              id="phone"
+              name="phone"
+              className="popup__input"
+              type="tel"
+              defaultValue={user.phone}
+              placeholder="Enter your phone"
+            />
+            <label className="popup__input-label" htmlFor="location">
+              LOCATION
+            </label>
+            <input
+              id="location"
+              name="location"
+              className="popup__input"
+              type="text"
+              defaultValue={user.location}
+              placeholder="Enter your Address"
+            />
             {/* <input className="popup__input" type="text" placeholder="420comrades" /> */}
           </div>
           <button type="submit" className="popup__save-btn">

@@ -20,16 +20,11 @@ import getData from '@/queries/getData';
 import useStore, { useCartItemCount } from '@/store/temp_order';
 
 const Header = () => {
-
-
   const { data: userSession, status } = useSession();
   const store = useStore();
-
-
+  const [isMenuShow, setIsMenuShow] = useState(false);
 
   const itemsInCart = useCartItemCount(store);
-
-
 
   // Стан для відображення попапа
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
@@ -42,14 +37,14 @@ const Header = () => {
     document.body.style.setProperty('overflow', 'hidden');
   };
 
-  const loginOpen = (e) => {
+  const loginOpen = e => {
     e.preventDefault();
     setIsLoginPopupOpen(true);
     setIsPopupOpen(false);
     document.body.style.setProperty('overflow', 'hidden');
   };
 
-  const signUpOpen = (e) => {
+  const signUpOpen = e => {
     e.preventDefault();
     setIsSignUpPopupOpen(true);
     setIsPopupOpen(false);
@@ -97,8 +92,14 @@ const Header = () => {
   const handleLogout = () => {
     mutation.mutate(userSession.user.refreshToken);
     signOut();
-    localStorage.removeItem('session_id')
+    localStorage.removeItem('session_id');
+    setIsMenuShow(false)
   };
+
+  const handleShowMenu = (e) => {
+    setIsMenuShow(!isMenuShow)
+  }
+
 
   return (
     <header className="header">
@@ -457,16 +458,26 @@ const Header = () => {
               </li>
             </ul>
             <div className="header__icon-wrapp">
+              <div className='header__icon'>
               {status === 'authenticated' ? (
-                <Link href={'/profile-page'} className="header__icon">
+                <>
                   <Image
                     src={profileIcon.src}
                     alt="profile"
                     width={48}
                     height={48}
                     className="header__icon-img"
+                    onClick={handleShowMenu}
                   />
-                </Link>
+                    <div className={isMenuShow ? "header__icon-menu" : 'header__icon-menuhide'}>
+                      <Link href={'/profile-page'} onClick={handleShowMenu} className="header__icon-menu-profile">
+                        Profile
+                      </Link>
+                      <div onClick={handleLogout} className="header__icon-menu-profile">
+                        Logout
+                      </div>
+                    </div>
+                </>
               ) : (
                 <button type="button" className="header__icon btn">
                   <Image
@@ -480,6 +491,7 @@ const Header = () => {
                   />
                 </button>
               )}
+              </div>
               <BusketIcon itemsInCart={itemsInCart} />
             </div>
           </div>
