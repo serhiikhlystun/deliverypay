@@ -18,11 +18,11 @@ import BusketIcon from './BusketIcon';
 import { getSession } from '@/queries/sessions';
 import getData from '@/queries/getData';
 import useStore, { useCartItemCount } from '@/store/temp_order';
+import Logout from './img/logout.svg';
 
 const Header = () => {
   const { data: userSession, status } = useSession();
   const store = useStore();
-  const [isMenuShow, setIsMenuShow] = useState(false);
 
   const itemsInCart = useCartItemCount(store);
 
@@ -93,13 +93,7 @@ const Header = () => {
     mutation.mutate(userSession.user.refreshToken);
     signOut();
     localStorage.removeItem('session_id');
-    setIsMenuShow(false)
   };
-
-  const handleShowMenu = (e) => {
-    setIsMenuShow(!isMenuShow)
-  }
-
 
   return (
     <header className="header">
@@ -458,39 +452,42 @@ const Header = () => {
               </li>
             </ul>
             <div className="header__icon-wrapp">
-              <div className='header__icon'>
-              {status === 'authenticated' ? (
-                <>
-                  <Image
-                    src={profileIcon.src}
-                    alt="profile"
-                    width={48}
-                    height={48}
-                    className="header__icon-img"
-                    onClick={handleShowMenu}
-                  />
-                    <div className={isMenuShow ? "header__icon-menu" : 'header__icon-menuhide'}>
-                      <Link href={'/profile-page'} onClick={handleShowMenu} className="header__icon-menu-profile">
-                        Profile
-                      </Link>
-                      <div onClick={handleLogout} className="header__icon-menu-profile">
-                        Logout
-                      </div>
-                    </div>
-                </>
-              ) : (
-                <button type="button" className="header__icon btn">
-                  <Image
-                    id="login-btn"
-                    onClick={handleOpenPopup}
-                    src={profileIcon.src}
-                    width={48}
-                    height={48}
-                    alt="profile"
-                    className="header__icon-img"
-                  />
-                </button>
-              )}
+              <div className="header__icon">
+                {status === 'authenticated' ? (
+                  <>
+                    <Link href={'/profile-page'}>
+                      <Image
+                        src={profileIcon.src}
+                        alt="profile"
+                        width={48}
+                        height={48}
+                        className="header__icon-img"
+                      />
+                    </Link>
+                    <Image
+                      src={Logout.src}
+                      alt="profile"
+                      width={48}
+                      height={48}
+                      className="header__icon-img logout"
+                      onClick={handleLogout}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <button type="button" className="header__icon btn">
+                      <Image
+                        id="login-btn"
+                        onClick={handleOpenPopup}
+                        src={profileIcon.src}
+                        width={48}
+                        height={48}
+                        alt="profile"
+                        className="header__icon-img"
+                      />
+                    </button>
+                  </>
+                )}
               </div>
               <BusketIcon itemsInCart={itemsInCart} />
             </div>
