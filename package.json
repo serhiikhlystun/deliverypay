@@ -12,6 +12,7 @@
     "graphql-config": "^5.0.3",
     "next": "14.1.4",
     "next-auth": "^4.24.7",
+    "punycode": "^2.3.1",
     "react": "^18",
     "react-dom": "^18",
     "react-query": "^3.39.3",

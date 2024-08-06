@@ -1,0 +1,259 @@
+@import "../../sass/abstracts/variables"
+@import "../../sass/abstracts/mixins"
+
+.cart
+  &__title
+    font-size: 30px
+    padding: 80px 0
+    text-align: center
+    &-small
+      font-size: 16px
+      padding-bottom: 24px
+  &__wrapp
+    display: grid
+    grid-template-columns: 60% 40%
+    padding-bottom: 80px
+  &-list
+    display: grid
+    grid-template-columns: 1fr
+    grid-row-gap: 24px
+    grid-column-gap: 40px
+    &-item
+      display: flex
+      border: 1px solid #DDDDDD
+      border-left: none
+      min-height: 200px
+      &:last-of-type
+        margin-bottom: 0
+      &__title
+        font-size: 18px
+        font-weight: 700
+        line-height: 130%
+        text-transform: uppercase
+        &-box
+          padding-right: 8px
+        &-inn
+          display: flex
+          justify-content: space-between
+          padding-bottom: 32px
+      &__like
+        display: flex
+        &-icon
+          width: auto
+          cursor: pointer
+          &-path
+            &.active
+              fill: $black
+      &__subtitle
+        font-size: 13px
+        color: $lightGrey
+      &__img
+        width: 100%
+        height: 100%
+        object-fit: cover
+        object-position: center
+        &-box
+          width: 250px
+      &__content
+        width: 100%
+        padding: 20px
+        border-left: none
+        display: flex
+        flex-direction: column
+        justify-content: space-between
+      &__slider
+        max-width: 30vw
+        width: 100%
+      &__price
+        font-size: 16px
+        padding-bottom: 4px
+        padding-right: 8px
+        font-weight: 700
+        &-wrapp
+          display: flex
+          padding-right: 64px
+        &-old
+          font-size: 15px
+          color: $lightGrey
+          text-decoration: line-through
+          font-weight: 700
+      &__descr
+        &-title
+          font-size: 12px
+          font-weight: 800
+          letter-spacing: 3px
+          text-transform: uppercase
+        &-text
+          font-size: 12px
+          font-weight: 300
+          line-height: 150%
+          padding-bottom: 24px
+      &__btn
+        display: flex
+        align-items: center
+        justify-content: center
+        height: 56px
+        width: 180px
+        color: $white
+        background: $black
+        font-size: 11px
+        font-weight: 800
+        border: none
+        cursor: pointer
+        text-transform: uppercase
+        transition: $transition
+        &:hover
+          @include hoverShadowBlack()
+        &-wrapp
+          display: flex
+          justify-content: space-between
+          align-items: center
+        &-icon
+          margin-right: 4px
+          margin-top: -2px
+      &__counter
+        padding: 10px 20px
+        display: flex
+        align-items: center
+        justify-content: center
+        width: max-content
+        border: 1px solid $grey
+        &-input
+          border: none
+           width: max-content
+          height: 20px
+          outline-color: $grey
+          display: flex
+          align-items: center
+          justify-content: center
+          margin: 0 16px
+        &-item
+          cursor: pointer
+          display: flex
+          align-items: center
+          justify-content: center
+    &__more
+      display: flex
+      align-items: center
+      justify-content: center
+      padding-top: 80px
+      &-btn
+        display: flex
+        align-items: center
+        justify-content: center
+        font-size: 12px
+        line-height: 120%
+        text-transform: uppercase
+        width: 180px
+        height: 56px
+        outline: none
+        background: $white
+        border: 1px solid #A1A1A1
+        cursor: pointer
+        transition: $transition
+        &:hover
+          @include hoverShadowBlack
+    &__title
+      font-weight: 700
+      padding-bottom: 16px
+    &__wrapp
+      width: 100%
+    &__counter
+      padding: 10px 20px
+      display: flex
+      align-items: center
+      justify-content: center
+      width: max-content
+      border: 1px solid $grey
+      margin-bottom: 32px
+      &-input
+        border: none
+        width: 20px
+        height: 20px
+        outline-color: $grey
+        display: flex
+        align-items: center
+        justify-content: center
+        margin: 0 16px
+      &-item
+        cursor: pointer
+        display: flex
+        align-items: center
+        justify-content: center
+
+
+@media (max-width: $tablet)
+  .cart-list
+    grid-template-columns: 1fr
+    &-item
+      max-width: none
+      &__img
+        &-box
+          width: 250px
+          height: 200px
+      &__descr
+        &-text
+          padding-bottom: 16px
+
+@media (max-width: $tablet)
+  .cart
+    &__title
+      &-small
+        max-width: 768px
+        width: 100%
+        margin: 0 auto
+    &-list
+      max-width: 768px
+      width: 100%
+      margin: 0 auto
+      &-item
+        min-height: auto
+        &__img
+          &-box
+            width: 112px
+            height: 100%
+        &__title
+          font-size: 14px
+          &-inn
+            padding-bottom: 16px
+        &__content
+          padding: 10px
+        &__price
+          &-wrapp
+            padding-right: 8px
+        &__btn
+          width: 96px
+          height: 32px
+      &__wrapp
+        padding-bottom: 40px
+    &__wrapp
+      display: flex
+      flex-direction: column
+
+@media (max-width: $mobile)
+  .cart
+    &__title
+      padding: 40px 0
+      &-small
+        padding-bottom: 8px
+    &-list
+
+      &-item
+        &__content
+          width: 70%
+        &__img
+          &-box
+            width: 30%
+        &__counter
+          padding: 4px 8px
+          &-input
+            margin: 0 8px
+
+
+@media (max-width: $mobileSmall)
+  .cart-list
+    &-item
+      &__img
+        &-box
+          width: 96px
+          height: 100%

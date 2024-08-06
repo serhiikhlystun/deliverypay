@@ -1,0 +1,78 @@
+@import "../../sass/abstracts/variables"
+
+.footer
+  display: flex
+  &__wrapper
+    display: flex
+    justify-content: space-between
+    padding: 40px 0
+  &__left
+    display: flex
+    flex-direction: column
+    width: 30%
+    justify-content: center
+    align-items: center
+  &__social
+    display: flex
+    justify-content: space-between
+    max-width: 200px
+    width: 100%
+    padding-top: 32px
+  &__right
+    display: flex
+    width: 60%
+    justify-content: space-evenly
+  &__logo
+    display: flex
+    transition: all 0.2s ease-in-out
+    width: 100%
+    max-width: 230px
+  &__copyright
+    font-weight: 400
+    font-size: 14px
+    line-height: 140%
+    width: 100%
+    color: $black
+    text-align: center
+  &__item
+    font-size: 19px
+    line-height: 220%
+    &-title
+      font-weight: 800
+      font-size: 19px
+      line-height: 220%
+    &-link
+      color: $black
+      cursor: pointer
+  &__links
+    display: flex
+    justify-content: space-around
+    width: 70%
+
+@media(max-width: $tablet)
+  .footer
+    &__wrapper
+      flex-direction: column
+    &__left
+      width: 100%
+      padding-bottom: 40px
+    &__links
+      width: 100%
+    &__copyright
+      padding-bottom: 40px
+
+
+@media(max-width: 600px)
+  .footer
+    &__links
+      flex-direction: column
+    &__item
+      text-align: center
+      &-title
+        text-align: center
+    &__box
+      padding-bottom: 40px
+      &:last-of-type
+        padding-bottom: 0
+    &__copyright
+      padding-bottom: 40px
