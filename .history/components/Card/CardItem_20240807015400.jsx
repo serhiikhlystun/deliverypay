@@ -163,7 +163,7 @@ const CardItem = ({
         image: image,
         slug: slug,
         category_slug: category.slug,
-        subcategory_slug: null !== subcategory ? subcategory.slug : "all",
+        subcategory_slug: subcategory.slug,
       });
       mutation.mutate({
         status: 'draft',

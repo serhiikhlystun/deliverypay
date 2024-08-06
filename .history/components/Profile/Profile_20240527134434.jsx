@@ -128,7 +128,7 @@ const Profile = () => {
         id: uuidv4(),
         slug: item.slug,
         category_slug: item.category_slug,
-        subcategory_slug: null !== item.subcategory_slug ? item.subcategory_slug : "all",
+        subcategory_slug: item.subcategory_slug,
       });
       mutation.mutate({
         status: 'draft',

@@ -179,7 +179,7 @@ const ProductItem = ({ product }) => {
         id: uuidv4(),
         slug: product.slug,
         category_slug: product.product_categories[0].categories_id.slug,
-        subcategory_slug:null !== product.subcategory ? product.subcategory.slug : "all",
+        subcategory_slug: product.subcategory.slug,
       });
     }
     mutation.mutate({
