@@ -9,8 +9,7 @@ import './Hamburger.sass';
 import LoginPopup from '../Popups/Login';
 import SignUpPopup from '../Popups/SignUp';
 import ResetPasswordPopup from '../Popups/ResetPasswordPopup';
-import TelegramIntegration from './TelegramApp'
-
+import TelegramIntegration from './TelegramApp';
 
 import LoginOrSignUp from '../Popups/LoginOrSignUp';
 import setData from '@/helpers/setData';
@@ -23,14 +22,13 @@ import { getSession } from '@/queries/sessions';
 import getData from '@/queries/getData';
 import useStore, { useCartItemCount } from '@/store/temp_order';
 import Logout from './img/logout.svg';
-
-
-
+import { usePathname } from 'next/navigation';
 
 const Header = () => {
   const { data: userSession, status } = useSession();
   const store = useStore();
   const itemsInCart = useCartItemCount(store);
+  const path = usePathname();
 
   // Стан для відображення попапа
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
@@ -38,6 +36,8 @@ const Header = () => {
   const [isResetPopupOpen, setIsResetPopupOpen] = useState(false);
   const [token, setToken] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isHomePageAcitve, setIsHomePageActive] = useState(true);
+  const [activePage, setActivePage] = useState(null);
 
   const handleOpenPopup = e => {
     e.preventDefault();
@@ -59,7 +59,6 @@ const Header = () => {
     document.body.style.setProperty('overflow', 'hidden');
   };
 
-
   // Обробник закриття попапа
   const handleClosePopup = () => {
     setIsResetPopupOpen(false);
@@ -70,7 +69,6 @@ const Header = () => {
   };
 
   useEffect(() => {
-
     const urlParams = new URLSearchParams(window.location.search);
     const tokenParam = urlParams.get('token');
 
@@ -114,6 +112,30 @@ const Header = () => {
     mutation.mutate(userSession.user.refreshToken);
     signOut();
     localStorage.removeItem('session_id');
+  };
+
+  useEffect(() => {
+    const elements = document.getElementsByName(path);
+    if (elements.length) {
+      elements.forEach(element => {
+        if (element.tagName === 'LI') {
+          element.classList.add('active');
+          setIsHomePageActive(false);
+          setActivePage(element);
+        }
+      });
+    }
+  }, []);
+
+  const handleChangeActivePage = e => {
+    e.preventDefault();
+    setIsHomePageActive(false);
+    if (activePage) {
+      activePage.classList.toggle('active');
+    }
+    const liElement = e.target.closest('li');
+    liElement.classList.toggle('active');
+    setActivePage(liElement);
   };
 
   return (
@@ -444,18 +466,18 @@ const Header = () => {
               </div>
             </div>
           </div>
-          <ul className={'header__nav'}>
-            <li className={'header__nav-item active'}>
+          <ul className={'header__nav'} onClick={handleChangeActivePage}>
+            <li className={`header__nav-item ${isHomePageAcitve ? 'active' : ''}`} name="/home">
               <Link href={'/'} alt="home">
                 HOME
               </Link>
             </li>
-            <li className={'header__nav-item'}>
+            <li className={'header__nav-item'} name="/products">
               <Link href={'/products'} alt="products">
                 ALL PRODUCTS
               </Link>
             </li>
-            <li className={'header__nav-item'}>
+            <li className={'header__nav-item'} name="/special">
               <Link href={'/special'} alt="special">
                 TODAY’S SPECIAL
               </Link>
@@ -465,12 +487,16 @@ const Header = () => {
             <Image src={logo.src} alt="logo" width={231} height={96} className="header__logo-img" />
           </Link>
           <div className="header__right">
-            <ul className={'header__nav'}>
-              <li className={'header__nav-item'}>
-                <Link href={'/content/delivery'}>DELIVERY</Link>
+            <ul className={'header__nav'} onClick={handleChangeActivePage}>
+              <li className={'header__nav-item'} name="/content/delivery">
+                <Link href={'/content/delivery'} alt="delivery">
+                  DELIVERY
+                </Link>
               </li>
-              <li className={'header__nav-item'}>
-                <Link href={'/content/contact'}>CONTACT</Link>
+              <li className={'header__nav-item'} name="/content/contact">
+                <Link href={'/content/contact'} alt="contact">
+                  CONTACT
+                </Link>
               </li>
             </ul>
             <div className="header__icon-wrapp">
@@ -521,7 +547,6 @@ const Header = () => {
         {isLoginPopupOpen && <LoginPopup onClose={handleClosePopup} />}
         {isSignUpPopupOpen && <SignUpPopup onClose={handleClosePopup} />}
         {isResetPopupOpen && <ResetPasswordPopup onClose={handleClosePopup} token={token} />}
-        
       </div>
     </header>
   );
