@@ -5,19 +5,7 @@ import SignUpPopup from '../Popups/SignUp';
 import GuestPopup from './Guest';
 import { useState } from 'react';
 
-import { useQuery } from 'react-query';
-import fetchData from "@/helpers/fetchData";
-import { СashbackQuery } from "@/queries/ProductsQueries";
-
-
-const GuestCartPopup = ({ handleGuestSubmit }) => {
-
-  const { data: data, isSuccess } = useQuery(
-    ['Cashback'],
-    async () => await fetchData(СashbackQuery, {}),
-  );
-  console.log(data,'CASH')
-  const [cashbakPercent, setCashBackPercent] = useState(0)
+const GuestCartPopup = ({ handleGuestSubmit, cashbakPercent }) => {
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
   const [isSignUpPopupOpen, setIsSignUpPopupOpen] = useState(false);
   const [isGuestPopupOpen, setIsGuestPopupOpen] = useState(false);
@@ -27,7 +15,6 @@ const GuestCartPopup = ({ handleGuestSubmit }) => {
   };
 
   const handleOpenPopup = e => {
-
     if (e.target.name === 'registration') {
       setIsSignUpPopupOpen(true);
     }
@@ -77,7 +64,9 @@ const GuestCartPopup = ({ handleGuestSubmit }) => {
       <div className="popup__title-wrapp">
         <h2 className="popup__title">LOGIN PLEASE</h2>
         <p className="popup__subtitle">
-          Log in and you will receive 5% cashback from each purchase or place an order as a Guest
+          {`
+          Log in and you will receive ${cashbakPercent}% cashback from each purchase or place an order as a Guest
+          `}
         </p>
       </div>
       <div className="popup__input-wrapp">
@@ -88,12 +77,12 @@ const GuestCartPopup = ({ handleGuestSubmit }) => {
           LOG IN
         </button>
       </div>
-      <button name='guest' className="popup__save-btn white" onClick={handleOpenPopup}>
+      <button name="guest" className="popup__save-btn white" onClick={handleOpenPopup}>
         GUEST
       </button>
       {isLoginPopupOpen && <LoginPopup onClose={handleClosePopup} />}
       {isSignUpPopupOpen && <SignUpPopup onClose={handleClosePopup} />}
-      {isGuestPopupOpen && <GuestPopup onClose={handleClosePopup} handleGuestSubmit={handleGuestSubmit}/>}
+      {isGuestPopupOpen && <GuestPopup onClose={handleClosePopup} handleGuestSubmit={handleGuestSubmit} />}
     </div>
   );
 };

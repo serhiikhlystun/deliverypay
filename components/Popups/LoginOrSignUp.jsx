@@ -1,7 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../common/Popup.sass';
+import { useQuery } from 'react-query';
+import getData from '@/queries/getData';
+import { СashbackQuery } from '@/queries/ProductsQueries';
 
 const LoginOrSignUp = ({ isOpen, onClose, loginOpen, signUpOpen }) => {
+  const [cashbakPercent, setCashBackPercent] = useState(0);
+
+  const { data: cashback } = useQuery(
+    ['cashback'],
+    async () => await getData(СashbackQuery, 'Cashback'),
+    { onSuccess: response => setCashBackPercent(response[0].percent) }
+  );
 
   const closeLoginPopup = () => {
     onClose();
@@ -40,14 +50,14 @@ const LoginOrSignUp = ({ isOpen, onClose, loginOpen, signUpOpen }) => {
         </div>
         <div className="popup__title-wrapp">
           <h2 className="popup__title">LOGIN OR REGISTER</h2>
-          <p className="popup__subtitle">Log in and you will receive 5% cashback from each purchase</p>
+          <p className="popup__subtitle">{`Log in and you will receive ${cashbakPercent}% cashback from each purchase`}</p>
         </div>
-          <button className="popup__save-btn success" onClick={loginOpen}>
-            LOGIN
-          </button>
-          <button className="popup__save-btn success" onClick={signUpOpen}>
-            SIGN UP
-          </button>
+        <button className="popup__save-btn success" onClick={loginOpen}>
+          LOGIN
+        </button>
+        <button className="popup__save-btn success" onClick={signUpOpen}>
+          SIGN UP
+        </button>
       </div>
     </div>
   );

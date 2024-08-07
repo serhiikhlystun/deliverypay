@@ -36,7 +36,7 @@ const Header = () => {
   const [isResetPopupOpen, setIsResetPopupOpen] = useState(false);
   const [token, setToken] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isHomePageAcitve, setIsHomePageActive] = useState(true);
+  const [isHomePageAcitve, setIsHomePageActive] = useState();
   const [activePage, setActivePage] = useState(null);
 
   const handleOpenPopup = e => {
@@ -124,17 +124,24 @@ const Header = () => {
           setActivePage(element);
         }
       });
+    } else if (path === '/') {
+      setIsHomePageActive(true);
+    } else {
+      setIsHomePageActive(false);
+      activePage ? activePage.classList.remove('active') : null;
     }
-  }, []);
+  }, [path]);
 
   const handleChangeActivePage = e => {
     e.preventDefault();
+    console.log(e.target);
+
     setIsHomePageActive(false);
     if (activePage) {
-      activePage.classList.toggle('active');
+      activePage.classList.remove('active');
     }
     const liElement = e.target.closest('li');
-    liElement.classList.toggle('active');
+    liElement.classList.add('active');
     setActivePage(liElement);
   };
 
@@ -466,19 +473,23 @@ const Header = () => {
               </div>
             </div>
           </div>
-          <ul className={'header__nav'} onClick={handleChangeActivePage}>
-            <li className={`header__nav-item ${isHomePageAcitve ? 'active' : ''}`} name="/home">
-              <Link href={'/'} alt="home">
+          <ul className={'header__nav'}>
+            <li
+              className={`header__nav-item ${isHomePageAcitve ? 'active' : ''}`}
+              name="/home"
+              onClick={handleChangeActivePage}
+            >
+              <Link href={'/'} alt="home" className={'header__nav-item-link'}>
                 HOME
               </Link>
             </li>
-            <li className={'header__nav-item'} name="/products">
-              <Link href={'/products'} alt="products">
+            <li className={'header__nav-item'} name="/products" onClick={handleChangeActivePage}>
+              <Link href={'/products'} alt="products" className={'header__nav-item-link'}>
                 ALL PRODUCTS
               </Link>
             </li>
-            <li className={'header__nav-item'} name="/special">
-              <Link href={'/special'} alt="special">
+            <li className={'header__nav-item'} name="/special" onClick={handleChangeActivePage}>
+              <Link href={'/special'} alt="special" className={'header__nav-item-link'}>
                 TODAY’S SPECIAL
               </Link>
             </li>
@@ -487,14 +498,14 @@ const Header = () => {
             <Image src={logo.src} alt="logo" width={231} height={96} className="header__logo-img" />
           </Link>
           <div className="header__right">
-            <ul className={'header__nav'} onClick={handleChangeActivePage}>
-              <li className={'header__nav-item'} name="/content/delivery">
-                <Link href={'/content/delivery'} alt="delivery">
+            <ul className={'header__nav'}>
+              <li className={'header__nav-item'} name="/content/delivery" onClick={handleChangeActivePage}>
+                <Link href={'/content/delivery'} alt="delivery" className={'header__nav-item-link'}>
                   DELIVERY
                 </Link>
               </li>
-              <li className={'header__nav-item'} name="/content/contact">
-                <Link href={'/content/contact'} alt="contact">
+              <li className={'header__nav-item'} name="/content/contact" onClick={handleChangeActivePage}>
+                <Link href={'/content/contact'} alt="contact" className={'header__nav-item-link'}>
                   CONTACT
                 </Link>
               </li>
