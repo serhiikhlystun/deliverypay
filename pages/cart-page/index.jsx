@@ -35,7 +35,7 @@ const CartPage = () => {
     }
   );
 
-  const { data: cashback, isSuccess: isDiscountSuccess } = useQuery(
+  const { data: cashback } = useQuery(
     ['cashback'],
     async () => await getData(СashbackQuery, 'Cashback'),
     { onSuccess: response => setCashBackPercent(response[0].percent) }
@@ -51,8 +51,8 @@ const CartPage = () => {
     if (isSuccess && session && session.temp_order) {
       setInitialTempOrder(session.temp_order);
     }
-    isDiscountSuccess ? calculatePrices() : null;
-  }, [isSuccess, session, isDiscountSuccess]);
+    calculatePrices();
+  }, [isSuccess, session, cashbakPercent]);
 
   const calculatePrices = () => {
     let tempTotal = { totalPrice: 0 };
@@ -110,7 +110,9 @@ const CartPage = () => {
               ))}
             </ul>
           </div>
-          <Delivery prices={prices} products={session?.temp_order} user={user} deviceClass={deviceClass} />
+          {cashbakPercent ? (
+            <Delivery prices={prices} products={session?.temp_order} user={user} deviceClass={deviceClass} />
+          ) : null}
         </div>
       </div>
     </section>

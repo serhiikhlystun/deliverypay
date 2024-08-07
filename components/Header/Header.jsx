@@ -134,7 +134,6 @@ const Header = () => {
 
   const handleChangeActivePage = e => {
     e.preventDefault();
-    console.log(e.target);
 
     setIsHomePageActive(false);
     if (activePage) {
