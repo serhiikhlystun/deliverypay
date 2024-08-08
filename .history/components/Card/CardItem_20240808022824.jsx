@@ -255,7 +255,7 @@ const CardItem = ({
               )}
             </div>
             <p className="card-item__descr-title">Short Description</p>
-            <p className="card-item__descr-text">{ description ? description.substring(0, 377)+"..." : ""}</p>
+            <p className="card-item__descr-text">{description??.substring(0, 380)}</p>
           </div>
           <div className="card-item__btn-wrapp">
             <div className="card-item__price-wrapp mob">

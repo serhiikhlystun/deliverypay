@@ -202,9 +202,9 @@ const ProductItem = ({ product }) => {
     return slides.map((slide, index) => (
       <SwiperSlide key={index}>
         <Image
-          src={`${assetsUrl}/${slide.directus_files_id.id}?width=580&height=700`}
-          width={580}
-          height={700}
+          src={`${assetsUrl}/${slide.directus_files_id.id}?width=780`}
+          width={780}
+          height={1200}
           alt={`Slide ${index + 1}`}
         />
       </SwiperSlide>

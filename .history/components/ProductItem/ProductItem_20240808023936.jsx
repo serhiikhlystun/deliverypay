@@ -203,7 +203,7 @@ const ProductItem = ({ product }) => {
       <SwiperSlide key={index}>
         <Image
           src={`${assetsUrl}/${slide.directus_files_id.id}?width=580&height=700`}
-          width={580}
+          width={780}
           height={700}
           alt={`Slide ${index + 1}`}
         />

@@ -8,6 +8,7 @@ import "swiper/swiper-bundle.css";
 import { TextForSlider } from "@/queries/ProductsQueries";
 import { useQuery } from "react-query";
 import fetchData from "@/helpers/fetchData";
+import getData from '@/queries/getData';
 
 
 SwiperCore.use([Autoplay]);
@@ -19,7 +20,7 @@ const TextSlider = () => {
   
   const { data: data, isSuccess } = useQuery(
     ["textForSlider"],
-    async () => await fetchData(TextForSlider, { status: "published" })
+    async () => await fetchData(TextForSlider, { variables: { status: "published" }})
   );
 
 

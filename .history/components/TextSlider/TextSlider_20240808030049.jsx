@@ -8,7 +8,7 @@ import "swiper/swiper-bundle.css";
 import { TextForSlider } from "@/queries/ProductsQueries";
 import { useQuery } from "react-query";
 import fetchData from "@/helpers/fetchData";
-
+import getData from "@/queries/getData";
 
 SwiperCore.use([Autoplay]);
 
@@ -16,28 +16,31 @@ const TextSlider = () => {
   const sliderRef = useRef(null);
   let swiper;
 
-  
   const { data: data, isSuccess } = useQuery(
     ["textForSlider"],
-    async () => await fetchData(TextForSlider, { status: "published" })
+    async () =>
+      await fetchData(TextForSlider, { variables: { status: "published" } })
   );
 
-
   useEffect(() => {
+    let swiperInstance = null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    swiper = new SwiperCore(sliderRef.current, {
-      modules: [Autoplay],
-      slidesPerView: 1,
-      spaceBetween: 16,
-      loop: true,
-      autoplay: {
-        delay: 2000,
-        disableOnInteraction: true
-      }
-    });
+    if (sliderRef.current && !swiperInstance.current && isSuccess) {
+      swiperInstance.current = new SwiperCore(sliderRef.current, {
+        modules: [Autoplay],
+        slidesPerView: 1,
+        spaceBetween: 16,
+        loop: true,
+        autoplay: {
+          delay: 2000,
+          disableOnInteraction: true
+        }
+      });
+    }
     return () => {
-      if (swiper) {
-        swiper.destroy(true, true);
+      if (swiperInstance.current) {
+        swiperInstance.current.destroy(true, true);
+        swiperInstance.current = null;
       }
     };
   }, []);

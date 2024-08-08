@@ -2,55 +2,55 @@
 
 import "./TextSlider.sass";
 import React, { useRef, useEffect } from "react";
-import SwiperCore from "swiper/core";
-import { Autoplay } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Autoplay } from "swiper";
 import "swiper/swiper-bundle.css";
 import { TextForSlider } from "@/queries/ProductsQueries";
 import { useQuery } from "react-query";
 import fetchData from "@/helpers/fetchData";
 
-
+// Імпорт модулів Swiper
 SwiperCore.use([Autoplay]);
 
 const TextSlider = () => {
   const sliderRef = useRef(null);
-  let swiper;
 
-  
-  const { data: data, isSuccess } = useQuery(
+  const { data, isSuccess } = useQuery(
     ["textForSlider"],
     async () => await fetchData(TextForSlider, { status: "published" })
   );
 
-
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    swiper = new SwiperCore(sliderRef.current, {
-      modules: [Autoplay],
-      slidesPerView: 1,
-      spaceBetween: 16,
-      loop: true,
-      autoplay: {
-        delay: 2000,
-        disableOnInteraction: true
-      }
-    });
+    let swiperInstance = null;
+    if (sliderRef.current) {
+      swiperInstance = new SwiperCore(sliderRef.current, {
+        modules: [Autoplay],
+        slidesPerView: 1,
+        spaceBetween: 16,
+        loop: true,
+        autoplay: {
+          delay: 2000,
+          disableOnInteraction: true,
+        },
+      });
+    }
+
     return () => {
-      if (swiper) {
-        swiper.destroy(true, true);
+      if (swiperInstance) {
+        swiperInstance.destroy(true, true);
       }
     };
   }, []);
 
   const slideNext = () => {
-    if (swiper) {
-      swiper.slideNext();
+    if (sliderRef.current?.swiper) {
+      sliderRef.current.swiper.slideNext();
     }
   };
 
   const slidePrev = () => {
-    if (swiper) {
-      swiper.slidePrev();
+    if (sliderRef.current?.swiper) {
+      sliderRef.current.swiper.slidePrev();
     }
   };
 
@@ -74,11 +74,11 @@ const TextSlider = () => {
         <div className="swiper-container" ref={sliderRef}>
           <div className="swiper-wrapper text-slider__wrapp">
             {isSuccess &&
-              data.data.text_for_slider.map((text, index) =>
-                <div className="swiper-slide text-slider__item" key={index}>
+              data.data.text_for_slider.map((text, index) => (
+                <SwiperSlide className="text-slider__item" key={index}>
                   {text.Text}
-                </div>
-              )}
+                </SwiperSlide>
+              ))}
           </div>
         </div>
         <div className="text-slider-next" onClick={slideNext}>

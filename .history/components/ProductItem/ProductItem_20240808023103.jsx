@@ -212,12 +212,21 @@ const ProductItem = ({ product }) => {
   };
 
   const ProductSlider = ({ product, assetsUrl }) => {
+    const [maxWidth, setMaxWidth] = useState(0);
+  
+    useEffect(() => {
+      // Calculate the maximum width of the images
+      const widths = product.slides.map(slide => 580); // Assuming 580 is the width, change if needed
+      const fallbackWidth = 580; // Assuming 580 is the fallback width
+      setMaxWidth(Math.max(...widths, fallbackWidth));
+    }, [product.slides]);
+  
     const slides = product.slides.length
       ? product.slides
       : [{ directus_files_id: { id: product.product_image.id } }];
   
     return (
-      <div className="product-item__slider">
+      <div className="product-item__slider" style={{ width: maxWidth }}>
         <Swiper
           modules={[Pagination, Autoplay]}
           spaceBetween={50}
