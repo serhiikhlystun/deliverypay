@@ -85,7 +85,7 @@ const Delivery = ({ prices, deviceClass, products, user }) => {
     <div className="delivery__content">
       {status === 'unauthenticated' ? (
         <>
-          <GuestCartPopup handleGuestSubmit={handleSubmit} />
+          <GuestCartPopup handleGuestSubmit={handleSubmit} cashbakPercent={prices.discount} />
           <CheckoutPrices prices={prices} status={status} deviceClass={deviceClass} />
         </>
       ) : (
