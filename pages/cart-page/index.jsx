@@ -9,10 +9,12 @@ import { getSession, updateSession } from '@/queries/sessions';
 import useStore from '@/store/temp_order';
 import { getCurrentUser } from '@/queries/Users';
 import { useSession } from 'next-auth/react';
+import { СashbackQuery } from '@/queries/ProductsQueries';
 
 const CartPage = () => {
   const [prices, setPrices] = useState({});
   const [deviceClass, setDeviceClass] = useState('desk');
+  const [cashbakPercent, setCashBackPercent] = useState(0);
   const { data: userSession, status } = useSession();
 
   const { data: session, isSuccess } = useQuery(['session'], async () =>
@@ -25,12 +27,18 @@ const CartPage = () => {
     setData(updateSession, { data: newSession, id: localStorage.getItem('session_id') });
   });
 
-  const { data: user, isUserSuccess } = useQuery(
+  const { data: user, isSuccess: isUserSuccess } = useQuery(
     ['currentUser'],
     async () => await fetchData(getCurrentUser, {}, '/system', userSession.user.accessToken),
     {
       enabled: status === 'authenticated',
     }
+  );
+
+  const { data: cashback } = useQuery(
+    ['cashback'],
+    async () => await getData(СashbackQuery, 'Cashback'),
+    { onSuccess: response => setCashBackPercent(response[0].percent) }
   );
 
   useEffect(() => {
@@ -44,7 +52,7 @@ const CartPage = () => {
       setInitialTempOrder(session.temp_order);
     }
     calculatePrices();
-  }, [isSuccess, session]);
+  }, [isSuccess, session, cashbakPercent]);
 
   const calculatePrices = () => {
     let tempTotal = { totalPrice: 0 };
@@ -54,7 +62,7 @@ const CartPage = () => {
         let price = Number(item.new_price ? item.new_price : item.price);
         let priceAll = price * item.quantity;
         tempTotal.totalPrice = (Number(tempTotal.totalPrice) + priceAll).toFixed(2);
-        tempTotal.discount = 5;
+        tempTotal.discount = cashbakPercent;
       });
     setPrices(tempTotal);
   };
@@ -102,7 +110,9 @@ const CartPage = () => {
               ))}
             </ul>
           </div>
-          <Delivery prices={prices} products={session?.temp_order} user={user} deviceClass={deviceClass} />
+          {cashbakPercent ? (
+            <Delivery prices={prices} products={session?.temp_order} user={user} deviceClass={deviceClass} />
+          ) : null}
         </div>
       </div>
     </section>
