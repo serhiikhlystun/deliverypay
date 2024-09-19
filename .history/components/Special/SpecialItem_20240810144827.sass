@@ -1,0 +1,75 @@
+@import "../../sass/abstracts/variables"
+
+.special-item
+  cursor: pointer
+  display: flex
+  flex-direction: column
+  width: 100%
+  height: max-content
+  object-fit: cover
+  transition: $transition opacity
+  border: 1px solid #DDDDDD
+  &:hover
+    transition: $transition opacity
+    opacity: 1
+    & .special-item__img
+      opacity: 0.6
+      transition: $transition opacity
+  &__img
+    object-fit: cover
+    object-position: left top
+    width: 100%
+    height: auto
+    margin-bottom: 8px
+    border-bottom: 1px solid #DDDDDD
+
+  &__title
+    font-size: 24px
+    padding-bottom: 8px
+    font-weight: 700
+
+  &__subtitle
+    font-size: 20px
+    color: $grey
+    padding: 4px 0 16px
+
+  &__box
+    padding: 8px
+    min-height: 88px
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+  &__price
+    font-size: 30px
+    font-weight: 700
+    line-height: 140%
+    color: $black
+    padding-right: 16px
+
+    &.old
+      text-decoration: line-through
+      color: $grey
+      font-weight: 700
+
+    &-wrapp
+      display: flex
+      align-items: center
+
+@media (max-width: $tabletSmall)
+
+  .special-item
+    &__img
+      height: auto
+      width: 100%
+      object-fit: cover
+    &__title
+      font-size: 13px
+      padding-bottom: 0
+      line-height: 100%
+    &__subtitle
+      font-size: 12px
+      padding-bottom: 6px
+      line-height: 120%
+    &__price
+      font-size: 14px
+      padding-right: 8px

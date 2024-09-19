@@ -1,0 +1,229 @@
+@import "../../sass/abstracts/variables"
+@import "../../sass/abstracts/mixins"
+
+.product-item
+  display: flex
+  max-width: 950px
+  margin: 0 auto
+  &__nav-mob
+    display: none
+    & svg
+      filter: drop-shadow(0 2px 6px #000000)
+  &__title
+    font-size: 27px
+    font-weight: 700
+    line-height: 130%
+    text-transform: uppercase
+    font-family: $tuskerGrotesk
+    &-box
+      padding-right: 8px
+    &-inn
+      display: flex
+      justify-content: space-between
+      padding-bottom: 32px
+  &__like
+    display: flex
+    &-icon
+      width: auto
+      cursor: pointer
+      &-path
+        &.active
+          fill: $black
+  &__subtitle
+    font-size: 13px
+    color: $lightGrey
+  &__img
+    width: 100%
+    height: 100%
+    object-fit: cover
+    &-wrapp
+      width: 50%
+  &__content
+    max-width: 70vw
+    width: 100%
+    padding: 24px
+    border-left: none
+  &__slider
+    max-width: 30vw
+    width: 100%
+  &__price
+    font-weight: 700
+    font-size: 30px
+    padding-bottom: 4px
+    &-wrapp
+      display: flex
+      flex-direction: column
+      padding-right: 64px
+    &-old
+      font-size: 25px
+      color: $lightGrey
+      font-weight: 300
+      text-decoration: line-through
+  &__descr
+    &-title
+      font-size: 12px
+      font-weight: 800
+      letter-spacing: 3px
+      text-transform: uppercase
+    &-text
+      font-size: 12px
+      font-weight: 300
+      line-height: 150%
+      padding-bottom: 24px
+  &__btn
+    display: flex
+    align-items: center
+    justify-content: center
+    height: 56px
+    width: 180px
+    color: $white
+    background: $black
+    font-size: 11px
+    font-weight: 800
+    border: none
+    cursor: pointer
+    text-transform: uppercase
+    transition: $transition
+    &:hover
+      @include hoverShadowBlack()
+    &-wrapp
+      display: flex
+      align-items: center
+    &-icon
+      margin-right: 4px
+      margin-top: -2px
+  &__counter
+    padding: 10px 20px
+    display: flex
+    align-items: center
+    justify-content: center
+    width: max-content
+    border: 1px solid $grey
+    margin-bottom: 32px
+    &-input
+      border: none
+      width: auto
+      min-width: 20px
+      max-width: 29px
+      height: 20px
+      outline-color: $grey
+      display: flex
+      align-items: center
+      justify-content: center
+      margin: 0 16px
+      text-align: center
+      vertical-align: middle
+    &-item
+      cursor: pointer
+      display: flex
+      align-items: center
+      justify-content: center
+
+
+.swiper
+  margin: 0
+  &-slide
+    overflow: hidden
+    font-family: $main-font
+    & img
+      width: 100%
+      height: 100%
+      object-fit: cover
+      object-position: center
+  &-pagination-bullet
+    background: $grey!important
+    opacity: 1!important
+    transform: scale(0.6)
+    &-active
+      background: $white!important
+      transform: scale(1)
+
+
+@media (max-width: $tablet)
+  .product-item
+    max-width: none
+    &__btn
+      &-wrapp
+        justify-content: flex-start
+    &__descr
+      &-text
+        padding-bottom: 16px
+    &__content
+      max-width: 60vw
+    &__slider
+      max-width: 40vw
+
+
+@media (max-width: $mobile)
+  .swiper
+    height: 65vh
+
+  .product-item
+    height: auto
+    width: 100%
+    flex-direction: column
+    position: relative
+    &__nav-mob
+      display: block
+      position: absolute
+      top: 24px
+      left: 0
+      z-index: 10
+
+    &__title
+      font-size: 18px
+      font-weight: 800
+      &-inn
+        padding-bottom: 16px
+    &__descr
+      &-title
+        padding-bottom: 4px
+    &__counter
+      display: none
+    &__img
+      &-wrapp
+        min-width: 110px
+    &__content
+      width: 100%
+      max-width: none
+      padding: 0
+      margin-top: -16px
+    &__btn
+      height: 56px
+      width: 100%
+      &-icon
+        width: 14px
+      &-wrapp
+        flex-direction: column
+    &__price
+      line-height: 100%
+      padding-right: 8px
+      &-old
+        font-size: 16px
+        line-height: 140%
+        font-weight: 700
+        padding-right: 16px
+      &-wrapp
+        flex-direction: row
+        padding-bottom: 16px
+        padding-right: 0
+
+    &__btn
+      &-wrapp
+        justify-content: space-between
+        align-items: flex-start
+    &__slider
+      max-width: none
+      width: calc(100% + 48px)
+      position: relative
+      left: -24px
+      top: -40px
+
+@media (max-width: $mobileSmall)
+  .product-item
+    &__like
+      &-icon
+        width: 32px
+        height: 32px
+
+

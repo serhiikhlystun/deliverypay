@@ -1,0 +1,95 @@
+.categories-item
+  height: 290px
+  width: 100%
+  position: relative
+  display: flex
+  align-items: flex-end
+  justify-content: center
+  background: white
+  &:nth-child(1)
+    grid-row: span 2
+    height: 100%
+  &:nth-child(4)
+    grid-row: span 1
+  &__img
+    object-fit: contain
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    z-index: 0
+  &__btn
+    cursor: pointer
+    width: 204px
+    height: 64px
+    display: flex
+    align-items: center
+    justify-content: center
+    background: #fff
+    // font-family: $tuskerGrotesk
+    font-size: 17px
+    position: relative
+    z-index: 1
+    border: none
+    color: $black
+    margin-bottom: 32px
+    transition: $transition
+    &:hover
+      @include hoverShadowBlack()
+
+// Медіа-запити для різних пристроїв
+
+@media screen and (max-width: 480px) and (orientation: portrait)
+  .categories-item
+    height: 120px
+    &__img
+      object-fit: contain
+
+@media screen and (max-width: 480px) and (orientation: landscape)
+  .categories-item
+    height: 160px
+    &__img
+      object-fit: contain
+
+@media screen and (min-width: 481px) and (max-width: 767px) and (orientation: portrait)
+  .categories-item
+    height: 180px
+    &__img
+      object-fit: contain
+
+@media screen and (min-width: 481px) and (max-width: 767px) and (orientation: landscape)
+  .categories-item
+    height: 220px
+    &__img
+      object-fit: contain
+
+@media screen and (min-width: 768px) and (max-width: 1023px) and (orientation: portrait)
+  .categories-item
+    height: 240px
+    &__img
+      object-fit: contain
+
+@media screen and (min-width: 768px) and (max-width: 1023px) and (orientation: landscape)
+  .categories-item
+    height: 260px
+    &__img
+      object-fit: contain
+
+@media screen and (min-width: 1024px) and (max-width: 1366px)
+  .categories-item
+    height: 300px
+    &__img
+      object-fit: contain
+
+@media screen and (min-width: 1367px) and (max-width: 1920px)
+  .categories-item
+    height: 350px
+    &__img
+      object-fit: contain
+
+@media screen and (min-width: 1921px)
+  .categories-item
+    height: 400px
+    &__img
+      object-fit: contain

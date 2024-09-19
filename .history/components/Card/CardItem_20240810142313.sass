@@ -1,0 +1,156 @@
+@import "../../sass/abstracts/variables"
+@import "../../sass/abstracts/mixins"
+
+.card-item
+  display: flex
+  height: auto
+  border: 1px solid #a6a6a6
+  &__title
+    font-size: 14px
+    font-weight: 700
+    line-height: 130%
+    font-family: $tuskerGrotesk
+    &-box
+      padding-right: 8px
+    &-inn
+      display: flex
+      justify-content: space-between
+  &__like
+    display: flex
+    &-icon
+      width: auto
+      cursor: pointer
+      &-path
+        &.active
+          fill: $black
+  &__subtitle
+    font-size: 13px
+    color: $lightGrey
+  &__img
+    width: 100%
+    height: 100%
+    object-fit: cover
+    &-wrapp
+      width: 50%
+  &__content
+    width: 50%
+    border: 1px solid #DDDDDD
+    border-left: 1px solid #DDDDDD
+    padding: 24px
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+  &__price
+    padding-right: 8px
+    font-weight: 700
+    font-size: 16px
+    &-wrapp
+      display: flex
+      align-items: center
+      padding-bottom: 32px
+      &.mob
+        display: none
+    &-old
+      font-size: 16px
+      color: $lightGrey
+      font-weight: 700
+      text-decoration: line-through
+  &__descr
+    &-title
+      font-size: 8px
+      font-weight: 800
+      letter-spacing: 3px
+      text-transform: uppercase
+    &-text
+      font-size: 12px
+      font-weight: 300
+      line-height: 150%
+  &__btn
+    display: flex
+    align-items: center
+    justify-content: center
+    height: 56px
+    width: 180px
+    color: $white
+    background: $black
+    font-size: 11px
+    font-weight: 800
+    border: none
+    cursor: pointer
+    text-transform: uppercase
+    transition: $transition
+    &:hover
+      @include hoverShadowBlack()
+    &-wrapp
+      display: flex
+      justify-content: center
+    &-icon
+      margin-right: 4px
+      margin-top: -2px
+
+
+@media (max-width: $tablet)
+  .card-item
+    height: auto
+    &__btn
+      &-wrapp
+        justify-content: flex-start
+    &__price
+      &-wrapp
+        padding-bottom: 16px
+    &__descr
+      &-text
+        padding-bottom: 16px
+
+@media (max-width: $mobile)
+  .card-item
+    height: auto
+    width: 100%
+    &__descr
+      &-title
+        display: none
+      &-text
+        display: none
+    &__img
+      &-wrapp
+        min-width: 110px
+    &__content
+      width: 100%
+      padding: 16px
+    &__btn
+      height: 32px
+      width: 96px
+      &-icon
+        width: 14px
+    &__price
+      line-height: 100%
+      &-wrapp
+        &.desk
+          display: none
+        &.mob
+          display: flex
+          padding-bottom: 0
+          flex-wrap: wrap
+          align-items: flex-start
+      &-old
+        font-size: 12px
+        line-height: 100%
+        margin-top: 1px
+    &__btn
+      &-wrapp
+        justify-content: space-between
+        align-items: center
+
+@media (max-width: $mobileSmall)
+  .card-item
+    &__price
+      padding-right: 0
+      &-wrapp
+        padding-right: 8px
+        &.mob
+          flex-direction: column
+          align-items: flex-end
+    &__like
+      &-icon
+        width: 32px
+        height: 32px
