@@ -2,14 +2,19 @@ import React from 'react';
 import './Auth.sass';
 
 const CheckoutPrices = ({ prices, deviceClass, status }) => {
+  console.log(prices);
+  
 
   return (
     <div className={`delivery__checkout-wrapp ${deviceClass}`}>
       <div className="delivery__checkout-box">
         <p className="delivery__checkout-total">Total:</p>
-        <p className="delivery__checkout-total">
+        {status === 'authenticated' ? <p className="delivery__checkout-total">
           ${(parseFloat(prices.totalPrice) * (1 - prices.discount / 100)).toFixed(2)}
-        </p>
+        </p> :
+        <p className="delivery__checkout-total">
+          ${(parseFloat(prices.totalPrice)).toFixed(2)}
+        </p>}
       </div>
       <div className="delivery__checkout-box">
         <p className="delivery__checkout-discount">Discount for registered customers:</p>
